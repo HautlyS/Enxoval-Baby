@@ -1,0 +1,325 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  color-scheme: light;
+  --bg-blush-canvas: #FFF5F8;
+  --bg-petal-tint: #FFE9F1;
+  --glass-surface: rgba(255, 255, 255, 0.76);
+  --glass-surface-strong: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(244, 172, 200, 0.62);
+  --ink-berry: #421728;
+  --ink-plum-muted: #7B4259;
+  --accent-rose: #D6336C;
+  --accent-rose-hover: #BD235A;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: var(--bg-blush-canvas);
+  color: var(--ink-berry);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: clip;
+  background-color: var(--bg-blush-canvas);
+  background-image:
+    radial-gradient(circle at 8% 6%, rgba(255, 204, 224, 0.42) 0%, transparent 45%),
+    radial-gradient(circle at 92% 12%, rgba(255, 226, 237, 0.5) 0%, transparent 42%),
+    radial-gradient(circle at 75% 55%, rgba(252, 214, 234, 0.24) 0%, transparent 48%),
+    radial-gradient(circle at 20% 88%, rgba(255, 212, 230, 0.36) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 249, 251, 0.93) 0%, rgba(255, 242, 247, 0.90) 52%, rgba(255, 249, 252, 0.94) 100%),
+    url('/src/assets/images/bg_blush_silk_pattern_1795441106855.jpg');
+  background-size: auto, auto, auto, auto, auto, cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Tactile fine cotton-silk canvas grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.24;
+  background-image:
+    radial-gradient(rgba(214, 51, 108, 0.032) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.78) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Accessible crisp Apple-rose focus rings for keyboard navigation */
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid rgba(214, 51, 108, 0.78);
+  outline-offset: 2px;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Apple-style frosted pink glassmorphism with satin specular rim & fine grain */
+.glass-panel {
+  position: relative;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.90) 0%, rgba(255, 245, 249, 0.78) 56%, rgba(255, 236, 244, 0.82) 100%);
+  backdrop-filter: blur(26px) saturate(185%);
+  -webkit-backdrop-filter: blur(26px) saturate(185%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 12px 30px -14px rgba(178, 52, 98, 0.16),
+    0 2px 6px -2px rgba(178, 52, 98, 0.06),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.97),
+    inset 0 -1px 0 0 rgba(244, 172, 200, 0.28);
+}
+
+.glass-panel-strong {
+  position: relative;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 250, 0.90) 58%, rgba(255, 236, 244, 0.93) 100%);
+  backdrop-filter: blur(34px) saturate(195%);
+  -webkit-backdrop-filter: blur(34px) saturate(195%);
+  border: 1px solid rgba(244, 162, 194, 0.78);
+  box-shadow:
+    0 22px 48px -18px rgba(164, 38, 88, 0.22),
+    0 4px 12px -4px rgba(164, 38, 88, 0.08),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.99),
+    inset 0 -1px 0 0 rgba(244, 162, 194, 0.34);
+}
+
+/* Tactile GPU-composited card hover & tap settle */
+.interactive-card {
+  transition:
+    transform 190ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 190ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 190ms ease;
+  will-change: transform;
+}
+
+.interactive-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(214, 51, 108, 0.44);
+  box-shadow:
+    0 18px 36px -14px rgba(178, 52, 98, 0.24),
+    0 4px 10px -2px rgba(178, 52, 98, 0.09),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.98);
+}
+
+.interactive-card:active {
+  transform: translateY(-1px) scale(0.992);
+}
+
+.apple-press {
+  transition:
+    transform 140ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.apple-press:active:not(:disabled) {
+  transform: scale(0.972);
+}
+
+/* Clean Editorial Header Link Underline Indicator */
+.nav-link-clean {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 4px;
+  transition: color 160ms ease;
+}
+
+.nav-link-clean::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #FB7185, #E11D48);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 160ms ease;
+  opacity: 0;
+}
+
+.nav-link-clean:hover::after,
+.nav-link-clean[data-active='true']::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* Airy pearl-eyelet & satin ribbon sheen for hero highlights & tool surfaces */
+.texture-silk-grid {
+  background-image:
+    radial-gradient(circle at 12px 12px, rgba(244, 162, 194, 0.075) 1.1px, transparent 1.3px),
+    radial-gradient(circle at 24px 24px, rgba(255, 255, 255, 0.65) 1.4px, transparent 1.6px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 240, 246, 0.16) 55%, rgba(255, 255, 255, 0.36) 100%);
+  background-size: 24px 24px, 24px 24px, 100% 100%;
+}
+
+/* Soft corner-faded watercolor floral wash inside hero cards (zero dark multiply) */
+.hero-silk-wash {
+  -webkit-mask-image: radial-gradient(ellipse 75% 75% at 88% 18%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.45) 48%, transparent 82%);
+  mask-image: radial-gradient(ellipse 75% 75% at 88% 18%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.45) 48%, transparent 82%);
+}
+
+/* Whisper-soft blush pastel gingham weave for editorial bands & keepsake cards */
+.texture-gingham-blush {
+  background-image:
+    linear-gradient(90deg, rgba(244, 162, 194, 0.038) 50%, transparent 50%),
+    linear-gradient(180deg, rgba(244, 162, 194, 0.038) 50%, transparent 50%);
+  background-size: 22px 22px;
+}
+
+/* Subtle diagonal woven stripe texture for frosted cards & progress tracks */
+.texture-woven-blush {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.72) 0px,
+    rgba(255, 255, 255, 0.72) 6px,
+    rgba(253, 232, 240, 0.42) 6px,
+    rgba(253, 232, 240, 0.42) 12px
+  );
+}
+
+/* Delicate cotton-dot paper texture for editorial insets */
+.texture-cotton-dots {
+  background-image: radial-gradient(rgba(214, 51, 108, 0.042) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Delicate kawaii scalloped lace border utility */
+.kawaii-lace-divider {
+  height: 14px;
+  background-image:
+    radial-gradient(
+      circle at 8px 0px,
+      transparent 5px,
+      rgba(244, 165, 196, 0.46) 5.5px,
+      rgba(244, 165, 196, 0.46) 7px,
+      transparent 7.5px
+    ),
+    radial-gradient(circle at 8px 10px, rgba(214, 51, 108, 0.18) 1.2px, transparent 1.5px);
+  background-size: 16px 14px;
+  background-repeat: repeat-x;
+}
+
+/* Ambient compositor-only float for floral & ribbon ornaments */
+@keyframes ambientFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(1.2deg);
+  }
+}
+
+.ambient-float {
+  animation: ambientFloat 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Mobile horizontal scroll edge mask */
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(to right, white 0%, white 92%, transparent 100%);
+  mask-image: linear-gradient(to right, white 0%, white 92%, transparent 100%);
+}
+
+@media (min-width: 640px) {
+  .mask-fade-x {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* Mobile safe-area bottom padding */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Hide scrollbars cleanly on mobile horizontal scrollers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom rose-quartz scrollbars for desktop panels */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 235, 242, 0.55);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(230, 128, 166, 0.55);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(214, 51, 108, 0.72);
+}
+
+/* Full animated pink glassmorphism shimmer skeleton */
+@keyframes kawaiiShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.kawaii-shimmer {
+  background: linear-gradient(
+    105deg,
+    rgba(255, 232, 241, 0.72) 20%,
+    rgba(255, 255, 255, 0.96) 50%,
+    rgba(255, 224, 236, 0.72) 80%
+  );
+  background-size: 200% 100%;
+  animation: kawaiiShimmer 1.5s infinite linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Enxoval Baby",
+  "description": "Planejador completo de enxoval para gestante, bebê e família com índice diário de lojas, compras via Pix em tempo real e Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,1243 @@
+{
+  "meta": {
+    "generatedAt": "2026-11-23T00:34:57.830Z",
+    "workflowName": "daily-scrape-ssg-index",
+    "scheduleCron": "0 6 * * *",
+    "totalItemsIndexed": 25,
+    "totalOffersIndexed": 100,
+    "storesCovered": [
+      "Magazine Luiza",
+      "Mercado Livre",
+      "Amazon Brasil",
+      "Farmácias em Geral"
+    ],
+    "sourceMode": "github-ssg-static"
+  },
+  "entries": [
+    {
+      "itemId": "item-gestante-mala",
+      "searchQuery": "mala maternidade",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27034006/Mala.jpg?v=639309273699600000",
+      "bestPriceBrl": 854.3,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Mala Maternidade com Rodinhas Malu — Mercado Livre",
+          "priceBrl": 854.3,
+          "url": "https://lista.mercadolivre.com.br/mala-maternidade",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "mala maternidade — Envio Prime",
+          "priceBrl": 872.1,
+          "url": "https://www.amazon.com.br/s?k=mala%20maternidade",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "mala maternidade — Magalu Indica",
+          "priceBrl": 881,
+          "url": "https://www.magazineluiza.com.br/busca/mala%20maternidade/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "mala maternidade — Rede Farmacêutica",
+          "priceBrl": 916.6,
+          "url": "https://www.paguemenos.com.br/mala-maternidade",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-gestante-camisola",
+      "searchQuery": "camisola amamentacao",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/24246623/Pijama.jpg?v=639126901483170000",
+      "bestPriceBrl": 95.9,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Pijama Festa do Pijama — Mercado Livre",
+          "priceBrl": 95.9,
+          "url": "https://lista.mercadolivre.com.br/camisola-amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "camisola amamentacao — Envio Prime",
+          "priceBrl": 97.9,
+          "url": "https://www.amazon.com.br/s?k=camisola%20amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "camisola amamentacao — Magalu Indica",
+          "priceBrl": 98.9,
+          "url": "https://www.magazineluiza.com.br/busca/camisola%20amamentacao/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "camisola amamentacao — Rede Farmacêutica",
+          "priceBrl": 102.9,
+          "url": "https://www.paguemenos.com.br/camisola-amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-gestante-sutia",
+      "searchQuery": "sutia amamentacao",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/22996508/Sutia.jpg?v=638822908437100000",
+      "bestPriceBrl": 79.43,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Sutiã Amamentação Maternity - 50149 Bege - P — Mercado Livre",
+          "priceBrl": 79.43,
+          "url": "https://lista.mercadolivre.com.br/sutia-amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "sutia amamentacao — Envio Prime",
+          "priceBrl": 81.09,
+          "url": "https://www.amazon.com.br/s?k=sutia%20amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "sutia amamentacao — Magalu Indica",
+          "priceBrl": 81.91,
+          "url": "https://www.magazineluiza.com.br/busca/sutia%20amamentacao/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "sutia amamentacao — Rede Farmacêutica",
+          "priceBrl": 85.22,
+          "url": "https://www.paguemenos.com.br/sutia-amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-gestante-almofada",
+      "searchQuery": "almofada amamentacao",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27055959/Almofada.jpg?v=639309452531230000",
+      "bestPriceBrl": 119.9,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Almofada de Amamentação — Mercado Livre",
+          "priceBrl": 119.9,
+          "url": "https://lista.mercadolivre.com.br/almofada-amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "almofada amamentacao — Envio Prime",
+          "priceBrl": 122.4,
+          "url": "https://www.amazon.com.br/s?k=almofada%20amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "almofada amamentacao — Magalu Indica",
+          "priceBrl": 123.65,
+          "url": "https://www.magazineluiza.com.br/busca/almofada%20amamentacao/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "almofada amamentacao — Rede Farmacêutica",
+          "priceBrl": 128.65,
+          "url": "https://www.paguemenos.com.br/almofada-amamentacao",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-gestante-lanolina",
+      "searchQuery": "pomada lanolina",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/1235704/pomada-para-os-seios-lanolina-anidra-amamente-30g-secundaria1.png.png?v=639277547803200000",
+      "bestPriceBrl": 47.9,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Pomada Para Os Seios Lanolina Anidra Amamente 30g — Mercado Livre",
+          "priceBrl": 47.9,
+          "url": "https://lista.mercadolivre.com.br/pomada-lanolina",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "pomada lanolina — Envio Prime",
+          "priceBrl": 48.9,
+          "url": "https://www.amazon.com.br/s?k=pomada%20lanolina",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "pomada lanolina — Magalu Indica",
+          "priceBrl": 49.4,
+          "url": "https://www.magazineluiza.com.br/busca/pomada%20lanolina/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Pomada Para Os Seios Lanolina Anidra Amamente 30g",
+          "priceBrl": 49.9,
+          "url": "https://www.paguemenos.com.br/pomada-para-os-seios-lanolina-anidra-amamente-30g/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-gestante-bomba",
+      "searchQuery": "bomba tira leite",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/766365/Bomba-Tira-Leite-Dellamed.jpg?v=638379189999270000",
+      "bestPriceBrl": 186.43,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Bomba Tira-Leite Dellamed — Mercado Livre",
+          "priceBrl": 186.43,
+          "url": "https://lista.mercadolivre.com.br/bomba-tira-leite",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "bomba tira leite — Envio Prime",
+          "priceBrl": 190.32,
+          "url": "https://www.amazon.com.br/s?k=bomba%20tira%20leite",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "bomba tira leite — Magalu Indica",
+          "priceBrl": 192.26,
+          "url": "https://www.magazineluiza.com.br/busca/bomba%20tira%20leite/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Bomba Tira-Leite Dellamed",
+          "priceBrl": 194.2,
+          "url": "https://www.paguemenos.com.br/bomba-tira-leite-dellamed-169846892rm59y87/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-gestante-absorvente",
+      "searchQuery": "absorvente seios",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/1129792/7612367040396_1.png?v=639059129252000000",
+      "bestPriceBrl": 37.91,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Absorvente para Seios Medela Descartável 30 Unidades — Mercado Livre",
+          "priceBrl": 37.91,
+          "url": "https://lista.mercadolivre.com.br/absorvente-seios",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "absorvente seios — Envio Prime",
+          "priceBrl": 38.7,
+          "url": "https://www.amazon.com.br/s?k=absorvente%20seios",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "absorvente seios — Magalu Indica",
+          "priceBrl": 39.1,
+          "url": "https://www.magazineluiza.com.br/busca/absorvente%20seios/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Absorvente para Seios Medela Descartável 30 Unidades",
+          "priceBrl": 39.49,
+          "url": "https://www.paguemenos.com.br/absorvente-para-seio-medela-descartavel-com-30-unidades/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-body-ml",
+      "searchQuery": "body bebe manga longa",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/24279955/Camiseta.jpg?v=639149369817670000",
+      "bestPriceBrl": 71.9,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Camiseta Manga Longa Alaska — Mercado Livre",
+          "priceBrl": 71.9,
+          "url": "https://lista.mercadolivre.com.br/body-bebe-manga-longa",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "body bebe manga longa — Envio Prime",
+          "priceBrl": 73.4,
+          "url": "https://www.amazon.com.br/s?k=body%20bebe%20manga%20longa",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "body bebe manga longa — Magalu Indica",
+          "priceBrl": 74.15,
+          "url": "https://www.magazineluiza.com.br/busca/body%20bebe%20manga%20longa/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "body bebe manga longa — Rede Farmacêutica",
+          "priceBrl": 77.15,
+          "url": "https://www.paguemenos.com.br/body-bebe-manga-longa",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-mijao",
+      "searchQuery": "mijao bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/25519307/Conjunto.jpg?v=639264276852800000",
+      "bestPriceBrl": 102.62,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Conjunto Culote 2 Unidades Branco — Mercado Livre",
+          "priceBrl": 102.62,
+          "url": "https://lista.mercadolivre.com.br/mijao-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "mijao bebe — Envio Prime",
+          "priceBrl": 104.76,
+          "url": "https://www.amazon.com.br/s?k=mijao%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "mijao bebe — Magalu Indica",
+          "priceBrl": 105.83,
+          "url": "https://www.magazineluiza.com.br/busca/mijao%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "mijao bebe — Rede Farmacêutica",
+          "priceBrl": 110.11,
+          "url": "https://www.paguemenos.com.br/mijao-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-macacao",
+      "searchQuery": "macacao bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/24253090/Macacao.jpg?v=639132084452900000",
+      "bestPriceBrl": 134.3,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Macacão Bebê no Comando — Mercado Livre",
+          "priceBrl": 134.3,
+          "url": "https://lista.mercadolivre.com.br/macacao-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "macacao bebe — Envio Prime",
+          "priceBrl": 137.1,
+          "url": "https://www.amazon.com.br/s?k=macacao%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "macacao bebe — Magalu Indica",
+          "priceBrl": 138.5,
+          "url": "https://www.magazineluiza.com.br/busca/macacao%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "macacao bebe — Rede Farmacêutica",
+          "priceBrl": 144.1,
+          "url": "https://www.paguemenos.com.br/macacao-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-fraldas",
+      "searchQuery": "fralda pampers recem nascido",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/1178272/7500435132510_1.jpg?v=639154861851970000",
+      "bestPriceBrl": 66.23,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Fralda Pampers Premium Care Recém-Nascido RN 36 Unidades — Mercado Livre",
+          "priceBrl": 66.23,
+          "url": "https://lista.mercadolivre.com.br/fralda-pampers-recem-nascido",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "fralda pampers recem nascido — Envio Prime",
+          "priceBrl": 67.61,
+          "url": "https://www.amazon.com.br/s?k=fralda%20pampers%20recem%20nascido",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "fralda pampers recem nascido — Magalu Indica",
+          "priceBrl": 68.3,
+          "url": "https://www.magazineluiza.com.br/busca/fralda%20pampers%20recem%20nascido/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Fralda Pampers Premium Care Recém-Nascido RN 36 Unidades",
+          "priceBrl": 68.99,
+          "url": "https://www.paguemenos.com.br/fraldas-pampers-recem-nascido-premium-care-rn-36-unidades/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-lencos",
+      "searchQuery": "lenco umedecido bebe",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/1172133/08ca45a9-8c1a-41f1-9d09-d63e16134246.jpg?v=639144588076030000",
+      "bestPriceBrl": 14.39,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Lenço Umedecido Infantil Amorável 99% Água Com 50 Unidades — Mercado Livre",
+          "priceBrl": 14.39,
+          "url": "https://lista.mercadolivre.com.br/lenco-umedecido-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "lenco umedecido bebe — Envio Prime",
+          "priceBrl": 14.69,
+          "url": "https://www.amazon.com.br/s?k=lenco%20umedecido%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "lenco umedecido bebe — Magalu Indica",
+          "priceBrl": 14.84,
+          "url": "https://www.magazineluiza.com.br/busca/lenco%20umedecido%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Lenço Umedecido Infantil Amorável 99% Água Com 50 Unidades",
+          "priceBrl": 14.99,
+          "url": "https://www.paguemenos.com.br/lenco-umedecido-infantil-amoravel-99porcento-agua-com-50-unidades/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-pomada",
+      "searchQuery": "bepantol baby",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/1225922/7891106916820_02.png?v=639252441076370000",
+      "bestPriceBrl": 69.11,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Bepantol Baby Disney Crea Tuf 120g — Mercado Livre",
+          "priceBrl": 69.11,
+          "url": "https://lista.mercadolivre.com.br/bepantol-baby",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "bepantol baby — Envio Prime",
+          "priceBrl": 70.55,
+          "url": "https://www.amazon.com.br/s?k=bepantol%20baby",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "bepantol baby — Magalu Indica",
+          "priceBrl": 71.27,
+          "url": "https://www.magazineluiza.com.br/busca/bepantol%20baby/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Bepantol Baby Disney Crea Tuf 120g",
+          "priceBrl": 71.99,
+          "url": "https://www.paguemenos.com.br/creme-para-assaduras-bepantol-baby-disney-toy-story-120g/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-cueiro",
+      "searchQuery": "cueiro manta bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27044903/Cueiro.jpg?v=639309353871430000",
+      "bestPriceBrl": 153.5,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Cueiro PM Clevamama — Mercado Livre",
+          "priceBrl": 153.5,
+          "url": "https://lista.mercadolivre.com.br/cueiro-manta-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "cueiro manta bebe — Envio Prime",
+          "priceBrl": 156.7,
+          "url": "https://www.amazon.com.br/s?k=cueiro%20manta%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "cueiro manta bebe — Magalu Indica",
+          "priceBrl": 158.3,
+          "url": "https://www.magazineluiza.com.br/busca/cueiro%20manta%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "cueiro manta bebe — Rede Farmacêutica",
+          "priceBrl": 164.7,
+          "url": "https://www.paguemenos.com.br/cueiro-manta-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-rn-kit-higiene",
+      "searchQuery": "aspirador nasal termometro bebe",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/1018395/Aspirador-Nasal-Pediatrico-com-Estojo---Buba.jpg?v=638839666433630000",
+      "bestPriceBrl": 34.97,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Aspirador Nasal Pediátrico com Estojo - Buba — Mercado Livre",
+          "priceBrl": 34.97,
+          "url": "https://lista.mercadolivre.com.br/aspirador-nasal-termometro-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "aspirador nasal termometro bebe — Envio Prime",
+          "priceBrl": 35.7,
+          "url": "https://www.amazon.com.br/s?k=aspirador%20nasal%20termometro%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "aspirador nasal termometro bebe — Magalu Indica",
+          "priceBrl": 36.07,
+          "url": "https://www.magazineluiza.com.br/busca/aspirador%20nasal%20termometro%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Aspirador Nasal Pediátrico com Estojo - Buba",
+          "priceBrl": 36.43,
+          "url": "https://www.paguemenos.com.br/aspirador-nasal-pediatrico-com-estojo-buba-1744394jo53724k7/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-qp-berco",
+      "searchQuery": "berco americano",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27051217/BerA§o.jpg?v=639309406731600000",
+      "bestPriceBrl": 2839.68,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Berço Americano Sambalelê Divicar — Mercado Livre",
+          "priceBrl": 2839.68,
+          "url": "https://lista.mercadolivre.com.br/berco-americano",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "berco americano — Envio Prime",
+          "priceBrl": 2898.84,
+          "url": "https://www.amazon.com.br/s?k=berco%20americano",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "berco americano — Magalu Indica",
+          "priceBrl": 2928.42,
+          "url": "https://www.magazineluiza.com.br/busca/berco%20americano/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "berco americano — Rede Farmacêutica",
+          "priceBrl": 3046.74,
+          "url": "https://www.paguemenos.com.br/berco-americano",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-qp-carrinho",
+      "searchQuery": "carrinho bebe travel system",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27032424/Carrinho.jpg?v=639309261028430000",
+      "bestPriceBrl": 6719.04,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Carrinho Travel System Bellagio Chicco — Mercado Livre",
+          "priceBrl": 6719.04,
+          "url": "https://lista.mercadolivre.com.br/carrinho-bebe-travel-system",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "carrinho bebe travel system — Envio Prime",
+          "priceBrl": 6859.02,
+          "url": "https://www.amazon.com.br/s?k=carrinho%20bebe%20travel%20system",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "carrinho bebe travel system — Magalu Indica",
+          "priceBrl": 6929.01,
+          "url": "https://www.magazineluiza.com.br/busca/carrinho%20bebe%20travel%20system/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "carrinho bebe travel system — Rede Farmacêutica",
+          "priceBrl": 7208.97,
+          "url": "https://www.paguemenos.com.br/carrinho-bebe-travel-system",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-qp-banheira",
+      "searchQuery": "banheira bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27057402/Banheira.jpg?v=639309467173700000",
+      "bestPriceBrl": 383.04,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Banheira Portátil Flexi Bath — Mercado Livre",
+          "priceBrl": 383.04,
+          "url": "https://lista.mercadolivre.com.br/banheira-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "banheira bebe — Envio Prime",
+          "priceBrl": 391.02,
+          "url": "https://www.amazon.com.br/s?k=banheira%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "banheira bebe — Magalu Indica",
+          "priceBrl": 395.01,
+          "url": "https://www.magazineluiza.com.br/busca/banheira%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "banheira bebe — Rede Farmacêutica",
+          "priceBrl": 410.97,
+          "url": "https://www.paguemenos.com.br/banheira-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-qp-toalha",
+      "searchQuery": "toalha capuz bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27047036/Toalha.jpg?v=639309369327200000",
+      "bestPriceBrl": 108,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Toalha com Capuz Power Sec Bebê — Mercado Livre",
+          "priceBrl": 108,
+          "url": "https://lista.mercadolivre.com.br/toalha-capuz-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "toalha capuz bebe — Envio Prime",
+          "priceBrl": 110.25,
+          "url": "https://www.amazon.com.br/s?k=toalha%20capuz%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "toalha capuz bebe — Magalu Indica",
+          "priceBrl": 111.38,
+          "url": "https://www.magazineluiza.com.br/busca/toalha%20capuz%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "toalha capuz bebe — Rede Farmacêutica",
+          "priceBrl": 115.88,
+          "url": "https://www.paguemenos.com.br/toalha-capuz-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-qp-baba",
+      "searchQuery": "baba eletronica",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27050886/BabA¡.jpg?v=639309404001330000",
+      "bestPriceBrl": 767.04,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Babá Eletrônica View Glow — Mercado Livre",
+          "priceBrl": 767.04,
+          "url": "https://lista.mercadolivre.com.br/baba-eletronica",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "baba eletronica — Envio Prime",
+          "priceBrl": 783.02,
+          "url": "https://www.amazon.com.br/s?k=baba%20eletronica",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "baba eletronica — Magalu Indica",
+          "priceBrl": 791.01,
+          "url": "https://www.magazineluiza.com.br/busca/baba%20eletronica/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "baba eletronica — Rede Farmacêutica",
+          "priceBrl": 822.97,
+          "url": "https://www.paguemenos.com.br/baba-eletronica",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-qp-trocador",
+      "searchQuery": "trocador bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27042119/Trocador.jpg?v=639309332940300000",
+      "bestPriceBrl": 671.04,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Trocador Bumbo — Mercado Livre",
+          "priceBrl": 671.04,
+          "url": "https://lista.mercadolivre.com.br/trocador-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "trocador bebe — Envio Prime",
+          "priceBrl": 685.02,
+          "url": "https://www.amazon.com.br/s?k=trocador%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "trocador bebe — Magalu Indica",
+          "priceBrl": 692.01,
+          "url": "https://www.magazineluiza.com.br/busca/trocador%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "trocador bebe — Rede Farmacêutica",
+          "priceBrl": 719.97,
+          "url": "https://www.paguemenos.com.br/trocador-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-fam-canguru",
+      "searchQuery": "canguru bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27050854/Canguru.jpg?v=639309403765400000",
+      "bestPriceBrl": 287.04,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Canguru Close 5 em 1 — Mercado Livre",
+          "priceBrl": 287.04,
+          "url": "https://lista.mercadolivre.com.br/canguru-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "canguru bebe — Envio Prime",
+          "priceBrl": 293.02,
+          "url": "https://www.amazon.com.br/s?k=canguru%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "canguru bebe — Magalu Indica",
+          "priceBrl": 296.01,
+          "url": "https://www.magazineluiza.com.br/busca/canguru%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "canguru bebe — Rede Farmacêutica",
+          "priceBrl": 307.97,
+          "url": "https://www.paguemenos.com.br/canguru-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-fam-esterilizador",
+      "searchQuery": "esterilizador mamadeira",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27058716/Esterilizador.jpg?v=639309482493070000",
+      "bestPriceBrl": 57.5,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Esterilizador para Microondas — Mercado Livre",
+          "priceBrl": 57.5,
+          "url": "https://lista.mercadolivre.com.br/esterilizador-mamadeira",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "esterilizador mamadeira — Envio Prime",
+          "priceBrl": 58.7,
+          "url": "https://www.amazon.com.br/s?k=esterilizador%20mamadeira",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "esterilizador mamadeira — Magalu Indica",
+          "priceBrl": 59.3,
+          "url": "https://www.magazineluiza.com.br/busca/esterilizador%20mamadeira/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "esterilizador mamadeira — Rede Farmacêutica",
+          "priceBrl": 61.7,
+          "url": "https://www.paguemenos.com.br/esterilizador-mamadeira",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-fam-farmacia",
+      "searchQuery": "soro fisiologico",
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/641332/solucao-fisiologica-pro-soro-dauf-0-9porcento-com-100ml-principal.jpg?v=638008028820030000",
+      "bestPriceBrl": 5.75,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Solução Fisiológica Dauf Pro Soro 0,9% 100ml Uso Tópico — Mercado Livre",
+          "priceBrl": 5.75,
+          "url": "https://lista.mercadolivre.com.br/soro-fisiologico",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "soro fisiologico — Envio Prime",
+          "priceBrl": 5.87,
+          "url": "https://www.amazon.com.br/s?k=soro%20fisiologico",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "soro fisiologico — Magalu Indica",
+          "priceBrl": 5.93,
+          "url": "https://www.magazineluiza.com.br/busca/soro%20fisiologico/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "Solução Fisiológica Dauf Pro Soro 0,9% 100ml Uso Tópico",
+          "priceBrl": 5.99,
+          "url": "https://www.paguemenos.com.br/solucao-fisiologica-pro-soro-dauf-0-9porcento-com-100ml/p",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    },
+    {
+      "itemId": "item-fam-organizador",
+      "searchQuery": "kit higiene bebe",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27053272/Kit.jpg?v=639309424450400000",
+      "bestPriceBrl": 41.18,
+      "offers": [
+        {
+          "storeSlug": "mercadolivre",
+          "storeName": "Mercado Livre",
+          "offerTitle": "Kit Higiene Bucal com Protetor — Mercado Livre",
+          "priceBrl": 41.18,
+          "url": "https://lista.mercadolivre.com.br/kit-higiene-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Chega amanhã",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "amazon",
+          "storeName": "Amazon Brasil",
+          "offerTitle": "kit higiene bebe — Envio Prime",
+          "priceBrl": 42.04,
+          "url": "https://www.amazon.com.br/s?k=kit%20higiene%20bebe",
+          "inStock": true,
+          "deliveryEstimate": "1 a 2 dias úteis",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "magalu",
+          "storeName": "Magazine Luiza",
+          "offerTitle": "kit higiene bebe — Magalu Indica",
+          "priceBrl": 42.47,
+          "url": "https://www.magazineluiza.com.br/busca/kit%20higiene%20bebe/",
+          "inStock": true,
+          "deliveryEstimate": "Retira ou 2 dias",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        },
+        {
+          "storeSlug": "farmacias",
+          "storeName": "Farmácias em Geral",
+          "pharmacyBrand": "Pague Menos / Drogasil",
+          "offerTitle": "kit higiene bebe — Rede Farmacêutica",
+          "priceBrl": 44.19,
+          "url": "https://www.paguemenos.com.br/kit-higiene-bebe",
+          "inStock": true,
+          "deliveryEstimate": "Entrega em até 2h",
+          "scrapedAt": "2026-11-23T00:34:57.830Z"
+        }
+      ]
+    }
+  ]
+}

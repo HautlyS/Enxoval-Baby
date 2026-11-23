@@ -1,0 +1,1103 @@
+<div #rootContainer class="min-h-screen flex flex-col relative z-10">
+  <!-- Compact Mobile Top Bar (48px) / 3-Zone Desktop Header (64px) -->
+  <header class="sticky top-0 z-40 glass-panel border-x-0 border-t-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 md:h-16 flex items-center justify-between gap-4 md:gap-8">
+      <!-- Zone 1: Single-line Brand Wordmark -->
+      <button
+        type="button"
+        (click)="switchView('descobrir')"
+        class="group flex items-center gap-2 text-rose-950 font-display text-lg md:text-xl font-semibold tracking-tight whitespace-nowrap shrink-0 cursor-pointer"
+      >
+        <app-kawaii-ribbon [size]="26" />
+        <span>Enxoval Baby</span>
+      </button>
+
+      <!-- Zone 2: Clean Single-Line Nav Links (Desktop) -->
+      <nav aria-label="Navegação principal" class="hidden md:flex items-center gap-6 text-sm font-medium text-rose-900">
+        <button
+          type="button"
+          (click)="switchView('descobrir')"
+          [attr.data-active]="store.activeView() === 'descobrir'"
+          class="nav-link-clean whitespace-nowrap shrink-0 cursor-pointer"
+          [class.text-rose-950]="store.activeView() === 'descobrir'"
+          [class.font-semibold]="store.activeView() === 'descobrir'"
+          [class.hover:text-rose-600]="store.activeView() !== 'descobrir'"
+        >
+          Listas
+        </button>
+        <button
+          type="button"
+          (click)="switchView('lista')"
+          [attr.data-active]="store.activeView() === 'lista'"
+          class="nav-link-clean whitespace-nowrap shrink-0 cursor-pointer"
+          [class.text-rose-950]="store.activeView() === 'lista'"
+          [class.font-semibold]="store.activeView() === 'lista'"
+          [class.hover:text-rose-600]="store.activeView() !== 'lista'"
+        >
+          Presentes
+        </button>
+        <button
+          type="button"
+          (click)="switchView('ferramentas')"
+          [attr.data-active]="store.activeView() === 'ferramentas'"
+          class="nav-link-clean whitespace-nowrap shrink-0 cursor-pointer"
+          [class.text-rose-950]="store.activeView() === 'ferramentas'"
+          [class.font-semibold]="store.activeView() === 'ferramentas'"
+          [class.hover:text-rose-600]="store.activeView() !== 'ferramentas'"
+        >
+          Ferramentas
+        </button>
+        <button
+          type="button"
+          (click)="openWizard()"
+          class="nav-link-clean font-semibold text-rose-700 hover:text-rose-950 whitespace-nowrap shrink-0 cursor-pointer"
+        >
+          Criar Lista
+        </button>
+        <button
+          type="button"
+          (click)="pixConfigOpen.set(true)"
+          class="nav-link-clean hover:text-rose-600 whitespace-nowrap shrink-0 cursor-pointer"
+        >
+          Pix
+        </button>
+      </nav>
+
+      <!-- Zone 3: 1 Primary Action (Google Account Sign-In / Connected Profile Popover) -->
+      <div class="relative flex items-center shrink-0">
+        @if (store.currentUser(); as user) {
+          <button
+            type="button"
+            (click)="toggleAccountMenu()"
+            [attr.aria-expanded]="accountMenuOpen()"
+            class="apple-press min-h-[40px] inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/85 hover:bg-rose-50 border border-rose-200 text-rose-950 text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <span class="w-6 h-6 rounded-full bg-rose-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+              {{ user.name.charAt(0).toUpperCase() }}
+            </span>
+            <span class="max-w-24 sm:max-w-32 truncate">{{ user.name }}</span>
+            <mat-icon class="text-base! text-rose-600">{{ accountMenuOpen() ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+
+          @if (accountMenuOpen()) {
+            <button
+              type="button"
+              tabindex="-1"
+              aria-label="Fechar menu da conta"
+              (click)="closeAccountMenu()"
+              class="fixed inset-0 z-40 cursor-default"
+            ></button>
+            <div
+              #accountMenuEl
+              role="menu"
+              tabindex="-1"
+              (keydown.escape)="closeAccountMenu()"
+              class="absolute right-0 top-12 z-50 w-64 glass-panel-strong texture-cotton-dots rounded-2xl p-2 shadow-lg space-y-1 origin-top-right"
+            >
+              <div class="px-3 py-2 border-b border-rose-200/60">
+                <div class="text-xs font-semibold text-rose-950 truncate">{{ user.name }}</div>
+                <div class="text-[11px] text-rose-700 truncate">{{ user.email }}</div>
+              </div>
+              <button
+                type="button"
+                (click)="openPixFromMenu()"
+                class="apple-press w-full min-h-[40px] px-3 py-2 rounded-xl hover:bg-rose-50 flex items-center gap-2.5 text-xs font-semibold text-rose-950 cursor-pointer text-left"
+              >
+                <mat-icon class="text-base! text-rose-600">qr_code_2</mat-icon>
+                <span>Configurar Lista &amp; Pix</span>
+              </button>
+              <button
+                type="button"
+                (click)="openWizardFromMenu()"
+                class="apple-press w-full min-h-[40px] px-3 py-2 rounded-xl hover:bg-rose-50 flex items-center gap-2.5 text-xs font-semibold text-rose-950 cursor-pointer text-left"
+              >
+                <mat-icon class="text-base! text-rose-600">auto_awesome</mat-icon>
+                <span>Criar Nova Lista</span>
+              </button>
+              <button
+                type="button"
+                (click)="signOutFromMenu()"
+                class="apple-press w-full min-h-[40px] px-3 py-2 rounded-xl hover:bg-rose-100/80 flex items-center gap-2.5 text-xs font-semibold text-rose-800 cursor-pointer text-left"
+              >
+                <mat-icon class="text-base! text-rose-700">logout</mat-icon>
+                <span>Sair da Conta Google</span>
+              </button>
+            </div>
+          }
+        } @else {
+          <button
+            type="button"
+            (click)="store.authModalOpen.set(true)"
+            class="apple-press min-h-[40px] inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold shadow-sm cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <mat-icon class="text-base!">login</mat-icon>
+            <span>Entrar Google</span>
+          </button>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- Floating Toast Feedback -->
+  @if (store.toastMessage(); as toast) {
+    <div
+      #toastEl
+      role="status"
+      aria-live="polite"
+      class="fixed bottom-20 md:bottom-5 right-4 left-4 md:left-auto z-50 glass-panel-strong px-4 py-2.5 rounded-2xl flex items-center justify-between gap-3 text-sm font-medium text-rose-950 max-w-md"
+    >
+      <div class="flex items-center gap-2.5 min-w-0">
+        <mat-icon class="text-rose-600 text-lg! shrink-0">favorite</mat-icon>
+        <span class="truncate">{{ toast }}</span>
+      </div>
+      <button
+        type="button"
+        (click)="dismissToast()"
+        aria-label="Fechar aviso"
+        class="apple-press w-8 h-8 rounded-full hover:bg-rose-100/80 flex items-center justify-center text-rose-700 cursor-pointer shrink-0"
+      >
+        <mat-icon class="text-base!">close</mat-icon>
+      </button>
+    </div>
+  }
+
+  <main id="topo" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-24 md:py-8 space-y-10 md:space-y-12">
+    @if (store.loading() || store.switchingList()) {
+      <app-kawaii-loading-skeleton
+        [headline]="store.switchingList() ? 'Abrindo lista de enxoval compartilhada...' : 'Preparando Enxoval Baby...'"
+        [statusLabel]="store.switchingList() ? 'Sincronizando itens e ofertas em tempo real' : 'Carregando listas da comunidade e lojas indexadas'"
+      />
+    } @else if (store.activeView() === 'lista') {
+      <!-- ===================================================================== -->
+      <!-- VIEW 1: DEDICATED LIST & GIFTS VIEW (Focus 100% on the selected list) -->
+      <!-- ===================================================================== -->
+
+      <!-- Lightweight Contextual List Switcher Bar -->
+      <div class="animate-reveal flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
+        <button
+          type="button"
+          (click)="switchView('descobrir')"
+          class="apple-press min-h-[42px] inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/88 hover:bg-white border border-rose-200 text-xs font-semibold text-rose-950 shadow-2xs cursor-pointer whitespace-nowrap"
+        >
+          <mat-icon class="text-base! text-rose-600">arrow_back</mat-icon>
+          <span>Explorar Outras Listas</span>
+        </button>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <a
+            href="#presentes-recebidos"
+            class="apple-press min-h-[42px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-white/88 hover:bg-white border border-rose-200 text-xs font-semibold text-rose-900 whitespace-nowrap"
+          >
+            <mat-icon class="text-base! text-rose-600">card_giftcard</mat-icon>
+            <span>Mural de Carinhos ({{ store.purchases().length }})</span>
+          </a>
+          @if (store.canManageActiveList()) {
+            <button
+              type="button"
+              (click)="pixConfigOpen.set(true)"
+              class="apple-press min-h-[42px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-rose-100/90 hover:bg-rose-200/80 border border-rose-200 text-xs font-semibold text-rose-950 cursor-pointer whitespace-nowrap"
+            >
+              <mat-icon class="text-base! text-rose-700">qr_code_2</mat-icon>
+              <span>Editar Chave Pix</span>
+            </button>
+          }
+          <button
+            type="button"
+            (click)="switchView('ferramentas')"
+            class="apple-press min-h-[42px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-white/88 hover:bg-white border border-rose-200 text-xs font-semibold text-rose-900 cursor-pointer whitespace-nowrap"
+          >
+            <mat-icon class="text-base! text-rose-600">calculate</mat-icon>
+            <span>Ferramentas &amp; Lojas</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Focused Hero for This Specific List -->
+      <app-hero
+        [stages]="stages"
+        [heroImage]="heroImage"
+        (createListClicked)="openWizard()"
+        (addItemClicked)="openAddItem()"
+        (openPixConfigClicked)="pixConfigOpen.set(true)"
+        (stageSelected)="selectStageAndScroll($event)"
+      />
+
+      <!-- Catálogo de Presentes da Lista -->
+      <section id="catalogo" class="space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div class="space-y-1">
+            <h2 class="font-display text-2xl sm:text-3xl font-semibold text-rose-950">
+              Presentes &amp; Itens da Lista
+            </h2>
+            <p class="text-sm text-rose-800">
+              Escolha qualquer item para presentear via Pix direto para {{ store.listConfig().creatorName || 'a família' }} ou nas lojas verificadas.
+            </p>
+          </div>
+          @if (store.canManageActiveList()) {
+            <button
+              type="button"
+              (click)="openAddItem()"
+              class="apple-press min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/85 hover:bg-white border border-rose-200 text-xs font-semibold text-rose-800 cursor-pointer whitespace-nowrap self-start sm:self-auto"
+            >
+              <mat-icon class="text-base!">add_circle_outline</mat-icon>
+              <span>Incluir Item Personalizado</span>
+            </button>
+          }
+        </div>
+
+        <div class="glass-panel-strong texture-cotton-dots rounded-3xl p-4 sm:p-5 space-y-3.5">
+          <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3.5">
+            <!-- Horizontally Scrollable Thumb-Friendly Segmented Tabs on Mobile -->
+            <div class="mask-fade-x flex items-center gap-1.5 p-1.5 rounded-2xl bg-rose-100/80 overflow-x-auto no-scrollbar">
+              <button
+                type="button"
+                (click)="selectStage('all')"
+                class="apple-press min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                [class.bg-white]="store.selectedStage() === 'all'"
+                [class.text-rose-950]="store.selectedStage() === 'all'"
+                [class.shadow-sm]="store.selectedStage() === 'all'"
+                [class.text-rose-800]="store.selectedStage() !== 'all'"
+              >
+                Tudo ({{ store.items().length }})
+              </button>
+              @for (st of stages; track st.id) {
+                <button
+                  type="button"
+                  (click)="selectStage(st.id)"
+                  class="apple-press min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                  [class.bg-white]="store.selectedStage() === st.id"
+                  [class.text-rose-950]="store.selectedStage() === st.id"
+                  [class.shadow-sm]="store.selectedStage() === st.id"
+                  [class.text-rose-800]="store.selectedStage() !== st.id"
+                >
+                  {{ stageLabels[st.id] }}
+                </button>
+              }
+            </div>
+
+            <!-- Search, Sort Order & Only Remaining Filter -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+              <div class="relative flex-1 sm:w-56">
+                <mat-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-rose-500 text-lg!">
+                  search
+                </mat-icon>
+                <input
+                  type="search"
+                  [formControl]="searchControl"
+                  placeholder="Buscar item ou categoria..."
+                  aria-label="Buscar item do enxoval"
+                  class="w-full min-h-[44px] pl-9 pr-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 placeholder:text-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                />
+              </div>
+
+              <select
+                [formControl]="sortControl"
+                aria-label="Ordenar catálogo"
+                class="min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-xs font-semibold text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer"
+              >
+                <option value="default">Ordem da Lista</option>
+                <option value="price_asc">Menor Preço Primeiro</option>
+                <option value="remaining_desc">Mais Faltantes Primeiro</option>
+              </select>
+
+              <button
+                type="button"
+                (click)="toggleOnlyRemaining()"
+                class="apple-press min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                [class.bg-rose-600]="store.onlyRemaining()"
+                [class.text-white]="store.onlyRemaining()"
+                [class.border-rose-600]="store.onlyRemaining()"
+                [class.bg-white/90]="!store.onlyRemaining()"
+                [class.text-rose-900]="!store.onlyRemaining()"
+                [class.border-rose-200]="!store.onlyRemaining()"
+              >
+                <mat-icon class="text-base!">filter_list</mat-icon>
+                <span>Apenas Faltantes</span>
+              </button>
+            </div>
+          </div>
+
+          @if (hasActiveCatalogFilters()) {
+            <div class="flex items-center justify-between gap-3 pt-2.5 border-t border-rose-200/60 text-xs">
+              <span class="text-rose-800 tabular-nums">
+                Exibindo <strong>{{ store.filteredItems().length }}</strong> de {{ store.items().length }} itens
+              </span>
+              <button
+                type="button"
+                (click)="resetCatalogFilters()"
+                class="inline-flex items-center gap-1 font-semibold text-rose-700 hover:text-rose-950 cursor-pointer"
+              >
+                <mat-icon class="text-sm!">close</mat-icon>
+                <span>Limpar filtros</span>
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Product Cards Grid -->
+        @if (store.filteredItems().length === 0) {
+          <div class="glass-panel texture-silk-grid rounded-3xl p-10 text-center space-y-4">
+            <mat-icon class="text-rose-400 text-4xl!">inventory_2</mat-icon>
+            <div class="space-y-1">
+              <h3 class="font-display text-xl font-semibold text-rose-950">
+                Nenhum item encontrado neste filtro
+              </h3>
+              <p class="text-sm text-rose-800">
+                Limpe os filtros ativos ou adicione um novo item ao enxoval agora mesmo.
+              </p>
+            </div>
+            <button
+              type="button"
+              (click)="resetCatalogFilters()"
+              class="apple-press min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-950 cursor-pointer"
+            >
+              <mat-icon class="text-base!">refresh</mat-icon>
+              <span>Limpar Filtros</span>
+            </button>
+          </div>
+        } @else {
+          <div #catalogGrid class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            @for (item of store.filteredItems(); track item.id) {
+              @let rem = remainingQty(item);
+              @let pct = itemProgressPct(item);
+              <article class="catalog-card interactive-card glass-panel rounded-3xl overflow-hidden flex flex-col justify-between group">
+                <!-- Media (Scraped Provider Image with resilient local stage fallback & soft paper grain vignette) -->
+                <div class="relative aspect-4/3 bg-gradient-to-b from-white via-white to-rose-50/70 texture-cotton-dots overflow-hidden border-b border-rose-100/70">
+                  <img
+                    [src]="item.imageUrl"
+                    [alt]="item.name"
+                    loading="lazy"
+                    (error)="onProductImageError($event, item.stage)"
+                    referrerpolicy="no-referrer"
+                    class="w-full h-full object-contain p-3 transition-transform duration-300 ease-out group-hover:scale-[1.05]"
+                  />
+                  @if (store.canManageActiveList()) {
+                    <button
+                      type="button"
+                      (click)="removeItem(item)"
+                      aria-label="Remover item"
+                      class="apple-press absolute top-3 right-3 w-10 h-10 rounded-full bg-white/90 hover:bg-rose-100 text-rose-800 flex items-center justify-center shadow-sm cursor-pointer"
+                    >
+                      <mat-icon class="text-lg!">delete_outline</mat-icon>
+                    </button>
+                  }
+                  @if (rem === 0) {
+                    <div class="absolute inset-0 bg-rose-50/70 backdrop-blur-[3px] flex items-center justify-center pointer-events-none">
+                      <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-white/95 border border-rose-200 text-rose-900 text-xs font-bold tracking-wide shadow-sm">
+                        <mat-icon class="text-base! text-rose-600">check_circle</mat-icon>
+                        <span>Item Completo na Lista</span>
+                      </span>
+                    </div>
+                  }
+                </div>
+
+                <!-- Body -->
+                <div class="p-5 flex-1 flex flex-col justify-between gap-4">
+                  <div class="space-y-2">
+                    <div class="flex flex-wrap items-center gap-1.5 text-xs text-rose-700 font-medium">
+                      <span>{{ stageLabels[item.stage] }}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{{ item.category }}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{{ item.priority }}</span>
+                    </div>
+
+                    <h3 class="font-display text-lg font-semibold text-rose-950 leading-snug line-clamp-2">
+                      {{ item.name }}
+                    </h3>
+
+                    <p class="text-xs text-rose-800 leading-relaxed line-clamp-2">
+                      {{ item.description }}
+                    </p>
+                  </div>
+
+                  <!-- Price, Remaining Counter & Direct Store Links -->
+                  <div class="space-y-3 pt-3 border-t border-rose-200/60">
+                    <div class="flex items-baseline justify-between gap-2">
+                      <div>
+                        <div class="text-[11px] text-rose-700">Preço atual indexado</div>
+                        <div class="text-lg font-bold text-rose-950 tabular-nums">
+                          {{ item.unitPriceBrl | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                        </div>
+                      </div>
+
+                      <div class="text-right">
+                        <div class="text-xs font-semibold text-rose-900 tabular-nums">
+                          @if (rem === 1) {
+                            <span class="text-rose-600">Última unidade de {{ item.requiredQty }}</span>
+                          } @else if (rem > 1) {
+                            Restam {{ rem }} de {{ item.requiredQty }}
+                          } @else {
+                            {{ item.requiredQty }} de {{ item.requiredQty }} garantidos
+                          }
+                        </div>
+                        <div class="text-[11px] text-rose-700 tabular-nums">
+                          {{ item.purchasedQty }} comprado(s)
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="h-1.5 w-full rounded-full texture-woven-blush border border-rose-200/50 overflow-hidden">
+                      <div
+                        class="h-full rounded-full bg-gradient-to-r from-rose-400 to-rose-600 transition-all duration-300"
+                        [style.width.%]="pct"
+                      ></div>
+                    </div>
+
+                    <!-- Safe Indexed Store Links (Best price highlighted) -->
+                    <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+                      @for (offer of item.offers; track offer.storeSlug) {
+                        @let cheapest = isBestOffer(item, offer.priceBrl);
+                        <a
+                          [href]="offer.url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="apple-press min-h-[40px] flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-xl border"
+                          [class.bg-rose-50/95]="cheapest"
+                          [class.border-rose-300]="cheapest"
+                          [class.text-rose-950]="cheapest"
+                          [class.bg-white/90]="!cheapest"
+                          [class.border-rose-200/70]="!cheapest"
+                          [class.text-rose-900]="!cheapest"
+                          [class.hover:bg-rose-50]="true"
+                        >
+                          <span class="truncate font-medium inline-flex items-center gap-1">
+                            @if (cheapest) {
+                              <mat-icon class="text-[13px]! text-rose-600 shrink-0">star</mat-icon>
+                            }
+                            <span class="truncate">{{ offer.storeName }}</span>
+                          </span>
+                          <span class="font-mono font-semibold text-rose-700 tabular-nums shrink-0">
+                            {{ offer.priceBrl | currency: 'BRL' : 'symbol' : '1.0-0' : 'pt-BR' }}
+                          </span>
+                        </a>
+                      }
+                    </div>
+
+                    <!-- Primary COMPRAR CTA -->
+                    <button
+                      type="button"
+                      (click)="openCheckout(item)"
+                      [disabled]="rem === 0"
+                      class="apple-press w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 disabled:from-rose-100 disabled:to-rose-200 disabled:text-rose-500 text-white text-sm font-semibold shadow-sm cursor-pointer whitespace-nowrap"
+                    >
+                      <mat-icon class="text-lg!">{{ rem > 0 ? 'shopping_bag' : 'check_circle' }}</mat-icon>
+                      <span>{{ rem > 0 ? 'COMPRAR COM PIX' : 'JÁ COMPLETO' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </section>
+
+      <div class="kawaii-lace-divider opacity-80" aria-hidden="true"></div>
+
+      <!-- Presentes Recebidos Desta Lista (Realtime Feed) -->
+      <section id="presentes-recebidos" class="relative overflow-hidden glass-panel-strong texture-gingham-blush rounded-3xl p-5 sm:p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3.5">
+            <div class="hidden sm:block w-14 h-14 rounded-2xl overflow-hidden border border-rose-200/80 bg-white/95 p-1 shadow-xs shrink-0">
+              <img
+                [src]="decorImages.peonyRibbon"
+                alt="Decoração floral de presente"
+                referrerpolicy="no-referrer"
+                class="w-full h-full object-cover rounded-xl"
+              />
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-xs font-medium text-rose-700">
+                Atualização Instantânea de Estoque
+              </div>
+              <h2 class="font-display text-2xl font-semibold text-rose-950">
+                Presentes Recebidos nesta Lista
+              </h2>
+            </div>
+          </div>
+          <span class="font-mono text-xs font-semibold text-rose-700 tabular-nums shrink-0">
+            {{ store.purchases().length }} registro(s)
+          </span>
+        </div>
+
+        @if (store.purchases().length === 0) {
+          <div class="rounded-2xl bg-white/85 texture-cotton-dots border border-rose-200/70 p-6 sm:p-7 flex flex-col sm:flex-row items-center gap-5">
+            <div class="w-24 h-20 rounded-2xl overflow-hidden border border-rose-200/80 bg-white shrink-0 shadow-xs">
+              <img
+                [src]="decorImages.layetteGiftbox"
+                alt="Caixa de presente do enxoval com laço rosa"
+                referrerpolicy="no-referrer"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="text-center sm:text-left space-y-1.5">
+              <div class="text-sm font-semibold text-rose-950">
+                Mural pronto para registrar cada carinho
+              </div>
+              <p class="text-xs sm:text-sm text-rose-800 max-w-xl leading-relaxed">
+                Quando alguém clicar em <strong>COMPRAR COM PIX</strong> e confirmar o presente, a dedicatória aparece aqui imediatamente e a quantidade necessária é deduzida da lista.
+              </p>
+            </div>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            @for (pur of store.purchases(); track pur.id) {
+              <div class="rounded-2xl bg-white/85 texture-cotton-dots border border-rose-200/70 p-4 space-y-1.5">
+                <div class="flex items-baseline justify-between gap-2">
+                  <span class="text-sm font-semibold text-rose-950 truncate">{{ pur.buyerName }}</span>
+                  <span class="font-mono text-xs font-semibold text-rose-700 tabular-nums shrink-0">
+                    {{ pur.totalAmountBrl | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                  </span>
+                </div>
+                <div class="text-xs text-rose-900">
+                  Garantiu <strong class="tabular-nums">{{ pur.quantity }}x</strong> {{ pur.itemName }}
+                </div>
+                @if (pur.buyerMessage) {
+                  <p class="text-xs italic text-rose-700">"{{ pur.buyerMessage }}"</p>
+                }
+                <div class="text-[10px] font-mono text-rose-600 pt-1">
+                  {{ pur.paymentMethod === 'loja_externa' ? (pur.storeName || 'Loja Parceira') : 'Pix Direto' }} · TXID {{ pur.pixTxid }} · {{ pur.createdAt | date: 'dd/MM HH:mm' : '' : 'pt-BR' }}
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    } @else if (store.activeView() === 'descobrir') {
+      <!-- ===================================================================== -->
+      <!-- VIEW 2: DISCOVERY HUB & ONBOARDING (Browse lists or create your own) -->
+      <!-- ===================================================================== -->
+
+      <section id="onboarding-listas" class="space-y-6">
+        <div class="animate-reveal grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
+          <!-- Left Onboarding Editorial Card with Silk Petal Wash -->
+          <div class="relative overflow-hidden lg:col-span-7 glass-panel-strong texture-silk-grid rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6">
+            <img
+              [src]="decorImages.blushSilkPattern"
+              alt=""
+              aria-hidden="true"
+              referrerpolicy="no-referrer"
+              class="pointer-events-none select-none hero-silk-wash absolute inset-0 w-full h-full object-cover opacity-[0.09]"
+            />
+
+            <div class="relative flex items-start justify-between gap-4">
+              <div class="space-y-3 max-w-2xl">
+                <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-700">
+                  <mat-icon class="text-base!">explore</mat-icon>
+                  <span>Descoberta &amp; Criação Rápida de Enxoval</span>
+                </div>
+                <h1 class="font-display text-3xl sm:text-4xl lg:text-[42px] font-semibold text-rose-950 leading-[1.1] tracking-tight text-balance">
+                  Explore listas de outros bebês ou crie sua lista para compartilhar
+                </h1>
+                <p class="text-sm sm:text-base text-rose-800 leading-relaxed">
+                  Cada lista tem seu próprio link exclusivo focado nos presentes, progresso em tempo real e recebimento direto via Pix sem intermediários.
+                </p>
+              </div>
+              <div class="hidden sm:block shrink-0 w-18 h-18 rounded-2xl overflow-hidden border border-rose-200/80 bg-white/95 p-1 shadow-xs ambient-float">
+                <img
+                  [src]="decorImages.peonyRibbon"
+                  alt="Ilustração floral de peônias e laço de seda"
+                  referrerpolicy="no-referrer"
+                  class="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            </div>
+
+            <div class="relative space-y-4">
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                <button
+                  type="button"
+                  (click)="openWizard()"
+                  class="apple-press min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold shadow-sm cursor-pointer whitespace-nowrap"
+                >
+                  <mat-icon class="text-lg!">auto_awesome</mat-icon>
+                  <span>Criar Minha Lista &amp; Link</span>
+                </button>
+                <button
+                  type="button"
+                  (click)="switchView('lista')"
+                  class="apple-press min-h-[48px] inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white/90 hover:bg-white border border-rose-200 text-xs sm:text-sm font-semibold text-rose-950 cursor-pointer whitespace-nowrap"
+                >
+                  <mat-icon class="text-base! text-rose-600">shopping_bag</mat-icon>
+                  <span>Ver Lista Atual ({{ store.listConfig().babyName }})</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-rose-200/60 text-xs">
+                <div class="rounded-2xl bg-white/85 texture-gingham-blush border border-rose-200/60 px-3.5 py-2.5 flex items-center gap-2.5">
+                  <span class="w-6 h-6 rounded-full bg-rose-600 text-white font-bold text-[11px] flex items-center justify-center shrink-0">1</span>
+                  <span class="text-rose-900 font-medium leading-snug">Abra qualquer lista em tela dedicada</span>
+                </div>
+                <div class="rounded-2xl bg-white/85 texture-gingham-blush border border-rose-200/60 px-3.5 py-2.5 flex items-center gap-2.5">
+                  <span class="w-6 h-6 rounded-full bg-rose-600 text-white font-bold text-[11px] flex items-center justify-center shrink-0">2</span>
+                  <span class="text-rose-900 font-medium leading-snug">Monte a sua em 4 passos guiados</span>
+                </div>
+                <div class="rounded-2xl bg-white/85 texture-gingham-blush border border-rose-200/60 px-3.5 py-2.5 flex items-center gap-2.5">
+                  <span class="w-6 h-6 rounded-full bg-rose-600 text-white font-bold text-[11px] flex items-center justify-center shrink-0">3</span>
+                  <span class="text-rose-900 font-medium leading-snug">Compartilhe a URL e receba via Pix</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Bespoke Layette Giftbox Visual Showcase -->
+          <div class="lg:col-span-5 glass-panel-strong rounded-3xl overflow-hidden relative min-h-[300px] sm:min-h-[360px] flex flex-col justify-between group">
+            <img
+              [src]="decorImages.layetteGiftbox"
+              alt="Caixa de presente de enxoval com cueiro floral, sapatinho de tricô e chocalho de madeira"
+              referrerpolicy="no-referrer"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-white/15 via-transparent to-rose-50/40 pointer-events-none"></div>
+
+            <div class="relative z-10 p-4 sm:p-5 flex justify-between items-start">
+              <div class="rounded-2xl bg-white/88 backdrop-blur-xl border border-white/90 px-3.5 py-2 shadow-xs">
+                <div class="text-[11px] font-semibold text-rose-700">Presentes com Carinho</div>
+                <div class="text-xs font-semibold text-rose-950">Pix Direto · Lojas Verificadas</div>
+              </div>
+            </div>
+
+            <div class="relative z-10 m-3 sm:m-4 rounded-2xl bg-white/84 backdrop-blur-xl border border-white/90 p-3.5 sm:p-4 shadow-sm space-y-1">
+              <div class="text-[11px] font-semibold text-rose-700">Curadoria Completa em 4 Etapas</div>
+              <div class="font-display text-base sm:text-lg font-semibold text-rose-950 leading-snug">
+                Da mala da maternidade ao quarto do bebê, tudo pronto para compartilhar
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Community Lists Discovery Grid -->
+        @if (store.availableLists().length > 0) {
+          <div class="space-y-3">
+            <div class="flex items-baseline justify-between gap-2">
+              <h2 class="font-display text-2xl font-semibold text-rose-950">
+                Listas Públicas da Comunidade
+              </h2>
+              <span class="text-xs font-medium text-rose-700 tabular-nums">
+                {{ store.availableLists().length }} lista(s) disponível(is)
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              @for (list of store.availableLists(); track list.slug) {
+                @let isCurrent = store.activeListSlug() === list.slug;
+                @let listRemaining = list.totalRequired - list.totalPurchased;
+                <button
+                  type="button"
+                  (click)="selectCommunityList(list.slug)"
+                  class="animate-reveal interactive-card glass-panel texture-cotton-dots rounded-3xl p-4 text-left flex flex-col justify-between gap-3.5 cursor-pointer group"
+                  [class.ring-2]="isCurrent"
+                  [class.ring-rose-500]="isCurrent"
+                  [class.bg-white/95]="isCurrent"
+                >
+                  <div class="space-y-3">
+                    <!-- Scraped Thumbnails Preview Collage -->
+                    <div class="grid grid-cols-3 gap-1.5">
+                      @for (thumb of list.previewImages; track thumb) {
+                        <div class="aspect-square rounded-2xl bg-white border border-rose-100 overflow-hidden p-1 shadow-2xs">
+                          <img
+                            [src]="thumb"
+                            [alt]="list.title"
+                            referrerpolicy="no-referrer"
+                            class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                      }
+                    </div>
+
+                    <div class="space-y-1.5">
+                      <div class="flex items-center justify-between gap-2 text-[11px] font-semibold text-rose-700">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                          <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold flex items-center justify-center shrink-0">
+                            {{ list.babyName.charAt(0).toUpperCase() }}
+                          </span>
+                          <span class="truncate">{{ list.babyName }} · {{ list.creatorCity }}</span>
+                        </div>
+                        @if (isCurrent) {
+                          <span class="inline-flex items-center gap-1 text-rose-600 font-bold shrink-0">
+                            <mat-icon class="text-sm!">check_circle</mat-icon>
+                            <span>Atual</span>
+                          </span>
+                        }
+                      </div>
+                      <h3 class="font-display text-base font-semibold text-rose-950 leading-snug line-clamp-1">
+                        {{ list.title }}
+                      </h3>
+                      <p class="text-[11px] text-rose-800 line-clamp-2 leading-relaxed">
+                        {{ list.welcomeNote }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="space-y-2 pt-2.5 border-t border-rose-200/60">
+                    <div class="h-1.5 w-full rounded-full texture-woven-blush border border-rose-200/50 overflow-hidden">
+                      <div
+                        class="h-full rounded-full bg-gradient-to-r from-rose-400 to-rose-600 transition-all duration-300"
+                        [style.width.%]="list.completionPct"
+                      ></div>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 text-xs">
+                      <span class="font-mono font-semibold text-rose-900 tabular-nums">
+                        {{ listRemaining }} faltam · {{ list.completionPct }}%
+                      </span>
+                      <span class="inline-flex items-center gap-1 font-semibold text-rose-700">
+                        <span>Abrir Lista</span>
+                        <mat-icon class="text-sm! transition-transform duration-200 group-hover:translate-x-0.5">arrow_forward</mat-icon>
+                      </span>
+                    </div>
+                  </div>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </section>
+
+      <div class="kawaii-lace-divider opacity-80" aria-hidden="true"></div>
+
+      <!-- Etapas Inspiracionais (abre diretamente na lista filtrada pela etapa) -->
+      <section id="etapas" class="space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div class="space-y-1">
+            <h2 class="font-display text-2xl sm:text-3xl font-semibold text-rose-950">
+              Explore por Etapa do Enxoval
+            </h2>
+            <p class="text-sm text-rose-800">
+              Escolha uma fase para abrir os itens recomendados com preços atualizados das lojas.
+            </p>
+          </div>
+        </div>
+
+        <div class="mask-fade-x flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 overflow-x-auto no-scrollbar pb-1">
+          @for (stage of stages; track stage.id) {
+            @let prog = stageProgress(stage.id);
+            <button
+              type="button"
+              (click)="selectStageAndScroll(stage.id)"
+              class="animate-reveal interactive-card min-w-[250px] sm:min-w-0 glass-panel rounded-3xl overflow-hidden text-left cursor-pointer flex flex-col group"
+            >
+              <div class="aspect-4/3 w-full overflow-hidden bg-rose-50 relative">
+                <img
+                  [src]="stage.imageUrl"
+                  [alt]="stage.title"
+                  referrerpolicy="no-referrer"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-rose-50/35 via-transparent to-white/10 pointer-events-none"></div>
+              </div>
+              <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3 w-full texture-cotton-dots">
+                <div class="space-y-1">
+                  <div class="text-xs font-medium text-rose-700 tabular-nums">
+                    {{ prog.required }} unidades planejadas
+                  </div>
+                  <h3 class="font-display text-lg font-semibold text-rose-950">
+                    {{ stage.title }}
+                  </h3>
+                  <p class="text-xs text-rose-800 leading-relaxed">
+                    {{ stage.subtitle }}
+                  </p>
+                </div>
+                <div class="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 pt-1">
+                  <span>Ver presentes desta etapa</span>
+                  <mat-icon class="text-sm! transition-transform duration-200 group-hover:translate-x-0.5">arrow_forward</mat-icon>
+                </div>
+              </div>
+            </button>
+          }
+        </div>
+      </section>
+    } @else {
+      <!-- ===================================================================== -->
+      <!-- VIEW 3: TOOLS & DAILY SSG STORE INDEX                                 -->
+      <!-- ===================================================================== -->
+
+      <div class="animate-reveal flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          (click)="switchView('lista')"
+          class="min-h-[42px] inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/85 hover:bg-white border border-rose-200 text-xs font-semibold text-rose-950 shadow-2xs transition-colors cursor-pointer whitespace-nowrap"
+        >
+          <mat-icon class="text-base! text-rose-600">arrow_back</mat-icon>
+          <span>Voltar para {{ store.listConfig().title }}</span>
+        </button>
+
+        <button
+          type="button"
+          (click)="switchView('descobrir')"
+          class="min-h-[42px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-white/85 hover:bg-white border border-rose-200 text-xs font-semibold text-rose-900 transition-colors cursor-pointer whitespace-nowrap"
+        >
+          <mat-icon class="text-base! text-rose-600">explore</mat-icon>
+          <span>Todas as Listas</span>
+        </button>
+      </div>
+
+      <!-- Ferramentas Práticas do Enxoval -->
+      <section id="ferramentas" class="space-y-5">
+        <div class="glass-panel texture-gingham-blush rounded-3xl p-5 sm:p-6 flex items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="text-xs font-semibold text-rose-700">Organização &amp; Comparador Verificado</div>
+            <h1 class="font-display text-2xl sm:text-3xl font-semibold text-rose-950">
+              Ferramentas da Gestante &amp; Família
+            </h1>
+            <p class="text-sm text-rose-800">
+              Calcule fraldas por idade, organize a mala da maternidade e exporte o planejamento de {{ store.listConfig().title }}.
+            </p>
+          </div>
+          <div class="hidden sm:block w-16 h-16 rounded-2xl overflow-hidden border border-rose-200/80 bg-white/95 p-1 shadow-xs shrink-0">
+            <img
+              [src]="decorImages.peonyRibbon"
+              alt="Decoração floral"
+              referrerpolicy="no-referrer"
+              class="w-full h-full object-cover rounded-xl"
+            />
+          </div>
+        </div>
+        <app-baby-tools-panel />
+      </section>
+
+      <div class="kawaii-lace-divider opacity-80" aria-hidden="true"></div>
+
+      <!-- Índice Diário GitHub SSG de Lojas & Farmácias -->
+      <section id="indice-lojas" class="glass-panel-strong texture-cotton-dots rounded-3xl p-5 sm:p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="text-xs font-medium text-rose-700">
+              GitHub Actions SSG Daily Run · Cron {{ store.ssgMeta().scheduleCron }}
+            </div>
+            <h2 class="font-display text-2xl font-semibold text-rose-950">
+              Índice Verificado de Lojas &amp; Farmácias
+            </h2>
+            <p class="text-xs text-rose-800">
+              Última indexação: {{ store.ssgMeta().generatedAt | date: 'dd/MM/yyyy HH:mm' : '' : 'pt-BR' }} ·
+              Links diretos HTTPS para Magazine Luiza, Mercado Livre, Amazon e Farmácias em Geral.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            (click)="triggerSyncSsg()"
+            [disabled]="syncingIndex()"
+            class="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-rose-100 hover:bg-rose-200/80 disabled:opacity-50 text-rose-950 text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <mat-icon class="text-base!">sync</mat-icon>
+            <span>{{ syncingIndex() ? 'Sincronizando...' : 'Sincronizar Índice' }}</span>
+          </button>
+        </div>
+
+        <!-- Store Filter Segmented Control -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="mask-fade-x flex items-center gap-1.5 p-1 rounded-2xl bg-rose-100/75 overflow-x-auto no-scrollbar">
+            @for (tab of storeFilterTabs; track tab.slug) {
+              <button
+                type="button"
+                (click)="setStoreFilter(tab.slug)"
+                class="apple-press min-h-[40px] px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                [class.bg-white]="store.selectedStoreFilter() === tab.slug"
+                [class.text-rose-950]="store.selectedStoreFilter() === tab.slug"
+                [class.shadow-sm]="store.selectedStoreFilter() === tab.slug"
+                [class.text-rose-800]="store.selectedStoreFilter() !== tab.slug"
+              >
+                {{ tab.label }}
+              </button>
+            }
+          </div>
+          <span class="text-xs font-mono font-semibold text-rose-700 tabular-nums shrink-0 px-1">
+            {{ indexedRows().length }} itens indexados
+          </span>
+        </div>
+
+        <!-- Indexed Table with Thumbnails -->
+        <div class="overflow-x-auto rounded-2xl bg-white/75 border border-rose-200/70 px-3 sm:px-4">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-rose-200 text-rose-700">
+                <th class="py-3 pr-4 font-semibold">Item do Enxoval</th>
+                <th class="py-3 px-3 font-semibold">Melhor Loja</th>
+                <th class="py-3 px-3 font-semibold hidden sm:table-cell">Entrega</th>
+                <th class="py-3 px-3 font-semibold text-right">Preço</th>
+                <th class="py-3 pl-3 font-semibold text-right">Acesso</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-rose-200/50">
+              @for (row of indexedRows(); track row.item.id) {
+                <tr class="hover:bg-rose-50/55 transition-colors">
+                  <td class="py-3 pr-4">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-white border border-rose-100 overflow-hidden p-1 shrink-0">
+                        <img
+                          [src]="row.item.imageUrl"
+                          [alt]="row.item.name"
+                          loading="lazy"
+                          (error)="onProductImageError($event, row.item.stage)"
+                          referrerpolicy="no-referrer"
+                          class="w-full h-full object-contain"
+                        />
+                      </div>
+                      <div class="min-w-0">
+                        <div class="font-semibold text-rose-950 truncate max-w-[180px] sm:max-w-xs">{{ row.item.name }}</div>
+                        <div class="text-[11px] text-rose-700">{{ row.item.category }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-3 text-rose-900">
+                    <div class="font-medium">{{ row.bestOffer.storeName }}</div>
+                    @if (row.bestOffer.pharmacyBrand) {
+                      <div class="text-[11px] text-rose-700">{{ row.bestOffer.pharmacyBrand }}</div>
+                    }
+                  </td>
+                  <td class="py-3 px-3 text-rose-800 whitespace-nowrap hidden sm:table-cell">
+                    {{ row.bestOffer.deliveryEstimate }}
+                  </td>
+                  <td class="py-3 px-3 text-right font-mono font-semibold text-rose-950 tabular-nums whitespace-nowrap">
+                    {{ row.bestOffer.priceBrl | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                  </td>
+                  <td class="py-3 pl-3 text-right">
+                    <div class="inline-flex items-center justify-end gap-1.5">
+                      @if (remainingQty(row.item) > 0) {
+                        <button
+                          type="button"
+                          (click)="openCheckout(row.item)"
+                          aria-label="Presentear este item com Pix"
+                          class="apple-press min-h-[40px] inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold cursor-pointer whitespace-nowrap"
+                        >
+                          <mat-icon class="text-sm!">qr_code_2</mat-icon>
+                          <span class="hidden md:inline">Pix</span>
+                        </button>
+                      }
+                      <a
+                        [href]="row.bestOffer.url"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="apple-press min-h-[40px] inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-900 font-semibold whitespace-nowrap"
+                      >
+                        <span>Visitar</span>
+                        <mat-icon class="text-sm!">open_in_new</mat-icon>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+  </main>
+
+  <footer class="hidden md:block mt-10 border-t border-rose-200/60 bg-white/55 texture-cotton-dots backdrop-blur-md relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between gap-4 text-xs text-rose-800">
+      <div class="flex items-center gap-2">
+        <app-kawaii-ribbon [size]="22" />
+        <span>Enxoval Baby · Planejador completo para gestante, bebê e família</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <button
+          type="button"
+          (click)="pixConfigOpen.set(true)"
+          class="hover:text-rose-600 cursor-pointer transition-colors"
+        >
+          Chave Pix &amp; Supabase
+        </button>
+        <button
+          type="button"
+          (click)="switchView('ferramentas')"
+          class="hover:text-rose-600 cursor-pointer transition-colors"
+        >
+          Ferramentas &amp; Índice SSG
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Fixed Bottom Tab Bar (Thumb-Zone Navigation Anchor) -->
+  <nav
+    aria-label="Navegação rápida mobile"
+    class="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-panel-strong border-x-0 border-b-0 pb-safe"
+  >
+    <div class="grid grid-cols-4 items-center h-14">
+      <button
+        type="button"
+        (click)="navigateMobileTab('catalogo')"
+        class="apple-press relative h-full flex flex-col items-center justify-center gap-0.5 cursor-pointer"
+        [class.text-rose-600]="store.activeView() === 'lista'"
+        [class.text-rose-900]="store.activeView() !== 'lista'"
+      >
+        <span
+          class="absolute top-0 w-8 h-0.5 rounded-full bg-rose-600 transition-transform duration-200"
+          [class.scale-x-100]="store.activeView() === 'lista'"
+          [class.scale-x-0]="store.activeView() !== 'lista'"
+        ></span>
+        <mat-icon class="text-[22px]! transition-transform duration-200" [class.-translate-y-0.5]="store.activeView() === 'lista'">shopping_bag</mat-icon>
+        <span class="text-[11px] font-semibold tracking-tight">Presentes</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="navigateMobileTab('etapas')"
+        class="apple-press relative h-full flex flex-col items-center justify-center gap-0.5 cursor-pointer"
+        [class.text-rose-600]="store.activeView() === 'descobrir'"
+        [class.text-rose-900]="store.activeView() !== 'descobrir'"
+      >
+        <span
+          class="absolute top-0 w-8 h-0.5 rounded-full bg-rose-600 transition-transform duration-200"
+          [class.scale-x-100]="store.activeView() === 'descobrir'"
+          [class.scale-x-0]="store.activeView() !== 'descobrir'"
+        ></span>
+        <mat-icon class="text-[22px]! transition-transform duration-200" [class.-translate-y-0.5]="store.activeView() === 'descobrir'">explore</mat-icon>
+        <span class="text-[11px] font-semibold tracking-tight">Listas</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="navigateMobileTab('ferramentas')"
+        class="apple-press relative h-full flex flex-col items-center justify-center gap-0.5 cursor-pointer"
+        [class.text-rose-600]="store.activeView() === 'ferramentas'"
+        [class.text-rose-900]="store.activeView() !== 'ferramentas'"
+      >
+        <span
+          class="absolute top-0 w-8 h-0.5 rounded-full bg-rose-600 transition-transform duration-200"
+          [class.scale-x-100]="store.activeView() === 'ferramentas'"
+          [class.scale-x-0]="store.activeView() !== 'ferramentas'"
+        ></span>
+        <mat-icon class="text-[22px]! transition-transform duration-200" [class.-translate-y-0.5]="store.activeView() === 'ferramentas'">calculate</mat-icon>
+        <span class="text-[11px] font-semibold tracking-tight">Ferramentas</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="navigateMobileTab('conta')"
+        class="apple-press relative h-full flex flex-col items-center justify-center gap-0.5 cursor-pointer"
+        [class.text-rose-600]="pixConfigOpen()"
+        [class.text-rose-900]="!pixConfigOpen()"
+      >
+        <span
+          class="absolute top-0 w-8 h-0.5 rounded-full bg-rose-600 transition-transform duration-200"
+          [class.scale-x-100]="pixConfigOpen()"
+          [class.scale-x-0]="!pixConfigOpen()"
+        ></span>
+        <mat-icon class="text-[22px]! transition-transform duration-200" [class.-translate-y-0.5]="pixConfigOpen()">qr_code_2</mat-icon>
+        <span class="text-[11px] font-semibold tracking-tight">Pix &amp; Conta</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Bottom-Sheet / Modal Layers -->
+  <app-create-list-wizard
+    [open]="store.wizardOpen()"
+    (closed)="store.wizardOpen.set(false)"
+  />
+  <app-pix-checkout-modal
+    [item]="activeCheckoutItem()"
+    (closed)="closeCheckout()"
+    (requestConfigurePix)="openPixFromCheckout()"
+  />
+  <app-add-item-modal
+    [open]="addItemOpen()"
+    (closed)="addItemOpen.set(false)"
+  />
+  <app-pix-config-drawer
+    [open]="pixConfigOpen()"
+    (closed)="pixConfigOpen.set(false)"
+  />
+  <app-google-auth-modal />
+</div>

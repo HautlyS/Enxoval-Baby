@@ -1,0 +1,49 @@
+name: Daily Enxoval SSG Store Index & Supabase Sync
+
+on:
+  schedule:
+    # Scheduled daily run at 06:00 UTC (03:00 BRT)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-scrape-ssg-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Run daily retail & pharmacy index scraper (Images, Prices & Links)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SSG_SYNC_SECRET: ${{ secrets.SSG_SYNC_SECRET }}
+        run: node scripts/scrape-enxoval-index.mjs
+
+      - name: Install dependencies and build Angular SSG bundle with GitHub Secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Commit updated daily SSG index snapshot
+        run: |
+          git config user.name "enxoval-ssg-bot"
+          git config user.email "bot@enxovalbaby.local"
+          git add public/data/indexed-stores.json
+          git diff --staged --quiet || git commit -m "chore(ssg-index): daily store & pharmacy image/price index update"
+          git push || true
