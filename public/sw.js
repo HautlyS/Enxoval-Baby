@@ -1,8 +1,9 @@
 const CACHE_NAME = 'enxoval-baby-v1';
+const BASE = '/Enxoval-Baby/';
 const SHELL_URLS = [
-  '/',
-  '/index.html',
-  '/favicon.ico',
+  BASE,
+  BASE + 'index.html',
+  BASE + 'favicon.ico',
 ];
 
 self.addEventListener('install', (event) => {
@@ -14,23 +15,20 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   const {request} = event;
   const url = new URL(request.url);
+  const path = url.pathname;
 
   // Cache-first for app shell and static assets
-  if (request.method === 'GET' && (request.destination === 'image' || request.destination === 'style' || request.destination === 'script' || SHELL_URLS.includes(url.pathname))) {
+  if (request.method === 'GET' &&
+      (request.destination === 'image' ||
+       request.destination === 'style' ||
+       request.destination === 'script' ||
+       path === BASE ||
+       path === BASE + 'index.html' ||
+       path === BASE + 'favicon.ico' ||
+       path.startsWith(BASE + 'src/') ||
+       path.startsWith(BASE + 'data/'))) {
     event.respondWith(
       caches.match(request).then((cached) => cached || fetch(request)),
-    );
-    return;
-  }
-
-  // Network-first for data (indexed-stores.json), fall back to cache
-  if (url.pathname.startsWith('/data/') || url.pathname.startsWith('/Enxoval-Baby/data/')) {
-    event.respondWith(
-      fetch(request).then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-        return response;
-      }).catch(() => caches.match(request)),
     );
     return;
   }
