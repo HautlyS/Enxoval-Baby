@@ -469,6 +469,24 @@ export class EnxovalStore implements OnDestroy {
     });
   }
 
+  private async handleAuthCallback(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (!code || !this.supabaseClient) return;
+    try {
+      const {error} = await this.supabaseClient.auth.exchangeCodeForSession(code);
+      if (!error) {
+        const session = this.supabaseClient.auth.getSession().then(({data}) => data.session);
+        const s = await session;
+        if (s) this.applySupabaseSession(s);
+      }
+      window.history.replaceState({}, '', window.location.pathname);
+    } catch {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }
+
   private resolveInitialSlugFromUrl(): {slug: string; isExplicitLink: boolean} {
     if (!isPlatformBrowser(this.platformId)) {
       return {slug: INITIAL_LIST_CONFIG.slug, isExplicitLink: false};
@@ -503,6 +521,7 @@ export class EnxovalStore implements OnDestroy {
   async initialize(): Promise<void> {
     this.loading.set(true);
     this.error.set(null);
+    await this.handleAuthCallback();
     const {slug: initialSlug, isExplicitLink} = this.resolveInitialSlugFromUrl();
     if (isExplicitLink) {
       this.activeView.set('lista');
@@ -870,7 +889,7 @@ export class EnxovalStore implements OnDestroy {
 
   async startGoogleOAuthPopup(): Promise<'started' | 'needs_preview'> {
     if (this.supabaseClient && this.supabaseConnected()) {
-      const redirectTo = `${window.location.origin}/auth/callback`;
+      const redirectTo = `${window.location.origin}/Enxoval-Baby/auth/callback`;
       const {data, error} = await this.supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -886,7 +905,7 @@ export class EnxovalStore implements OnDestroy {
     }
 
     if (environment.googleClientId) {
-      const redirectUri = `${window.location.origin}/auth/callback`;
+      const redirectUri = `${window.location.origin}/Enxoval-Baby/auth/callback`;
       const params = new URLSearchParams({
         client_id: environment.googleClientId,
         redirect_uri: redirectUri,
