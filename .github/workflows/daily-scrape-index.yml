@@ -5,9 +5,29 @@ on:
     # Scheduled daily run at 06:00 UTC (03:00 BRT)
     - cron: '0 6 * * *'
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      # Note: public/data/** is intentionally omitted so the bot's own
+      # index commits never re-trigger this workflow.
+      - 'scripts/**'
+      - 'src/**'
+      - 'angular.json'
+      - 'package.json'
+      - 'bun.lock'
+      - 'tsconfig*.json'
+      - '.github/workflows/daily-scrape-index.yml'
 
 permissions:
   contents: write
+  # Needed by the final step to dispatch the Pages workflow.
+  actions: write
+
+# Never let two runs race to push the same branch.
+concurrency:
+  group: daily-scrape-index
+  cancel-in-progress: false
 
 jobs:
   daily-scrape-ssg-index:
@@ -16,11 +36,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
       - name: Run daily retail & pharmacy index scraper (Images, Prices & Links)
         env:
@@ -29,15 +54,30 @@ jobs:
           SSG_SYNC_SECRET: ${{ secrets.SSG_SYNC_SECRET }}
         run: node scripts/scrape-enxoval-index.mjs
 
-      - name: Install dependencies and build Angular SSG bundle
-        run: |
-          npm ci
-          npm run build
+      - name: Build Angular SSG bundle
+        run: bun run build
 
       - name: Commit updated daily SSG index snapshot
+        id: snapshot
         run: |
           git config user.name "enxoval-ssg-bot"
           git config user.email "bot@enxovalbaby.local"
           git add public/data/indexed-stores.json
-          git diff --staged --quiet || git commit -m "chore(ssg-index): daily store & pharmacy image/price index update"
-          git push || true
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore(ssg-index): daily store & pharmacy image/price index update [skip ci]"
+            if git push; then
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      # GITHUB_TOKEN pushes do not start new workflow runs, so the freshly
+      # scraped index has to ask the Pages workflow to rebuild explicitly.
+      - name: Rebuild GitHub Pages with the fresh index
+        if: steps.snapshot.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref main
