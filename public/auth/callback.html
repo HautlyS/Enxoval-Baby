@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Autenticação Google — Enxoval Baby</title>
+  </head>
+  <body>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var code = params.get('code');
+        var error = params.get('error');
+        var errorDescription = params.get('error_description');
+
+        if (error) {
+          if (window.opener) {
+            window.opener.postMessage(
+              { type: 'SUPABASE_AUTH_ERROR', error: error, error_description: errorDescription },
+              window.location.origin
+            );
+          }
+          window.close();
+          return;
+        }
+
+        if (code && window.opener) {
+          window.opener.postMessage(
+            { type: 'SUPABASE_AUTH_CALLBACK', code: code },
+            window.location.origin
+          );
+        }
+
+        window.close();
+      })();
+    </script>
+  </body>
+</html>

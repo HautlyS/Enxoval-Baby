@@ -479,7 +479,17 @@ export class EnxovalStore implements OnDestroy {
       if (!error) {
         const session = this.supabaseClient.auth.getSession().then(({data}) => data.session);
         const s = await session;
-        if (s) this.applySupabaseSession(s);
+        if (s) {
+          this.applySupabaseSession(s);
+          if (window.opener) {
+            window.opener.postMessage(
+              { type: 'SUPABASE_AUTH_SUCCESS', token: s.access_token, user: this.currentUser() },
+              window.location.origin
+            );
+            window.close();
+            return;
+          }
+        }
       }
       window.history.replaceState({}, '', window.location.pathname);
     } catch {
@@ -889,7 +899,7 @@ export class EnxovalStore implements OnDestroy {
 
   async startGoogleOAuthPopup(): Promise<'started' | 'needs_preview'> {
     if (this.supabaseClient && this.supabaseConnected()) {
-      const redirectTo = `${window.location.origin}/Enxoval-Baby/auth/callback`;
+      const redirectTo = `${window.location.origin}/Enxoval-Baby/auth/callback.html`;
       const {data, error} = await this.supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -905,7 +915,7 @@ export class EnxovalStore implements OnDestroy {
     }
 
     if (environment.googleClientId) {
-      const redirectUri = `${window.location.origin}/Enxoval-Baby/auth/callback`;
+      const redirectUri = `${window.location.origin}/Enxoval-Baby/auth/callback.html`;
       const params = new URLSearchParams({
         client_id: environment.googleClientId,
         redirect_uri: redirectUri,
