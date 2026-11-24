@@ -9,41 +9,41 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
   selector: 'app-baby-tools-panel',
   imports: [MatIconModule, KawaiiProgressRing],
   template: `
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
       <!-- Tool 1: Calculadora de Fraldas -->
-      <div class="lg:col-span-6 glass-panel-strong texture-silk-grid rounded-3xl p-5 sm:p-6 space-y-5">
+      <div class="lg:col-span-6 bento-card bento-dot-matrix rounded-[26px] p-5 sm:p-6 space-y-5">
         <div class="flex items-start justify-between gap-4">
           <div class="space-y-1">
-            <div class="text-xs font-medium text-rose-700">Planejamento Inteligente</div>
-            <h3 class="font-display text-xl font-semibold text-rose-950">
+            <div class="text-xs font-bold text-[#C2185B]">Planejamento Inteligente</div>
+            <h3 class="font-display text-xl font-bold text-[#0F1115]">
               Calculadora de Fraldas por Idade
             </h3>
-            <p class="text-xs text-rose-800">
+            <p class="text-xs text-[#4B5563]">
               Ajuste o tempo de planejamento e adicione os pacotes exatos direto no enxoval.
             </p>
           </div>
-          <div class="w-11 h-11 rounded-2xl bg-rose-100/85 border border-rose-200/70 flex items-center justify-center text-rose-700 shrink-0">
+          <div class="w-11 h-11 rounded-full bg-[#FCE4EC] border border-[#F48FB1] flex items-center justify-center text-[#C2185B] shrink-0">
             <mat-icon>calculate</mat-icon>
           </div>
         </div>
 
-        <div class="space-y-4 rounded-2xl bg-white/80 texture-cotton-dots border border-rose-200/70 p-4">
+        <div class="space-y-4 rounded-[22px] bg-[#F6F7F9] border border-[#E4E7EC] p-4">
           <div class="flex items-center justify-between gap-4">
             <div>
-              <div class="text-xs font-semibold text-rose-950">Horizonte de Estoque</div>
-              <div class="text-[11px] text-rose-700">Meses iniciais do bebê</div>
+              <div class="text-xs font-bold text-[#0F1115]">Horizonte de Estoque</div>
+              <div class="text-[11px] text-[#4B5563]">Meses iniciais do bebê</div>
             </div>
-            <div class="flex items-center gap-2 bg-rose-50 border border-rose-200 rounded-xl p-1">
+            <div class="flex items-center gap-1.5 bg-white border border-[#D8DCE3] rounded-full p-1">
               <button
                 type="button"
                 (click)="changeMonths(-1)"
                 [disabled]="months() <= 1"
                 aria-label="Reduzir meses"
-                class="min-w-[44px] min-h-[44px] rounded-lg flex items-center justify-center text-rose-900 hover:bg-white disabled:opacity-40 cursor-pointer"
+                class="apple-press min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center text-[#0F1115] hover:bg-[#F1F3F6] disabled:opacity-35 cursor-pointer"
               >
                 <mat-icon>remove</mat-icon>
               </button>
-              <span class="w-14 text-center text-sm font-bold text-rose-950 tabular-nums">
+              <span class="w-12 text-center text-sm font-bold text-[#0F1115] tabular-nums">
                 {{ months() }}m
               </span>
               <button
@@ -51,29 +51,29 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
                 (click)="changeMonths(1)"
                 [disabled]="months() >= 12"
                 aria-label="Aumentar meses"
-                class="min-w-[44px] min-h-[44px] rounded-lg flex items-center justify-center text-rose-900 hover:bg-white disabled:opacity-40 cursor-pointer"
+                class="apple-press min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center text-[#0F1115] hover:bg-[#F1F3F6] disabled:opacity-35 cursor-pointer"
               >
                 <mat-icon>add</mat-icon>
               </button>
             </div>
           </div>
 
-          <div class="flex items-center justify-between gap-4 pt-2 border-t border-rose-100">
+          <div class="flex items-center justify-between gap-4 pt-3 border-t border-[#E4E7EC]">
             <div>
-              <div class="text-xs font-semibold text-rose-950">Trocas Médias Diárias</div>
-              <div class="text-[11px] text-rose-700">Recomendado RN: 8 a 10 trocas/dia</div>
+              <div class="text-xs font-bold text-[#0F1115]">Trocas Médias Diárias</div>
+              <div class="text-[11px] text-[#4B5563]">Recomendado RN: 8 a 10 trocas/dia</div>
             </div>
-            <div class="flex items-center gap-2 bg-rose-50 border border-rose-200 rounded-xl p-1">
+            <div class="flex items-center gap-1.5 bg-white border border-[#D8DCE3] rounded-full p-1">
               <button
                 type="button"
                 (click)="changePerDay(-1)"
                 [disabled]="changesPerDay() <= 5"
                 aria-label="Reduzir trocas diárias"
-                class="min-w-[44px] min-h-[44px] rounded-lg flex items-center justify-center text-rose-900 hover:bg-white disabled:opacity-40 cursor-pointer"
+                class="apple-press min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center text-[#0F1115] hover:bg-[#F1F3F6] disabled:opacity-35 cursor-pointer"
               >
                 <mat-icon>remove</mat-icon>
               </button>
-              <span class="w-14 text-center text-sm font-bold text-rose-950 tabular-nums">
+              <span class="w-14 text-center text-sm font-bold text-[#0F1115] tabular-nums">
                 {{ changesPerDay() }}/dia
               </span>
               <button
@@ -81,7 +81,7 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
                 (click)="changePerDay(1)"
                 [disabled]="changesPerDay() >= 12"
                 aria-label="Aumentar trocas diárias"
-                class="min-w-[44px] min-h-[44px] rounded-lg flex items-center justify-center text-rose-900 hover:bg-white disabled:opacity-40 cursor-pointer"
+                class="apple-press min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center text-[#0F1115] hover:bg-[#F1F3F6] disabled:opacity-35 cursor-pointer"
               >
                 <mat-icon>add</mat-icon>
               </button>
@@ -89,28 +89,28 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
           </div>
         </div>
 
-        <div #diaperTiers class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+        <div #diaperTiers class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
           @for (tier of diaperBreakdown(); track tier.size) {
-            <div class="tier-box rounded-2xl bg-white/85 texture-cotton-dots border border-rose-200/70 p-3 space-y-0.5 transition-colors hover:border-rose-300">
-              <div class="text-[11px] font-semibold text-rose-700">{{ tier.size }}</div>
-              <div class="font-display text-xl font-bold text-rose-950 tabular-nums">
+            <div class="tier-box rounded-[20px] bg-[#F6F7F9] border border-[#E4E7EC] p-3.5 space-y-1 transition-colors hover:border-[#C2185B]/45">
+              <div class="text-[11px] font-bold text-[#C2185B]">{{ tier.size }}</div>
+              <div class="font-display text-2xl font-bold text-[#0F1115] tabular-nums">
                 {{ tier.packs }}
               </div>
-              <div class="text-[10px] text-rose-700 tabular-nums">{{ tier.units }} fraldas</div>
+              <div class="text-[10px] font-medium text-[#4B5563] tabular-nums">{{ tier.units }} fraldas</div>
             </div>
           }
         </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
-          <div class="text-xs text-rose-900">
-            Total estimado: <strong class="tabular-nums">{{ totalPacks() }} pacotes</strong>
+          <div class="text-xs text-[#4B5563]">
+            Total estimado: <strong class="text-[#0F1115] tabular-nums">{{ totalPacks() }} pacotes</strong>
             ({{ totalDiapers() }} fraldas)
           </div>
           <button
             type="button"
             (click)="addCalculatedDiapers()"
             [disabled]="addingDiapers()"
-            class="apple-press min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-semibold cursor-pointer whitespace-nowrap"
+            class="apple-press min-h-[46px] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#FF80AB] hover:bg-[#F48FB1] disabled:opacity-50 text-[#111111] text-xs font-bold shadow-xs cursor-pointer whitespace-nowrap"
           >
             <mat-icon class="text-base!">add_shopping_cart</mat-icon>
             <span>{{ addingDiapers() ? 'Adicionando...' : 'Adicionar Estoque ao Enxoval' }}</span>
@@ -119,14 +119,14 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
       </div>
 
       <!-- Tool 2: Checklist Interativo da Mala da Maternidade + Export CSV -->
-      <div class="lg:col-span-6 glass-panel-strong texture-gingham-blush rounded-3xl p-5 sm:p-6 space-y-4">
+      <div class="lg:col-span-6 bento-card rounded-[26px] p-5 sm:p-6 space-y-4">
         <div class="flex items-center justify-between gap-4">
           <div class="space-y-1">
-            <div class="text-xs font-medium text-rose-700">Organização Pré-Parto</div>
-            <h3 class="font-display text-xl font-semibold text-rose-950">
+            <div class="text-xs font-bold text-[#C2185B]">Organização Pré-Parto</div>
+            <h3 class="font-display text-xl font-bold text-[#0F1115]">
               Checklist da Mala da Maternidade
             </h3>
-            <p class="text-xs text-rose-800">
+            <p class="text-xs text-[#4B5563]">
               Toque em cada item para marcar o que já está separado na mala.
             </p>
           </div>
@@ -138,14 +138,14 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
             <button
               type="button"
               (click)="store.toggleChecklistItem(entry.id)"
-              class="apple-press w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl bg-white/85 hover:bg-white texture-cotton-dots border border-rose-200/70 flex items-center justify-between gap-3 text-left cursor-pointer"
+              class="apple-press w-full min-h-[48px] px-3.5 py-2.5 rounded-[18px] bg-[#F6F7F9] hover:bg-[#EEF0F4] border border-[#E4E7EC] flex items-center justify-between gap-3 text-left cursor-pointer"
             >
               <div class="flex items-center gap-3 min-w-0">
                 <mat-icon
                   class="transition-transform duration-200"
                   [class.scale-110]="entry.packed"
-                  [class.text-rose-600]="entry.packed"
-                  [class.text-rose-300]="!entry.packed"
+                  [class.text-[#C2185B]]="entry.packed"
+                  [class.text-[#6B7280]]="!entry.packed"
                 >
                   {{ entry.packed ? 'check_circle' : 'radio_button_unchecked' }}
                 </mat-icon>
@@ -153,26 +153,26 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
                   <div
                     class="text-xs font-semibold truncate transition-colors"
                     [class.line-through]="entry.packed"
-                    [class.text-rose-600]="entry.packed"
-                    [class.text-rose-950]="!entry.packed"
+                    [class.text-[#6B7280]]="entry.packed"
+                    [class.text-[#0F1115]]="!entry.packed"
                   >
                     {{ entry.label }}
                   </div>
-                  <div class="text-[11px] text-rose-700">{{ entry.group }}</div>
+                  <div class="text-[11px] text-[#4B5563]">{{ entry.group }}</div>
                 </div>
               </div>
-              <span class="font-mono text-[11px] font-semibold text-rose-800 shrink-0 tabular-nums">
+              <span class="font-mono text-[11px] font-bold text-[#C2185B] shrink-0 tabular-nums">
                 {{ entry.qtyLabel }}
               </span>
             </button>
           }
         </div>
 
-        <div class="pt-2 border-t border-rose-200/60 flex flex-wrap items-center justify-between gap-3">
-          <span class="inline-flex items-center gap-1.5 text-xs font-medium text-rose-800 tabular-nums">
+        <div class="pt-3 border-t border-[#E4E7EC] flex flex-wrap items-center justify-between gap-3">
+          <span class="inline-flex items-center gap-1.5 text-xs font-medium text-[#4B5563] tabular-nums">
             @if (store.checklistProgress().pct === 100) {
-              <mat-icon class="text-base! text-rose-600">celebration</mat-icon>
-              <span class="font-semibold text-rose-700">Mala 100% pronta para a maternidade!</span>
+              <mat-icon class="text-base! text-[#C2185B]">celebration</mat-icon>
+              <span class="font-bold text-[#C2185B]">Mala 100% pronta para a maternidade!</span>
             } @else {
               <span>{{ store.checklistProgress().packed }} de {{ store.checklistProgress().total }} itens prontos</span>
             }
@@ -180,9 +180,9 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
           <a
             [href]="'/api/enxoval/export.csv?list=' + store.activeListSlug()"
             [attr.download]="'enxoval-' + store.activeListSlug() + '.csv'"
-            class="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 hover:bg-rose-50 border border-rose-200 text-rose-950 text-xs font-semibold transition-colors whitespace-nowrap"
+            class="apple-press min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F6F7F9] hover:bg-[#E8EBF0] border border-[#D8DCE3] text-[#0F1115] text-xs font-bold transition-colors whitespace-nowrap"
           >
-            <mat-icon class="text-base!">download</mat-icon>
+            <mat-icon class="text-base! text-[#C2185B]">download</mat-icon>
             <span>Baixar Lista Completa (CSV)</span>
           </a>
         </div>

@@ -17,6 +17,7 @@ import {
   PixKeyType,
   PublicEnxovalSummary,
   PurchaseRecord,
+  SelectedCatalogItemInput,
   SsgIndexMetadata,
   StoreSlug,
 } from './models';
@@ -120,6 +121,7 @@ export class EnxovalStore implements OnDestroy {
   readonly activeView = signal<AppViewMode>('descobrir');
   readonly activeMobileTab = signal<MobileTab>('etapas');
   readonly selectedStage = signal<EnxovalStage | 'all'>('all');
+  readonly selectedCategory = signal<string>('all');
   readonly searchQuery = signal('');
   readonly onlyRemaining = signal(false);
   readonly sortOrder = signal<CatalogSortOrder>('default');
@@ -127,6 +129,14 @@ export class EnxovalStore implements OnDestroy {
 
   // Baby Tools State
   readonly maternityChecklist = signal<MaternityBagChecklistItem[]>(INITIAL_MATERNITY_CHECKLIST);
+
+  readonly availableCategories = computed(() => {
+    const cats = new Set<string>();
+    for (const item of this.items()) {
+      if (item.category.trim()) cats.add(item.category.trim());
+    }
+    return Array.from(cats).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  });
 
   readonly isAuthenticated = computed(() => Boolean(this.currentUser() && this.accessToken()));
   readonly canManageActiveList = computed(() => {
@@ -147,12 +157,14 @@ export class EnxovalStore implements OnDestroy {
 
   readonly filteredItems = computed(() => {
     const stage = this.selectedStage();
+    const category = this.selectedCategory();
     const query = this.searchQuery().trim().toLowerCase();
     const onlyRem = this.onlyRemaining();
     const order = this.sortOrder();
 
     const matched = this.items().filter((item) => {
       if (stage !== 'all' && item.stage !== stage) return false;
+      if (category !== 'all' && item.category !== category) return false;
       if (onlyRem && item.requiredQty - item.purchasedQty <= 0) return false;
       if (query) {
         const haystack = `${item.name} ${item.category} ${item.description}`.toLowerCase();
@@ -401,6 +413,7 @@ export class EnxovalStore implements OnDestroy {
     if (this.switchingList()) return;
     this.switchingList.set(true);
     this.selectedStage.set('all');
+    this.selectedCategory.set('all');
     const minWait = new Promise((r) => setTimeout(r, 420));
     try {
       const [snapshot] = await Promise.all([
@@ -448,6 +461,7 @@ export class EnxovalStore implements OnDestroy {
     this.purchases.set([]);
     this.availableLists.set(res.availableLists);
     this.selectedStage.set('all');
+    this.selectedCategory.set('all');
     this.openView('lista', true);
 
     if (isPlatformBrowser(this.platformId)) {
@@ -506,6 +520,27 @@ export class EnxovalStore implements OnDestroy {
         this.items.update((list) => {
           if (list.some((i) => i.id === data.item.id)) return list;
           return [data.item, ...list];
+        });
+        if (data.ssgMeta) this.ssgMeta.set(data.ssgMeta);
+      } catch {
+        // ignore
+      }
+    });
+
+    source.addEventListener('items_batch_added', (evt) => {
+      try {
+        const data = JSON.parse((evt as MessageEvent).data) as {
+          listSlug?: string;
+          items: EnxovalItem[];
+          ssgMeta?: SsgIndexMetadata;
+          summary?: PublicEnxovalSummary;
+        };
+        if (data.summary) this.upsertListSummary(data.summary);
+        if (data.listSlug && data.listSlug !== this.activeListSlug()) return;
+        this.items.update((list) => {
+          const existing = new Set(list.map((i) => i.id));
+          const incoming = (data.items ?? []).filter((it) => !existing.has(it.id));
+          return incoming.length > 0 ? [...incoming, ...list] : list;
         });
         if (data.ssgMeta) this.ssgMeta.set(data.ssgMeta);
       } catch {
@@ -767,6 +802,31 @@ export class EnxovalStore implements OnDestroy {
     if (res.summary) this.upsertListSummary(res.summary);
     this.showToast(`Item "${res.item.name}" adicionado e indexado nas 4 lojas.`);
     return res.item;
+  }
+
+  async addItemsBatch(
+    items: (SelectedCatalogItemInput | NewItemInput)[],
+  ): Promise<EnxovalItem[]> {
+    const slug = this.activeListSlug();
+    const res = await firstValueFrom(
+      this.http.post<{items: EnxovalItem[]; summary?: PublicEnxovalSummary}>(
+        `/api/enxoval/items/batch?list=${encodeURIComponent(slug)}`,
+        {items, listSlug: slug},
+        {headers: this.authHeaders()},
+      ),
+    );
+    this.items.update((list) => {
+      const existing = new Set(list.map((i) => i.id));
+      const incoming = res.items.filter((it) => !existing.has(it.id));
+      return incoming.length > 0 ? [...incoming, ...list] : list;
+    });
+    if (res.summary) this.upsertListSummary(res.summary);
+    this.showToast(
+      res.items.length === 1
+        ? `Item "${res.items[0].name}" adicionado à lista!`
+        : `${res.items.length} novos itens adicionados ao enxoval!`,
+    );
+    return res.items;
   }
 
   async deleteItem(itemId: string): Promise<void> {

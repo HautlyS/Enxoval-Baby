@@ -15,19 +15,11 @@ import {
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {animate} from 'motion';
-import {INITIAL_ENXOVAL_ITEMS} from '../core/catalog-seed';
+import {FULL_ENXOVAL_CATALOG, INITIAL_ENXOVAL_ITEMS, STAGE_IMAGES} from '../core/catalog-seed';
 import {EnxovalStore} from '../core/enxoval-store';
-import {EnxovalStage, PixKeyType} from '../core/models';
+import {EnxovalItem, EnxovalStage, ItemPriority, PixKeyType} from '../core/models';
 import {validatePixKey} from '../core/pix-brcode';
 import {KawaiiRibbon} from './kawaii-ornaments';
-
-interface WizardStageOption {
-  id: EnxovalStage;
-  title: string;
-  subtitle: string;
-  icon: string;
-  itemCount: number;
-}
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +29,7 @@ interface WizardStageOption {
     @if (open()) {
       <div
         (keydown.escape)="closeWizard()"
-        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-rose-100/55 backdrop-blur-md"
+        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-[#0F1115]/35 backdrop-blur-sm"
         role="dialog"
         aria-modal="true"
         aria-labelledby="wizard-title"
@@ -51,23 +43,23 @@ interface WizardStageOption {
         ></button>
         <div
           #sheetContainer
-          class="relative z-10 glass-panel-strong w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl overflow-hidden max-h-[93vh] flex flex-col"
+          class="relative z-10 bento-card-strong w-full sm:max-w-2xl rounded-t-[28px] sm:rounded-[28px] overflow-hidden max-h-[93vh] flex flex-col text-[#0F1115]"
         >
           <!-- Mobile Grab Handle -->
           <div class="sm:hidden pt-3 pb-1 flex justify-center shrink-0">
-            <span class="w-10 h-1.5 rounded-full bg-rose-300/80"></span>
+            <span class="w-10 h-1.5 rounded-full bg-[#CBD2DD]"></span>
           </div>
 
           <!-- Header & Animated Stepper -->
-          <div class="px-5 sm:px-6 pt-3.5 pb-4 border-b border-rose-200/60 bg-white/70 texture-silk-grid shrink-0 space-y-3.5">
+          <div class="px-5 sm:px-6 pt-3.5 pb-4 border-b border-[#E4E7EC] bg-[#F6F7F9] shrink-0 space-y-3.5">
             <div class="flex items-center justify-between gap-4">
               <div class="flex items-center gap-3 min-w-0">
                 <app-kawaii-ribbon [size]="30" />
                 <div class="min-w-0">
-                  <p class="text-xs font-medium text-rose-700">
+                  <p class="text-xs font-bold text-[#C2185B]">
                     Passo {{ step() }} de 4 · Assistente de Enxoval
                   </p>
-                  <h2 id="wizard-title" class="font-display text-lg font-semibold text-rose-950 truncate">
+                  <h2 id="wizard-title" class="font-display text-lg font-bold text-[#0F1115] truncate">
                     {{ stepTitles[step() - 1] }}
                   </h2>
                 </div>
@@ -76,7 +68,7 @@ interface WizardStageOption {
                 type="button"
                 (click)="closeWizard()"
                 aria-label="Fechar assistente de criação"
-                class="min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center text-rose-800 hover:bg-rose-100/80 transition-colors cursor-pointer shrink-0"
+                class="apple-press min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center text-[#4B5563] hover:text-[#0F1115] hover:bg-[#E4E7EC] cursor-pointer shrink-0"
               >
                 <mat-icon>close</mat-icon>
               </button>
@@ -86,16 +78,16 @@ interface WizardStageOption {
             <div class="grid grid-cols-4 gap-2" aria-label="Progresso do assistente">
               @for (s of [1, 2, 3, 4]; track s) {
                 <div class="space-y-1">
-                  <div class="h-1.5 w-full rounded-full texture-woven-blush overflow-hidden">
+                  <div class="h-1.5 w-full rounded-full bg-[#E4E7EC] overflow-hidden">
                     <div
-                      class="h-full rounded-full bg-rose-600 transition-all duration-300"
+                      class="h-full rounded-full bg-[#C2185B] transition-all duration-300"
                       [style.width.%]="step() >= s ? 100 : 0"
                     ></div>
                   </div>
                   <div
-                    class="text-[10px] font-semibold truncate"
-                    [class.text-rose-950]="step() === s"
-                    [class.text-rose-600]="step() !== s"
+                    class="text-[10px] font-bold truncate"
+                    [class.text-[#0F1115]]="step() === s"
+                    [class.text-[#4B5563]]="step() !== s"
                   >
                     {{ stepShortLabels[s - 1] }}
                   </div>
@@ -105,13 +97,13 @@ interface WizardStageOption {
           </div>
 
           <!-- Animated Step Content Body -->
-          <div #stepBody class="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5 texture-cotton-dots">
+          <div #stepBody class="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5 bg-white">
             @if (step() === 1) {
               <!-- Step 1: Baby Identity & Share Slug -->
               <form [formGroup]="identityForm" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label for="wiz-baby" class="block text-xs font-semibold text-rose-900 mb-1">
+                    <label for="wiz-baby" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                       Nome ou Apelido do Bebê
                     </label>
                     <input
@@ -119,11 +111,11 @@ interface WizardStageOption {
                       type="text"
                       formControlName="babyName"
                       placeholder="Ex.: Alice, Bento ou Nosso Bebê"
-                      class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 placeholder:text-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] placeholder:text-[#6B7280] focus:outline-none focus:border-[#C2185B]"
                     />
                   </div>
                   <div>
-                    <label for="wiz-title" class="block text-xs font-semibold text-rose-900 mb-1">
+                    <label for="wiz-title" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                       Título da Sua Lista
                     </label>
                     <input
@@ -131,14 +123,14 @@ interface WizardStageOption {
                       type="text"
                       formControlName="title"
                       placeholder="Ex.: Enxoval da Pequena Alice"
-                      class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 placeholder:text-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] placeholder:text-[#6B7280] focus:outline-none focus:border-[#C2185B]"
                     />
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label for="wiz-city" class="block text-xs font-semibold text-rose-900 mb-1">
+                    <label for="wiz-city" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                       Cidade da Família
                     </label>
                     <input
@@ -146,28 +138,28 @@ interface WizardStageOption {
                       type="text"
                       formControlName="creatorCity"
                       placeholder="Ex.: SAO PAULO"
-                      class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] focus:outline-none focus:border-[#C2185B]"
                     />
                   </div>
                   <div>
-                    <label for="wiz-due" class="block text-xs font-semibold text-rose-900 mb-1">
+                    <label for="wiz-due" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                       Data Prevista do Parto (opcional)
                     </label>
                     <input
                       id="wiz-due"
                       type="date"
                       formControlName="dueDate"
-                      class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] focus:outline-none focus:border-[#C2185B]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label for="wiz-slug" class="block text-xs font-semibold text-rose-900 mb-1">
+                  <label for="wiz-slug" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                     Endereço Curto de Compartilhamento
                   </label>
-                  <div class="flex items-center rounded-xl bg-rose-50/80 border border-rose-200 overflow-hidden">
-                    <span class="px-3 text-xs font-mono text-rose-700 bg-rose-100/70 min-h-[44px] flex items-center shrink-0">
+                  <div class="flex items-center rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] overflow-hidden focus-within:border-[#C2185B]">
+                    <span class="px-3.5 text-xs font-mono font-bold text-[#C2185B] bg-[#EBEEF3] min-h-[44px] flex items-center shrink-0">
                       ?list=
                     </span>
                     <input
@@ -175,18 +167,18 @@ interface WizardStageOption {
                       type="text"
                       formControlName="customSlug"
                       placeholder="enxoval-da-alice"
-                      class="w-full min-h-[44px] px-3 py-2 bg-white/90 text-sm font-mono text-rose-950 focus:outline-none"
+                      class="w-full min-h-[44px] px-3 py-2 bg-transparent text-sm font-mono text-[#0F1115] focus:outline-none"
                     />
                   </div>
                   @if (sanitizedSlugPreview()) {
-                    <p class="mt-1 text-[11px] font-mono text-rose-700 truncate">
+                    <p class="mt-1.5 text-[11px] font-mono font-semibold text-[#C2185B] truncate">
                       Link final: /?list={{ sanitizedSlugPreview() }}
                     </p>
                   }
                 </div>
 
                 <div>
-                  <label for="wiz-note" class="block text-xs font-semibold text-rose-900 mb-1">
+                  <label for="wiz-note" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                     Mensagem de Boas-Vindas aos Convidados
                   </label>
                   <textarea
@@ -194,89 +186,250 @@ interface WizardStageOption {
                     rows="2"
                     formControlName="welcomeNote"
                     placeholder="Preparamos com carinho cada item que vamos precisar nesta nova jornada..."
-                    class="w-full px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 placeholder:text-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400 resize-none"
+                    class="w-full px-4 py-2.5 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] placeholder:text-[#6B7280] focus:outline-none focus:border-[#C2185B] resize-none"
                   ></textarea>
                 </div>
               </form>
             } @else if (step() === 2) {
-              <!-- Step 2: Select Stages & Essentials Filter -->
-              <div class="space-y-4">
-                <p class="text-xs sm:text-sm text-rose-900 leading-relaxed">
-                  Escolha quais etapas já devem entrar na sua lista com imagens e preços reais indexados das lojas:
-                </p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  @for (opt of stageOptions; track opt.id) {
-                    @let active = isStageSelected(opt.id);
+              <!-- Step 2: Full Search & Multi-Select Enxoval Catalog (68 Items) -->
+              <div class="space-y-3.5">
+                <!-- Quick Presets Row -->
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex flex-wrap items-center gap-1.5">
                     <button
                       type="button"
-                      (click)="toggleStage(opt.id)"
-                      class="p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3 active:scale-[0.99]"
-                      [class.bg-rose-50]="active"
-                      [class.border-rose-500]="active"
-                      [class.shadow-sm]="active"
-                      [class.bg-white/80]="!active"
-                      [class.border-rose-200]="!active"
+                      (click)="applySelectionPreset('starter')"
+                      class="apple-press min-h-[34px] px-3 py-1 rounded-full text-[11px] font-bold border cursor-pointer transition-colors"
+                      [class.bg-[#FF80AB]]="activePreset() === 'starter'"
+                      [class.border-[#FF80AB]]="activePreset() === 'starter'"
+                      [class.text-[#111111]]="activePreset() === 'starter'"
+                      [class.bg-[#F6F7F9]]="activePreset() !== 'starter'"
+                      [class.border-[#D8DCE3]]="activePreset() !== 'starter'"
+                      [class.text-[#0F1115]]="activePreset() !== 'starter'"
                     >
-                      <div
-                        class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors"
-                        [class.bg-rose-600]="active"
-                        [class.text-white]="active"
-                        [class.bg-rose-100]="!active"
-                        [class.text-rose-700]="!active"
+                      Base Recomendada ({{ starterItems.length }})
+                    </button>
+                    <button
+                      type="button"
+                      (click)="applySelectionPreset('essentials')"
+                      class="apple-press min-h-[34px] px-3 py-1 rounded-full text-[11px] font-bold border cursor-pointer transition-colors"
+                      [class.bg-[#FF80AB]]="activePreset() === 'essentials'"
+                      [class.border-[#FF80AB]]="activePreset() === 'essentials'"
+                      [class.text-[#111111]]="activePreset() === 'essentials'"
+                      [class.bg-[#F6F7F9]]="activePreset() !== 'essentials'"
+                      [class.border-[#D8DCE3]]="activePreset() !== 'essentials'"
+                      [class.text-[#0F1115]]="activePreset() !== 'essentials'"
+                    >
+                      Lista Enxuta ({{ essentialCatalogCount }})
+                    </button>
+                    <button
+                      type="button"
+                      (click)="applySelectionPreset('all')"
+                      class="apple-press min-h-[34px] px-3 py-1 rounded-full text-[11px] font-bold border cursor-pointer transition-colors"
+                      [class.bg-[#FF80AB]]="activePreset() === 'all'"
+                      [class.border-[#FF80AB]]="activePreset() === 'all'"
+                      [class.text-[#111111]]="activePreset() === 'all'"
+                      [class.bg-[#F6F7F9]]="activePreset() !== 'all'"
+                      [class.border-[#D8DCE3]]="activePreset() !== 'all'"
+                      [class.text-[#0F1115]]="activePreset() !== 'all'"
+                    >
+                      Tudo ({{ fullCatalog.length }})
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    (click)="clearAllSelections()"
+                    class="text-[11px] font-bold text-[#C2185B] hover:text-[#9D174D] cursor-pointer"
+                  >
+                    Desmarcar tudo
+                  </button>
+                </div>
+
+                <!-- Search & Category Select -->
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                  <div class="relative sm:col-span-7">
+                    <mat-icon class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#4B5563] text-lg!">
+                      search
+                    </mat-icon>
+                    <input
+                      type="search"
+                      [formControl]="wizardSearchControl"
+                      placeholder="Buscar fraldas, berço, cadeirão, mala..."
+                      aria-label="Buscar itens no assistente"
+                      class="w-full min-h-[42px] pl-10 pr-4 py-1.5 rounded-full bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] placeholder:text-[#6B7280] focus:outline-none focus:border-[#C2185B]"
+                    />
+                  </div>
+                  <select
+                    [formControl]="wizardCategoryControl"
+                    aria-label="Filtrar categoria no assistente"
+                    class="sm:col-span-5 min-h-[42px] px-4 py-1.5 rounded-full bg-[#F6F7F9] border border-[#D8DCE3] text-xs font-semibold text-[#0F1115] focus:outline-none focus:border-[#C2185B] cursor-pointer"
+                  >
+                    <option value="all">Todas categorias ({{ catalogCategories.length }})</option>
+                    @for (cat of catalogCategories; track cat) {
+                      <option [value]="cat">{{ cat }}</option>
+                    }
+                  </select>
+                </div>
+
+                <!-- Stage & Priority Filter Pills -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div class="mask-fade-x flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                    @for (st of wizardStageTabs; track st.id) {
+                      <button
+                        type="button"
+                        (click)="wizardStageFilter.set(st.id)"
+                        class="apple-press min-h-[34px] px-3 py-1 rounded-full text-[11px] font-semibold border cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+                        [class.bg-[#FF80AB]]="wizardStageFilter() === st.id"
+                        [class.border-[#FF80AB]]="wizardStageFilter() === st.id"
+                        [class.text-[#111111]]="wizardStageFilter() === st.id"
+                        [class.font-bold]="wizardStageFilter() === st.id"
+                        [class.bg-[#F6F7F9]]="wizardStageFilter() !== st.id"
+                        [class.border-[#E4E7EC]]="wizardStageFilter() !== st.id"
+                        [class.text-[#4B5563]]="wizardStageFilter() !== st.id"
                       >
-                        <mat-icon>{{ active ? 'check' : opt.icon }}</mat-icon>
-                      </div>
-                      <div class="min-w-0 flex-1 space-y-0.5">
-                        <div class="flex items-center justify-between gap-2">
-                          <span class="font-display text-sm font-semibold text-rose-950">
-                            {{ opt.title }}
-                          </span>
-                          <span class="font-mono text-[11px] font-semibold text-rose-700 shrink-0">
-                            {{ opt.itemCount }} itens
-                          </span>
-                        </div>
-                        <p class="text-xs text-rose-800 leading-relaxed">{{ opt.subtitle }}</p>
-                      </div>
+                        {{ st.label }}
+                      </button>
+                    }
+                  </div>
+
+                  <div class="flex items-center gap-1 overflow-x-auto no-scrollbar shrink-0">
+                    @for (pr of wizardPriorityTabs; track pr) {
+                      <button
+                        type="button"
+                        (click)="wizardPriorityFilter.set(pr)"
+                        class="apple-press min-h-[32px] px-2.5 py-1 rounded-full text-[11px] font-semibold border cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+                        [class.bg-[#111111]]="wizardPriorityFilter() === pr"
+                        [class.border-[#111111]]="wizardPriorityFilter() === pr"
+                        [class.text-white]="wizardPriorityFilter() === pr"
+                        [class.bg-white]="wizardPriorityFilter() !== pr"
+                        [class.border-[#D8DCE3]]="wizardPriorityFilter() !== pr"
+                        [class.text-[#4B5563]]="wizardPriorityFilter() !== pr"
+                      >
+                        {{ pr === 'all' ? 'Todas' : pr }}
+                      </button>
+                    }
+                  </div>
+                </div>
+
+                <!-- Filtered Count + Select Visible -->
+                <div class="flex items-center justify-between gap-2 text-[11px] text-[#4B5563]">
+                  <span class="tabular-nums">
+                    Mostrando <strong class="text-[#0F1115]">{{ filteredWizardCatalog().length }}</strong> de {{ fullCatalog.length }} itens
+                  </span>
+                  @if (filteredWizardCatalog().length > 0) {
+                    <button
+                      type="button"
+                      (click)="selectAllVisibleWizard()"
+                      class="font-bold text-[#C2185B] hover:text-[#9D174D] cursor-pointer"
+                    >
+                      Marcar visíveis ({{ filteredWizardCatalog().length }})
                     </button>
                   }
                 </div>
 
-                <!-- Essentials Toggle -->
-                <button
-                  type="button"
-                  (click)="toggleEssentialsOnly()"
-                  class="w-full min-h-[52px] p-4 rounded-2xl border text-left transition-colors cursor-pointer flex items-center justify-between gap-4"
-                  [class.bg-rose-50]="essentialsOnly()"
-                  [class.border-rose-400]="essentialsOnly()"
-                  [class.bg-white/80]="!essentialsOnly()"
-                  [class.border-rose-200]="!essentialsOnly()"
-                >
-                  <div class="space-y-0.5">
-                    <div class="text-xs font-semibold text-rose-950">
-                      Modo Lista Enxuta (apenas itens de prioridade Essencial)
+                <!-- Multi-Select Scrollable List -->
+                <div class="max-h-[290px] sm:max-h-[320px] overflow-y-auto rounded-[22px] bg-[#F6F7F9] border border-[#E4E7EC] p-2.5 space-y-2">
+                  @if (filteredWizardCatalog().length === 0) {
+                    <div class="py-8 text-center space-y-2">
+                      <div class="text-xs font-bold text-[#0F1115]">Nenhum item encontrado neste filtro</div>
+                      <button
+                        type="button"
+                        (click)="resetWizardCatalogFilters()"
+                        class="apple-press min-h-[36px] px-4 py-1 rounded-full bg-[#FF80AB] text-[#111111] text-xs font-bold cursor-pointer"
+                      >
+                        Limpar filtros
+                      </button>
                     </div>
-                    <div class="text-[11px] text-rose-700">
-                      Ideal para quem quer começar com os itens indispensáveis e ampliar depois.
-                    </div>
-                  </div>
-                  <div
-                    class="w-12 h-7 rounded-full p-1 transition-colors shrink-0 flex items-center"
-                    [class.bg-rose-600]="essentialsOnly()"
-                    [class.justify-end]="essentialsOnly()"
-                    [class.bg-rose-200]="!essentialsOnly()"
-                    [class.justify-start]="!essentialsOnly()"
-                  >
-                    <span class="w-5 h-5 rounded-full bg-white shadow-sm"></span>
-                  </div>
-                </button>
+                  } @else {
+                    @for (item of filteredWizardCatalog(); track item.id) {
+                      @let chosenQty = selectedItemQuantities().get(item.id);
+                      @let isChosen = chosenQty !== undefined;
+                      <div
+                        class="rounded-[18px] border p-2.5 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
+                        [class.bg-[#FCE4EC]/55]="isChosen"
+                        [class.border-[#C2185B]]="isChosen"
+                        [class.bg-white]="!isChosen"
+                        [class.border-[#E4E7EC]]="!isChosen"
+                      >
+                        <button
+                          type="button"
+                          (click)="toggleWizardItem(item)"
+                          class="flex items-center gap-2.5 text-left flex-1 min-w-0 cursor-pointer"
+                        >
+                          <span
+                            class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-colors"
+                            [class.bg-[#FF80AB]]="isChosen"
+                            [class.border-[#C2185B]]="isChosen"
+                            [class.text-[#111111]]="isChosen"
+                            [class.bg-[#F6F7F9]]="!isChosen"
+                            [class.border-[#CBD2DD]]="!isChosen"
+                            [class.text-transparent]="!isChosen"
+                          >
+                            <mat-icon class="text-[13px]!">check</mat-icon>
+                          </span>
 
-                <div class="rounded-2xl bg-white/80 border border-rose-200 p-4 flex items-center justify-between gap-4 text-xs">
-                  <div class="text-rose-800">
-                    Prévia da lista inicial:
-                    <strong class="text-rose-950 tabular-nums">{{ previewSelection().count }} itens</strong>
+                          <div class="w-10 h-10 rounded-xl bg-white border border-[#E4E7EC] overflow-hidden p-0.5 shrink-0">
+                            <img
+                              [src]="item.imageUrl"
+                              [alt]="item.name"
+                              loading="lazy"
+                              (error)="onWizardThumbError($event, item.stage)"
+                              referrerpolicy="no-referrer"
+                              class="w-full h-full object-contain"
+                            />
+                          </div>
+
+                          <div class="min-w-0 flex-1">
+                            <div class="text-[10px] font-semibold text-[#4B5563] truncate">
+                              <span class="text-[#C2185B]">{{ stageShortLabels[item.stage] }}</span> · {{ item.category }} · {{ item.priority }}
+                            </div>
+                            <div class="text-xs font-bold text-[#0F1115] truncate">{{ item.name }}</div>
+                          </div>
+                        </button>
+
+                        <div class="flex items-center justify-between sm:justify-end gap-2.5 pl-7 sm:pl-0 shrink-0">
+                          <span class="font-mono text-xs font-bold text-[#0F1115] tabular-nums">
+                            {{ item.unitPriceBrl | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                          </span>
+
+                          @if (isChosen && chosenQty !== undefined) {
+                            <div class="inline-flex items-center gap-0.5 rounded-full bg-white border border-[#C2185B]/45 p-0.5">
+                              <button
+                                type="button"
+                                (click)="adjustWizardItemQty(item.id, -1)"
+                                aria-label="Diminuir quantidade"
+                                class="apple-press w-7 h-7 rounded-full hover:bg-[#F6F7F9] flex items-center justify-center text-[#0F1115] cursor-pointer"
+                              >
+                                <mat-icon class="text-sm!">remove</mat-icon>
+                              </button>
+                              <span class="w-6 text-center font-mono text-xs font-bold text-[#0F1115] tabular-nums">
+                                {{ chosenQty }}
+                              </span>
+                              <button
+                                type="button"
+                                (click)="adjustWizardItemQty(item.id, 1)"
+                                aria-label="Aumentar quantidade"
+                                class="apple-press w-7 h-7 rounded-full hover:bg-[#F6F7F9] flex items-center justify-center text-[#0F1115] cursor-pointer"
+                              >
+                                <mat-icon class="text-sm!">add</mat-icon>
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  }
+                </div>
+
+                <!-- Live Preview Summary Bar -->
+                <div class="rounded-[18px] bg-[#F6F7F9] border border-[#E4E7EC] px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+                  <div class="text-[#4B5563]">
+                    Selecionados:
+                    <strong class="text-[#0F1115] tabular-nums">{{ previewSelection().count }} itens</strong>
+                    <span class="text-[#4B5563] tabular-nums"> ({{ previewSelection().units }} un.)</span>
                   </div>
-                  <div class="font-mono font-bold text-rose-700 tabular-nums">
+                  <div class="font-mono font-bold text-[#C2185B] tabular-nums">
                     Estimativa: {{ previewSelection().totalValue | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
                   </div>
                 </div>
@@ -284,31 +437,31 @@ interface WizardStageOption {
             } @else if (step() === 3) {
               <!-- Step 3: Google Creator Auth + Optional Pix Key -->
               <div class="space-y-4">
-                <div class="rounded-2xl bg-rose-50/90 border border-rose-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="rounded-[20px] bg-[#F6F7F9] border border-[#E4E7EC] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   @if (store.currentUser(); as user) {
                     <div class="flex items-center gap-3 min-w-0">
-                      <div class="w-10 h-10 rounded-full bg-rose-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
+                      <div class="w-10 h-10 rounded-full bg-[#FF80AB] text-[#111111] text-sm font-bold flex items-center justify-center shrink-0">
                         {{ user.name.charAt(0).toUpperCase() }}
                       </div>
                       <div class="min-w-0">
-                        <div class="text-xs font-semibold text-rose-950 truncate">
+                        <div class="text-xs font-bold text-[#0F1115] truncate">
                           Criador conectado: {{ user.name }}
                         </div>
-                        <div class="text-[11px] text-rose-700 truncate">{{ user.email }}</div>
+                        <div class="text-[11px] text-[#4B5563] truncate">{{ user.email }}</div>
                       </div>
                     </div>
-                    <mat-icon class="text-rose-600 shrink-0">verified</mat-icon>
+                    <mat-icon class="text-[#C2185B] shrink-0">verified</mat-icon>
                   } @else {
-                    <div class="space-y-0.5 text-xs text-rose-900">
-                      <div class="font-semibold">Conecte sua conta Google para publicar</div>
-                      <div class="text-rose-700">
+                    <div class="space-y-0.5 text-xs">
+                      <div class="font-bold text-[#0F1115]">Conecte sua conta Google para publicar</div>
+                      <div class="text-[#4B5563]">
                         Sua conta Google garante que somente você gerencie e receba nesta lista.
                       </div>
                     </div>
                     <button
                       type="button"
                       (click)="store.authModalOpen.set(true)"
-                      class="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                      class="apple-press min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-[#FF80AB] hover:bg-[#F48FB1] text-[#111111] text-xs font-bold cursor-pointer whitespace-nowrap shrink-0"
                     >
                       <mat-icon class="text-base!">login</mat-icon>
                       <span>Conectar Google</span>
@@ -319,13 +472,13 @@ interface WizardStageOption {
                 <form [formGroup]="pixForm" class="space-y-3.5">
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     <div>
-                      <label for="wiz-key-type" class="block text-xs font-semibold text-rose-900 mb-1">
+                      <label for="wiz-key-type" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                         Tipo da Chave Pix
                       </label>
                       <select
                         id="wiz-key-type"
                         formControlName="pixKeyType"
-                        class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] focus:outline-none focus:border-[#C2185B]"
                       >
                         <option value="email">E-mail</option>
                         <option value="cpf">CPF</option>
@@ -335,7 +488,7 @@ interface WizardStageOption {
                       </select>
                     </div>
                     <div class="sm:col-span-2">
-                      <label for="wiz-pix-key" class="block text-xs font-semibold text-rose-900 mb-1">
+                      <label for="wiz-pix-key" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                         Sua Chave Pix (para presentes em dinheiro)
                       </label>
                       <input
@@ -343,13 +496,13 @@ interface WizardStageOption {
                         type="text"
                         formControlName="pixKey"
                         placeholder="Ex.: seuemail@gmail.com ou CPF (pode preencher depois)"
-                        class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm font-mono text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm font-mono text-[#0F1115] focus:outline-none focus:border-[#C2185B]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label for="wiz-creator" class="block text-xs font-semibold text-rose-900 mb-1">
+                    <label for="wiz-creator" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                       Nome do Titular Pix (até 25 caracteres)
                     </label>
                     <input
@@ -357,13 +510,13 @@ interface WizardStageOption {
                       type="text"
                       formControlName="creatorName"
                       placeholder="Nome que aparecerá no aplicativo do banco"
-                      class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white/90 border border-rose-200 text-sm text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-[#F6F7F9] border border-[#D8DCE3] text-sm text-[#0F1115] focus:outline-none focus:border-[#C2185B]"
                     />
                   </div>
                 </form>
 
                 @if (errorMsg()) {
-                  <p class="text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-xl px-3.5 py-2.5">
+                  <p class="text-xs font-semibold text-[#9D174D] bg-[#FCE4EC] border border-[#F48FB1] rounded-xl px-3.5 py-2.5">
                     {{ errorMsg() }}
                   </p>
                 }
@@ -372,40 +525,40 @@ interface WizardStageOption {
               <!-- Step 4: Animated Creation + Ready Share Link -->
               @if (publishing()) {
                 <div class="py-10 text-center space-y-5">
-                  <div class="w-16 h-16 mx-auto rounded-2xl bg-rose-100 border border-rose-200 flex items-center justify-center animate-bounce">
+                  <div class="w-16 h-16 mx-auto rounded-full bg-[#F6F7F9] border border-[#E4E7EC] flex items-center justify-center animate-bounce">
                     <app-kawaii-ribbon [size]="36" />
                   </div>
                   <div class="space-y-1.5">
-                    <h3 class="font-display text-xl font-semibold text-rose-950">
+                    <h3 class="font-display text-xl font-bold text-[#0F1115]">
                       Montando seu Enxoval Compartilhável...
                     </h3>
-                    <p class="text-xs sm:text-sm text-rose-800">
+                    <p class="text-xs sm:text-sm text-[#4B5563]">
                       Vinculando ofertas verificadas, sincronização em tempo real e URL exclusiva.
                     </p>
                   </div>
-                  <div class="max-w-xs mx-auto h-2 rounded-full bg-rose-100 overflow-hidden">
-                    <div class="h-full w-3/4 rounded-full bg-rose-600 kawaii-shimmer"></div>
+                  <div class="max-w-xs mx-auto h-2 rounded-full bg-[#F1F3F6] overflow-hidden">
+                    <div class="h-full w-3/4 rounded-full bg-[#C2185B] kawaii-shimmer"></div>
                   </div>
                 </div>
               } @else if (publishedResult(); as res) {
-                <div #publishedCard class="rounded-3xl bg-white/85 border border-rose-200 p-6 text-center space-y-5">
-                  <div class="w-14 h-14 mx-auto rounded-full bg-rose-600 text-white flex items-center justify-center shadow-sm">
+                <div #publishedCard class="rounded-[24px] bg-[#F6F7F9] border border-[#E4E7EC] p-6 text-center space-y-5">
+                  <div class="w-14 h-14 mx-auto rounded-full bg-[#FF80AB] text-[#111111] flex items-center justify-center shadow-sm">
                     <mat-icon>celebration</mat-icon>
                   </div>
                   <div class="space-y-1">
-                    <h3 class="font-display text-2xl font-semibold text-rose-950">
+                    <h3 class="font-display text-2xl font-bold text-[#0F1115]">
                       Sua Lista Está Pronta para Compartilhar
                     </h3>
-                    <p class="text-xs sm:text-sm text-rose-800">
+                    <p class="text-xs sm:text-sm text-[#4B5563]">
                       Envie este link para familiares e amigos escolherem presentes via Pix ou direto nas lojas.
                     </p>
                   </div>
 
-                  <div class="rounded-2xl bg-rose-50/90 border border-rose-200 p-3.5 text-left space-y-2">
-                    <div class="text-[11px] font-semibold text-rose-700">
+                  <div class="rounded-2xl bg-white border border-[#E4E7EC] p-3.5 text-left space-y-2">
+                    <div class="text-[11px] font-bold text-[#C2185B]">
                       Link Exclusivo de Compartilhamento
                     </div>
-                    <div class="font-mono text-xs text-rose-950 break-all bg-white rounded-xl px-3 py-2.5 border border-rose-200/80">
+                    <div class="font-mono text-xs font-semibold text-[#0F1115] break-all bg-[#F6F7F9] rounded-xl px-3 py-2.5 border border-[#E4E7EC] select-all">
                       {{ res.shareUrl }}
                     </div>
                   </div>
@@ -414,7 +567,7 @@ interface WizardStageOption {
                     <button
                       type="button"
                       (click)="copyShareUrl(res.shareUrl)"
-                      class="min-h-[48px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold cursor-pointer transition-colors"
+                      class="apple-press min-h-[46px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#FF80AB] hover:bg-[#F48FB1] text-[#111111] text-sm font-bold cursor-pointer"
                     >
                       <mat-icon class="text-lg!">{{ copiedShare() ? 'check' : 'content_copy' }}</mat-icon>
                       <span>{{ copiedShare() ? 'Copiado!' : 'Copiar Link' }}</span>
@@ -423,9 +576,9 @@ interface WizardStageOption {
                     <button
                       type="button"
                       (click)="nativeShare(res.shareUrl, res.title)"
-                      class="min-h-[48px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-950 text-sm font-semibold cursor-pointer transition-colors"
+                      class="apple-press min-h-[46px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white hover:bg-[#EBEEF3] border border-[#D8DCE3] text-[#0F1115] text-sm font-bold cursor-pointer"
                     >
-                      <mat-icon class="text-lg!">ios_share</mat-icon>
+                      <mat-icon class="text-lg! text-[#C2185B]">ios_share</mat-icon>
                       <span>Enviar</span>
                     </button>
 
@@ -433,9 +586,9 @@ interface WizardStageOption {
                       [href]="whatsappShareUrl(res.shareUrl, res.title)"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="min-h-[48px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-950 text-sm font-semibold transition-colors"
+                      class="apple-press min-h-[46px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white hover:bg-[#EBEEF3] border border-[#D8DCE3] text-[#0F1115] text-sm font-bold"
                     >
-                      <mat-icon class="text-lg!">share</mat-icon>
+                      <mat-icon class="text-lg! text-[#C2185B]">share</mat-icon>
                       <span>WhatsApp</span>
                     </a>
                   </div>
@@ -445,13 +598,13 @@ interface WizardStageOption {
           </div>
 
           <!-- Sticky Footer Navigation -->
-          <div class="px-5 sm:px-6 py-3.5 border-t border-rose-200/60 bg-white/85 backdrop-blur-md flex items-center justify-between gap-3 shrink-0">
+          <div class="px-5 sm:px-6 py-4 border-t border-[#E4E7EC] bg-[#F6F7F9] flex items-center justify-between gap-3 shrink-0">
             @if (step() < 4) {
               <button
                 type="button"
                 (click)="prevStep()"
                 [disabled]="step() === 1"
-                class="min-h-[44px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-rose-50 disabled:opacity-40 border border-rose-200 text-xs font-semibold text-rose-900 cursor-pointer transition-colors"
+                class="apple-press min-h-[44px] inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-white hover:bg-[#EBEEF3] disabled:opacity-40 border border-[#D8DCE3] text-xs font-bold text-[#0F1115] cursor-pointer"
               >
                 <mat-icon class="text-base!">arrow_back</mat-icon>
                 <span>Voltar</span>
@@ -462,7 +615,7 @@ interface WizardStageOption {
                   type="button"
                   (click)="nextStep()"
                   [disabled]="!canAdvance()"
-                  class="min-h-[48px] inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-sm font-semibold cursor-pointer transition-colors"
+                  class="apple-press min-h-[46px] inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FF80AB] hover:bg-[#F48FB1] disabled:opacity-45 text-[#111111] text-sm font-bold cursor-pointer"
                 >
                   <span>Continuar</span>
                   <mat-icon class="text-base!">arrow_forward</mat-icon>
@@ -472,7 +625,7 @@ interface WizardStageOption {
                   type="button"
                   (click)="publishList()"
                   [disabled]="publishing()"
-                  class="min-h-[48px] inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-sm font-semibold cursor-pointer transition-all apple-press"
+                  class="apple-press min-h-[46px] inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FF80AB] hover:bg-[#F48FB1] disabled:opacity-45 text-[#111111] text-sm font-bold cursor-pointer"
                 >
                   <mat-icon class="text-base!">rocket_launch</mat-icon>
                   <span>Publicar Lista &amp; Gerar Link</span>
@@ -483,7 +636,7 @@ interface WizardStageOption {
                 type="button"
                 (click)="finishAndView()"
                 [disabled]="publishing()"
-                class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-sm font-semibold cursor-pointer transition-all apple-press"
+                class="apple-press w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#FF80AB] hover:bg-[#F48FB1] disabled:opacity-45 text-[#111111] text-sm font-bold cursor-pointer"
               >
                 <mat-icon class="text-lg!">done_all</mat-icon>
                 <span>Abrir Minha Lista Agora</span>
@@ -504,14 +657,28 @@ export class CreateListWizard {
   readonly open = input(false);
   readonly closed = output<void>();
 
+  protected readonly fullCatalog = FULL_ENXOVAL_CATALOG;
+  protected readonly starterItems = INITIAL_ENXOVAL_ITEMS;
+  protected readonly essentialCatalogCount = FULL_ENXOVAL_CATALOG.filter(
+    (i) => i.priority === 'Essencial',
+  ).length;
+  protected readonly catalogCategories = Array.from(
+    new Set(FULL_ENXOVAL_CATALOG.map((it) => it.category)),
+  ).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
   readonly step = signal<1 | 2 | 3 | 4>(1);
-  readonly selectedStages = signal<EnxovalStage[]>([
-    'gestante',
-    'bebe_rn',
-    'quarto_passeio',
-    'familia',
-  ]);
-  readonly essentialsOnly = signal(false);
+  readonly activePreset = signal<'starter' | 'essentials' | 'all' | 'custom'>('starter');
+  readonly selectedItemQuantities = signal<Map<string, number>>(
+    new Map(INITIAL_ENXOVAL_ITEMS.map((it) => [it.id, it.requiredQty])),
+  );
+  readonly wizardStageFilter = signal<EnxovalStage | 'all'>('all');
+  readonly wizardPriorityFilter = signal<ItemPriority | 'all'>('all');
+  readonly wizardSearchText = signal('');
+  readonly wizardCategoryText = signal('all');
+
+  readonly wizardSearchControl = new FormControl('', {nonNullable: true});
+  readonly wizardCategoryControl = new FormControl('all', {nonNullable: true});
+
   readonly publishing = signal(false);
   readonly errorMsg = signal<string | null>(null);
   readonly copiedShare = signal(false);
@@ -523,43 +690,34 @@ export class CreateListWizard {
 
   protected readonly stepTitles = [
     'Identidade do Bebê & Link da Lista',
-    'Escolha as Etapas do Enxoval',
+    'Escolha Cada Item do Seu Enxoval',
     'Conta Google & Chave Pix Própria',
     'Link Pronto para Compartilhar',
   ];
 
-  protected readonly stepShortLabels = ['1. Bebê', '2. Etapas', '3. Google/Pix', '4. Compartilhar'];
+  protected readonly stepShortLabels = ['1. Bebê', '2. Itens', '3. Google/Pix', '4. Compartilhar'];
 
-  protected readonly stageOptions: WizardStageOption[] = [
-    {
-      id: 'gestante',
-      title: 'Gestante & Maternidade',
-      subtitle: 'Mala hospitalar, amamentação e conforto',
-      icon: 'pregnant_woman',
-      itemCount: INITIAL_ENXOVAL_ITEMS.filter((i) => i.stage === 'gestante').length,
-    },
-    {
-      id: 'bebe_rn',
-      title: 'Bebê Recém-Nascido',
-      subtitle: 'Bodies, macacões, fraldas e farmácia RN',
-      icon: 'child_care',
-      itemCount: INITIAL_ENXOVAL_ITEMS.filter((i) => i.stage === 'bebe_rn').length,
-    },
-    {
-      id: 'quarto_passeio',
-      title: 'Quarto, Passeio & Banho',
-      subtitle: 'Berço, carrinho, banheira e babá eletrônica',
-      icon: 'crib',
-      itemCount: INITIAL_ENXOVAL_ITEMS.filter((i) => i.stage === 'quarto_passeio').length,
-    },
-    {
-      id: 'familia',
-      title: 'Família & Rede de Apoio',
-      subtitle: 'Canguru ergonômico, esterilizador e farmácia',
-      icon: 'diversity_1',
-      itemCount: INITIAL_ENXOVAL_ITEMS.filter((i) => i.stage === 'familia').length,
-    },
+  protected readonly wizardStageTabs: {id: EnxovalStage | 'all'; label: string}[] = [
+    {id: 'all', label: 'Tudo'},
+    {id: 'gestante', label: 'Gestante'},
+    {id: 'bebe_rn', label: 'Bebê RN'},
+    {id: 'quarto_passeio', label: 'Quarto & Passeio'},
+    {id: 'familia', label: 'Família'},
   ];
+
+  protected readonly wizardPriorityTabs: (ItemPriority | 'all')[] = [
+    'all',
+    'Essencial',
+    'Recomendado',
+    'Conforto',
+  ];
+
+  protected readonly stageShortLabels: Record<EnxovalStage, string> = {
+    gestante: 'Gestante',
+    bebe_rn: 'Bebê RN',
+    quarto_passeio: 'Quarto & Passeio',
+    familia: 'Família',
+  };
 
   readonly identityForm = new FormGroup({
     babyName: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
@@ -579,20 +737,48 @@ export class CreateListWizard {
     creatorName: new FormControl('', {nonNullable: true}),
   });
 
+  readonly filteredWizardCatalog = computed(() => {
+    const stage = this.wizardStageFilter();
+    const pri = this.wizardPriorityFilter();
+    const cat = this.wizardCategoryText();
+    const q = this.wizardSearchText().trim().toLowerCase();
+
+    return this.fullCatalog.filter((item) => {
+      if (stage !== 'all' && item.stage !== stage) return false;
+      if (pri !== 'all' && item.priority !== pri) return false;
+      if (cat !== 'all' && item.category !== cat) return false;
+      if (q) {
+        const hay = `${item.name} ${item.category} ${item.description}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  });
+
   readonly previewSelection = computed(() => {
-    const stages = this.selectedStages();
-    const ess = this.essentialsOnly();
-    const matched = INITIAL_ENXOVAL_ITEMS.filter((it) => stages.includes(it.stage)).filter((it) =>
-      ess ? it.priority === 'Essencial' : true,
-    );
-    const totalValue = matched.reduce((acc, it) => acc + it.requiredQty * it.unitPriceBrl, 0);
+    const map = this.selectedItemQuantities();
+    let count = 0;
+    let units = 0;
+    let totalValue = 0;
+    for (const it of this.fullCatalog) {
+      const qty = map.get(it.id);
+      if (qty !== undefined) {
+        count++;
+        units += qty;
+        totalValue += qty * it.unitPriceBrl;
+      }
+    }
     return {
-      count: matched.length,
+      count,
+      units,
       totalValue: Number(totalValue.toFixed(2)),
     };
   });
 
   constructor() {
+    this.wizardSearchControl.valueChanges.subscribe((v) => this.wizardSearchText.set(v));
+    this.wizardCategoryControl.valueChanges.subscribe((v) => this.wizardCategoryText.set(v));
+
     this.identityForm.controls.customSlug.valueChanges.subscribe((raw) => {
       const clean = raw
         .toLowerCase()
@@ -670,21 +856,83 @@ export class CreateListWizard {
     });
   }
 
-  protected isStageSelected(stage: EnxovalStage): boolean {
-    return this.selectedStages().includes(stage);
-  }
-
-  protected toggleStage(stage: EnxovalStage): void {
-    this.selectedStages.update((prev) => {
-      if (prev.includes(stage)) {
-        return prev.length > 1 ? prev.filter((s) => s !== stage) : prev;
+  protected toggleWizardItem(item: EnxovalItem): void {
+    this.activePreset.set('custom');
+    this.selectedItemQuantities.update((prev) => {
+      const next = new Map(prev);
+      if (next.has(item.id)) {
+        next.delete(item.id);
+      } else {
+        next.set(item.id, item.requiredQty);
       }
-      return [...prev, stage];
+      return next;
     });
   }
 
-  protected toggleEssentialsOnly(): void {
-    this.essentialsOnly.update((v) => !v);
+  protected adjustWizardItemQty(itemId: string, delta: number): void {
+    this.activePreset.set('custom');
+    this.selectedItemQuantities.update((prev) => {
+      const next = new Map(prev);
+      const cur = next.get(itemId);
+      if (cur === undefined) return prev;
+      next.set(itemId, Math.max(1, Math.min(200, cur + delta)));
+      return next;
+    });
+  }
+
+  protected applySelectionPreset(preset: 'starter' | 'essentials' | 'all'): void {
+    this.activePreset.set(preset);
+    if (preset === 'starter') {
+      this.selectedItemQuantities.set(new Map(INITIAL_ENXOVAL_ITEMS.map((it) => [it.id, it.requiredQty])));
+      return;
+    }
+    if (preset === 'essentials') {
+      this.selectedItemQuantities.set(
+        new Map(
+          FULL_ENXOVAL_CATALOG.filter((it) => it.priority === 'Essencial').map((it) => [
+            it.id,
+            it.requiredQty,
+          ]),
+        ),
+      );
+      return;
+    }
+    this.selectedItemQuantities.set(new Map(FULL_ENXOVAL_CATALOG.map((it) => [it.id, it.requiredQty])));
+  }
+
+  protected selectAllVisibleWizard(): void {
+    this.activePreset.set('custom');
+    const visible = this.filteredWizardCatalog();
+    this.selectedItemQuantities.update((prev) => {
+      const next = new Map(prev);
+      for (const it of visible) {
+        if (!next.has(it.id)) {
+          next.set(it.id, it.requiredQty);
+        }
+      }
+      return next;
+    });
+  }
+
+  protected clearAllSelections(): void {
+    this.activePreset.set('custom');
+    this.selectedItemQuantities.set(new Map());
+  }
+
+  protected resetWizardCatalogFilters(): void {
+    this.wizardStageFilter.set('all');
+    this.wizardPriorityFilter.set('all');
+    this.wizardSearchControl.setValue('');
+    this.wizardCategoryControl.setValue('all');
+  }
+
+  protected onWizardThumbError(event: Event, stage: EnxovalStage): void {
+    const img = event.target as HTMLImageElement | null;
+    if (!img) return;
+    const fallback = STAGE_IMAGES[stage];
+    if (!img.src.endsWith(fallback)) {
+      img.src = fallback;
+    }
   }
 
   protected canAdvance(): boolean {
@@ -692,7 +940,7 @@ export class CreateListWizard {
       return this.identityForm.valid;
     }
     if (this.step() === 2) {
-      return this.selectedStages().length > 0;
+      return this.previewSelection().count > 0;
     }
     return true;
   }
@@ -734,6 +982,20 @@ export class CreateListWizard {
       finalPixKey = check.normalized;
     }
 
+    const selectedEntries = Array.from(this.selectedItemQuantities().entries()).map(
+      ([templateId, requiredQty]) => ({templateId, requiredQty}),
+    );
+    const derivedStageSet = new Set<EnxovalStage>();
+    for (const it of this.fullCatalog) {
+      if (this.selectedItemQuantities().has(it.id)) {
+        derivedStageSet.add(it.stage);
+      }
+    }
+    const derivedStages: EnxovalStage[] =
+      derivedStageSet.size > 0
+        ? Array.from(derivedStageSet)
+        : ['gestante', 'bebe_rn', 'quarto_passeio', 'familia'];
+
     this.step.set(4);
     this.publishing.set(true);
     this.errorMsg.set(null);
@@ -749,8 +1011,8 @@ export class CreateListWizard {
           creatorCity: idVal.creatorCity.trim() || 'SAO PAULO',
           customSlug: idVal.customSlug.trim(),
           welcomeNote: idVal.welcomeNote.trim(),
-          selectedStages: this.selectedStages(),
-          essentialsOnly: this.essentialsOnly(),
+          selectedStages: derivedStages,
+          selectedItems: selectedEntries,
           pixKey: finalPixKey,
           pixKeyType: pixVal.pixKeyType,
           creatorName:
@@ -815,6 +1077,11 @@ export class CreateListWizard {
     this.step.set(1);
     this.publishedResult.set(null);
     this.errorMsg.set(null);
+    this.activePreset.set('starter');
+    this.selectedItemQuantities.set(
+      new Map(INITIAL_ENXOVAL_ITEMS.map((it) => [it.id, it.requiredQty])),
+    );
+    this.resetWizardCatalogFilters();
     this.identityForm.reset({
       babyName: '',
       title: '',

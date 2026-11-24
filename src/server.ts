@@ -13,6 +13,7 @@ import QRCode from 'qrcode';
 import {
   buildVerifiedStoreOffers,
   COMMUNITY_LIST_SEEDS,
+  FULL_ENXOVAL_CATALOG,
   INITIAL_ENXOVAL_ITEMS,
   INITIAL_LIST_CONFIG,
   STAGE_IMAGES,
@@ -204,6 +205,14 @@ let catalogTemplateItems: EnxovalItem[] = INITIAL_ENXOVAL_ITEMS.map((item) => ({
   ...item,
   offers: [...item.offers],
 }));
+
+const FULL_CATALOG_BY_ID = new Map<string, EnxovalItem>(
+  FULL_ENXOVAL_CATALOG.map((item) => [item.id, item]),
+);
+
+function getCatalogTemplateById(id: string): EnxovalItem | undefined {
+  return catalogTemplateItems.find((it) => it.id === id) ?? FULL_CATALOG_BY_ID.get(id);
+}
 
 let ssgMeta: SsgIndexMetadata = {
   generatedAt: '2026-11-22T06:00:00.000Z',
@@ -665,10 +674,27 @@ app.post('/api/enxoval/lists', requireGoogleAuth, async (req: AuthedRequest, res
     return;
   }
 
+  const rawSelectedItems = Array.isArray(body.selectedItems) ? body.selectedItems : [];
+  const chosenTemplates: {template: EnxovalItem; requiredQty: number}[] = [];
+  const seenTemplateIds = new Set<string>();
+  for (const entry of rawSelectedItems) {
+    if (!entry || typeof entry !== 'object') continue;
+    const tplId = typeof entry.templateId === 'string' ? entry.templateId.trim() : '';
+    if (!tplId || seenTemplateIds.has(tplId)) continue;
+    const tpl = getCatalogTemplateById(tplId);
+    if (!tpl) continue;
+    seenTemplateIds.add(tplId);
+    const reqQtyNum = Number(entry.requiredQty);
+    const requiredQty =
+      Number.isInteger(reqQtyNum) && reqQtyNum >= 1 && reqQtyNum <= 200 ? reqQtyNum : tpl.requiredQty;
+    chosenTemplates.push({template: tpl, requiredQty});
+    if (chosenTemplates.length >= 120) break;
+  }
+
   const rawStages = Array.isArray(body.selectedStages) ? body.selectedStages : [];
   const selectedStages = rawStages.filter(isValidStage);
-  if (selectedStages.length === 0) {
-    res.status(400).json({error: 'Selecione ao menos uma etapa do enxoval.'});
+  if (selectedStages.length === 0 && chosenTemplates.length === 0) {
+    res.status(400).json({error: 'Selecione ao menos uma etapa ou item para o enxoval.'});
     return;
   }
 
@@ -698,10 +724,20 @@ app.post('/api/enxoval/lists', requireGoogleAuth, async (req: AuthedRequest, res
     updatedAt: now,
   };
 
-  const newItems = cloneCatalogItems(selectedStages, essentialsOnly).map((it) => ({
-    ...it,
-    id: `${slug.slice(0, 18)}-${it.id}`,
-  }));
+  const newItems: EnxovalItem[] =
+    chosenTemplates.length > 0
+      ? chosenTemplates.map(({template, requiredQty}) => ({
+          ...template,
+          id: `${slug.slice(0, 18)}-${template.id}`,
+          requiredQty,
+          purchasedQty: 0,
+          offers: template.offers.map((o) => ({...o})),
+          updatedAt: now,
+        }))
+      : cloneCatalogItems(selectedStages, essentialsOnly).map((it) => ({
+          ...it,
+          id: `${slug.slice(0, 18)}-${it.id}`,
+        }));
   const record: ServerEnxovalList = {
     config: listConfig,
     items: newItems,
@@ -995,6 +1031,162 @@ app.post('/api/enxoval/items', requireGoogleAuth, async (req: AuthedRequest, res
   const summary = buildPublicSummary(list);
   broadcastRealtime('item_added', {listSlug: slug, item: newItem, ssgMeta: listMeta, summary});
   res.status(201).json({item: newItem, summary});
+});
+
+// Protected: Add multiple curated or custom items in one fast batch
+app.post('/api/enxoval/items/batch', requireGoogleAuth, async (req: AuthedRequest, res) => {
+  const slug = getRequestedListSlug(req);
+  const list = getListRecord(slug);
+  if (!canUserMutateList(list, req.googleUser)) {
+    res.status(403).json({
+      error: 'Somente o criador desta lista pode adicionar itens. Crie sua própria lista no assistente!',
+    });
+    return;
+  }
+
+  const body = req.body ?? {};
+  const rawItems = Array.isArray(body.items) ? body.items : [];
+  if (rawItems.length === 0 || rawItems.length > 80) {
+    res.status(400).json({error: 'Selecione entre 1 e 80 itens por envio.'});
+    return;
+  }
+
+  const now = new Date().toISOString();
+  const existingIds = new Set(list.items.map((it) => it.id));
+  const createdItems: EnxovalItem[] = [];
+
+  for (let i = 0; i < rawItems.length; i++) {
+    const raw = rawItems[i];
+    if (!raw || typeof raw !== 'object') continue;
+    const tplId = typeof raw.templateId === 'string' ? raw.templateId.trim() : '';
+    const tpl = tplId ? getCatalogTemplateById(tplId) : undefined;
+
+    if (tpl) {
+      const reqQtyNum = Number(raw.requiredQty);
+      const requiredQty =
+        Number.isInteger(reqQtyNum) && reqQtyNum >= 1 && reqQtyNum <= 200 ? reqQtyNum : tpl.requiredQty;
+      let candidateId = `${slug.slice(0, 14)}-${tpl.id}`;
+      if (existingIds.has(candidateId)) {
+        candidateId = `${candidateId}-${Date.now().toString(36)}-${i}`;
+      }
+      existingIds.add(candidateId);
+      createdItems.push({
+        ...tpl,
+        id: candidateId,
+        requiredQty,
+        purchasedQty: 0,
+        offers: tpl.offers.map((o) => ({...o})),
+        updatedAt: now,
+      });
+      continue;
+    }
+
+    const name = typeof raw.name === 'string' ? raw.name.trim() : '';
+    if (name.length < 2 || name.length > 140) continue;
+    const category = typeof raw.category === 'string' ? raw.category.trim().slice(0, 60) || 'Enxoval' : 'Enxoval';
+    const description =
+      typeof raw.description === 'string' && raw.description.trim()
+        ? raw.description.trim().slice(0, 280)
+        : 'Item adicionado ao enxoval.';
+    const stage: EnxovalStage = isValidStage(raw.stage) ? raw.stage : 'bebe_rn';
+    const priority: ItemPriority = isValidPriority(raw.priority) ? raw.priority : 'Essencial';
+    const reqQtyNum = Number(raw.requiredQty);
+    const requiredQty = Number.isInteger(reqQtyNum) && reqQtyNum >= 1 && reqQtyNum <= 200 ? reqQtyNum : 1;
+    const priceNum = Number(raw.unitPriceBrl);
+    const unitPriceBrl =
+      Number.isFinite(priceNum) && priceNum >= 1 && priceNum <= 50000 ? Number(priceNum.toFixed(2)) : 89.9;
+    const searchQuery =
+      typeof raw.searchQuery === 'string' && raw.searchQuery.trim().length > 2
+        ? raw.searchQuery.trim()
+        : name;
+    const includePharmacy =
+      category.toLowerCase().includes('farm') ||
+      name.toLowerCase().includes('fralda') ||
+      name.toLowerCase().includes('pomada') ||
+      name.toLowerCase().includes('soro');
+    const customImg =
+      typeof raw.imageUrl === 'string' && raw.imageUrl.startsWith('/') ? raw.imageUrl : STAGE_IMAGES[stage];
+
+    const id = `item-${Date.now().toString(36)}-${i}-${randomBytes(2).toString('hex')}`;
+    existingIds.add(id);
+    createdItems.push({
+      id,
+      stage,
+      category,
+      name,
+      description,
+      priority,
+      requiredQty,
+      purchasedQty: 0,
+      unitPriceBrl,
+      imageUrl: customImg,
+      searchQuery,
+      offers: buildVerifiedStoreOffers(searchQuery, unitPriceBrl, now, includePharmacy),
+      updatedAt: now,
+    });
+  }
+
+  if (createdItems.length === 0) {
+    res.status(400).json({error: 'Nenhum item válido informado para adicionar.'});
+    return;
+  }
+
+  list.items = [...createdItems, ...list.items];
+
+  const supaAdmin = getSupabaseAdminClient();
+  if (supaAdmin) {
+    try {
+      await supaAdmin.from('enxoval_items').upsert(
+        createdItems.map((it) => ({
+          id: it.id,
+          list_id: list.config.id,
+          stage: it.stage,
+          category: it.category,
+          name: it.name,
+          description: it.description,
+          priority: it.priority,
+          required_qty: it.requiredQty,
+          purchased_qty: 0,
+          unit_price_brl: it.unitPriceBrl,
+          image_url: it.imageUrl,
+          search_query: it.searchQuery,
+          updated_at: now,
+        })),
+      );
+      await supaAdmin.from('enxoval_store_offers').upsert(
+        createdItems.flatMap((it) =>
+          it.offers.map((offer) => ({
+            item_id: it.id,
+            store_slug: offer.storeSlug,
+            store_name: offer.storeName,
+            pharmacy_brand: offer.pharmacyBrand ?? null,
+            offer_title: offer.offerTitle,
+            price_brl: offer.priceBrl,
+            url: offer.url,
+            in_stock: offer.inStock,
+            delivery_estimate: offer.deliveryEstimate,
+            scraped_at: offer.scrapedAt,
+          })),
+        ),
+      );
+    } catch {
+      // Ignore if Postgres schema is not provisioned yet
+    }
+  }
+
+  const listMeta: SsgIndexMetadata = {
+    ...ssgMeta,
+    totalItemsIndexed: list.items.length,
+    totalOffersIndexed: list.items.reduce((acc, i) => acc + i.offers.length, 0),
+  };
+  const summary = buildPublicSummary(list);
+  broadcastRealtime('items_batch_added', {
+    listSlug: slug,
+    items: createdItems,
+    ssgMeta: listMeta,
+    summary,
+  });
+  res.status(201).json({items: createdItems, summary});
 });
 
 // Protected: Delete item (requires Google Sign-In + List Ownership)

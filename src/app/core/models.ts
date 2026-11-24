@@ -80,6 +80,11 @@ export interface PublicEnxovalSummary {
   previewImages: string[];
 }
 
+export interface SelectedCatalogItemInput {
+  templateId: string;
+  requiredQty?: number;
+}
+
 export interface CreateListWizardInput {
   title: string;
   babyName: string;
@@ -91,6 +96,7 @@ export interface CreateListWizardInput {
   welcomeNote: string;
   selectedStages: EnxovalStage[];
   essentialsOnly?: boolean;
+  selectedItems?: SelectedCatalogItemInput[];
   customSlug?: string;
 }
 

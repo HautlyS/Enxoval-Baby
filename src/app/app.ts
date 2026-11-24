@@ -20,10 +20,10 @@ import {BabyToolsPanel} from './components/baby-tools-panel';
 import {CreateListWizard} from './components/create-list-wizard';
 import {GoogleAuthModal} from './components/google-auth-modal';
 import {KawaiiLoadingSkeleton} from './components/kawaii-loading-skeleton';
-import {KawaiiRibbon} from './components/kawaii-ornaments';
+import {KawaiiFloralCorner, KawaiiRibbon} from './components/kawaii-ornaments';
 import {PixCheckoutModal} from './components/pix-checkout-modal';
 import {PixConfigDrawer} from './components/pix-config-drawer';
-import {DECORATION_IMAGES, STAGE_IMAGES} from './core/catalog-seed';
+import {DECORATION_IMAGES, FULL_ENXOVAL_CATALOG, STAGE_IMAGES} from './core/catalog-seed';
 import {AppViewMode, CatalogSortOrder, EnxovalStore, MobileTab} from './core/enxoval-store';
 import {EnxovalItem, EnxovalStage, StoreSlug} from './core/models';
 
@@ -36,6 +36,7 @@ import {EnxovalItem, EnxovalStage, StoreSlug} from './core/models';
     ReactiveFormsModule,
     MatIconModule,
     KawaiiRibbon,
+    KawaiiFloralCorner,
     AppHero,
     KawaiiLoadingSkeleton,
     CreateListWizard,
@@ -57,6 +58,7 @@ export class App {
 
   protected readonly heroImage = STAGE_IMAGES.hero;
   protected readonly decorImages = DECORATION_IMAGES;
+  protected readonly fullCatalogCount = FULL_ENXOVAL_CATALOG.length;
 
   protected readonly stages: HeroStageMeta[] = [
     {
@@ -97,6 +99,7 @@ export class App {
   };
 
   protected readonly searchControl = new FormControl('', {nonNullable: true});
+  protected readonly categoryControl = new FormControl('all', {nonNullable: true});
   protected readonly sortControl = new FormControl<CatalogSortOrder>('default', {nonNullable: true});
   protected readonly activeCheckoutItem = signal<EnxovalItem | null>(null);
   protected readonly addItemOpen = signal(false);
@@ -107,6 +110,7 @@ export class App {
   protected readonly hasActiveCatalogFilters = computed(
     () =>
       this.store.selectedStage() !== 'all' ||
+      this.store.selectedCategory() !== 'all' ||
       this.store.onlyRemaining() ||
       this.store.searchQuery().trim().length > 0 ||
       this.store.sortOrder() !== 'default',
@@ -147,6 +151,10 @@ export class App {
   constructor() {
     this.searchControl.valueChanges.subscribe((value) => {
       this.store.searchQuery.set(value);
+    });
+
+    this.categoryControl.valueChanges.subscribe((category) => {
+      this.store.selectedCategory.set(category);
     });
 
     this.sortControl.valueChanges.subscribe((order) => {
@@ -193,6 +201,7 @@ export class App {
     effect(() => {
       const filterKey = [
         this.store.selectedStage(),
+        this.store.selectedCategory(),
         this.store.onlyRemaining(),
         this.store.sortOrder(),
         this.store.searchQuery(),
@@ -317,8 +326,10 @@ export class App {
 
   protected resetCatalogFilters(): void {
     this.store.selectedStage.set('all');
+    this.store.selectedCategory.set('all');
     this.store.onlyRemaining.set(false);
     this.searchControl.setValue('');
+    this.categoryControl.setValue('all');
     this.sortControl.setValue('default');
   }
 
@@ -369,6 +380,10 @@ export class App {
       img.classList.remove('object-contain', 'p-2', 'p-1', 'p-3');
       img.classList.add('object-cover');
     }
+  }
+
+  protected openCatalogBrowser(): void {
+    this.addItemOpen.set(true);
   }
 
   protected openAddItem(): void {

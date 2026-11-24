@@ -37,6 +37,15 @@ function isSafeStoreUrl(rawUrl: unknown): rawUrl is string {
   }
 }
 
+function constantTimeEquals(a: string, b: string): boolean {
+  if (!a || !b || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
 Deno.serve(async (req) => {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({error: 'Método não permitido.'}), {
@@ -46,18 +55,15 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Automatically injected inside Supabase Edge Functions runtime (never stored in GitHub Actions)
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
     const syncSecret = Deno.env.get('SSG_SYNC_SECRET')?.trim() ?? '';
 
-    const authHeader = req.headers.get('authorization') ?? '';
     const providedSecret = req.headers.get('x-sync-secret')?.trim() ?? '';
-    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const authorizedBySecret = constantTimeEquals(providedSecret, syncSecret);
 
-    const authorizedBySecret = Boolean(syncSecret && providedSecret === syncSecret);
-    const authorizedByServiceRole = Boolean(serviceRoleKey && bearer === serviceRoleKey);
-
-    if (!authorizedBySecret && !authorizedByServiceRole) {
+    if (!authorizedBySecret) {
       return new Response(JSON.stringify({error: 'Não autorizado para sincronização SSG.'}), {
         status: 401,
         headers: {'Content-Type': 'application/json'},

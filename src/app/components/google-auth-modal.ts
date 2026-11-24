@@ -21,7 +21,7 @@ import {KawaiiRibbon} from './kawaii-ornaments';
     @if (store.authModalOpen()) {
       <div
         (keydown.escape)="close()"
-        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-rose-100/55 backdrop-blur-md"
+        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-[#0F1115]/35 backdrop-blur-sm"
         role="dialog"
         aria-modal="true"
         aria-labelledby="google-auth-title"
@@ -35,19 +35,19 @@ import {KawaiiRibbon} from './kawaii-ornaments';
         ></button>
         <div
           #sheetContainer
-          class="relative z-10 glass-panel-strong w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden flex flex-col"
+          class="relative z-10 bento-card-strong w-full sm:max-w-md rounded-t-[28px] sm:rounded-[28px] overflow-hidden flex flex-col text-[#0F1115]"
         >
           <!-- Mobile Grab Handle -->
           <div class="sm:hidden pt-3 pb-1 flex justify-center">
-            <span class="w-10 h-1.5 rounded-full bg-rose-300/80"></span>
+            <span class="w-10 h-1.5 rounded-full bg-[#CBD2DD]"></span>
           </div>
 
-          <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-rose-200/60 bg-white/70 texture-silk-grid">
+          <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-[#E4E7EC] bg-[#F6F7F9]">
             <div class="flex items-center gap-3">
               <app-kawaii-ribbon [size]="28" />
               <div>
-                <p class="text-xs font-medium text-rose-700">Acesso Exclusivo Google</p>
-                <h2 id="google-auth-title" class="font-display text-lg font-semibold text-rose-950">
+                <p class="text-xs font-bold text-[#C2185B]">Acesso Exclusivo Google</p>
+                <h2 id="google-auth-title" class="font-display text-lg font-bold text-[#0F1115]">
                   Conectar Conta Google
                 </h2>
               </div>
@@ -56,14 +56,14 @@ import {KawaiiRibbon} from './kawaii-ornaments';
               type="button"
               (click)="close()"
               aria-label="Fechar janela de login"
-              class="min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center text-rose-800 hover:bg-rose-100/80 transition-colors cursor-pointer"
+              class="apple-press min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center text-[#4B5563] hover:text-[#0F1115] hover:bg-[#E4E7EC] cursor-pointer"
             >
               <mat-icon>close</mat-icon>
             </button>
           </div>
 
-          <div class="p-6 space-y-5 texture-cotton-dots">
-            <p class="text-sm text-rose-900 leading-relaxed">
+          <div class="p-6 space-y-5 bg-white">
+            <p class="text-sm text-[#4B5563] leading-relaxed">
               Entre exclusivamente com sua conta Google para editar itens do enxoval, configurar a chave Pix da lista e vincular sua assinatura nos presentes recebidos.
             </p>
 
@@ -72,7 +72,7 @@ import {KawaiiRibbon} from './kawaii-ornaments';
                 type="button"
                 (click)="handleGoogleClick()"
                 [disabled]="loading()"
-                class="w-full min-h-[48px] px-5 py-3 rounded-2xl bg-white hover:bg-rose-50 border border-rose-200 shadow-sm flex items-center justify-center gap-3 text-sm font-semibold text-rose-950 transition-all apple-press cursor-pointer"
+                class="w-full min-h-[48px] px-5 py-3 rounded-full bg-[#111111] hover:bg-[#23262B] text-white shadow-sm flex items-center justify-center gap-3 text-sm font-bold apple-press cursor-pointer"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z" />
@@ -83,16 +83,16 @@ import {KawaiiRibbon} from './kawaii-ornaments';
                 <span>{{ loading() ? 'Abrindo autenticação Google...' : 'Continuar com Google' }}</span>
               </button>
             } @else {
-              <div class="rounded-2xl bg-rose-50/80 border border-rose-200 p-4 space-y-3">
-                <div class="text-xs font-semibold text-rose-900">
+              <div class="rounded-[22px] bg-[#F6F7F9] border border-[#E4E7EC] p-4 space-y-3">
+                <div class="text-xs font-bold text-[#0F1115]">
                   Modo Preview Google (OAuth externo ainda não configurado)
                 </div>
-                <p class="text-xs text-rose-800 leading-relaxed">
-                  Para testar a sessão Google imediatamente neste ambiente, confirme seu nome e e-mail Google. Em produção, basta definir <code class="font-mono">GOOGLE_CLIENT_ID</code> ou conectar o Supabase Auth.
+                <p class="text-xs text-[#4B5563] leading-relaxed">
+                  Para testar a sessão Google imediatamente neste ambiente, confirme seu nome e e-mail Google. Em produção, basta definir <code class="font-mono font-bold text-[#C2185B]">GOOGLE_CLIENT_ID</code> ou conectar o Supabase Auth.
                 </p>
                 <form [formGroup]="previewForm" (ngSubmit)="submitPreview()" class="space-y-3">
                   <div>
-                    <label for="g-name" class="block text-xs font-semibold text-rose-900 mb-1">
+                    <label for="g-name" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                       Nome Completo
                     </label>
                     <input
@@ -100,11 +100,11 @@ import {KawaiiRibbon} from './kawaii-ornaments';
                       type="text"
                       formControlName="name"
                       placeholder="Ex.: Mariana Oliveira"
-                      class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white border border-rose-200 text-sm text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-white border border-[#D8DCE3] text-sm text-[#0F1115] focus:outline-none focus:border-[#C2185B]"
                     />
                   </div>
                   <div>
-                    <label for="g-email" class="block text-xs font-semibold text-rose-900 mb-1">
+                    <label for="g-email" class="block text-xs font-semibold text-[#4B5563] mb-1.5">
                       E-mail Google
                     </label>
                     <input
@@ -112,16 +112,16 @@ import {KawaiiRibbon} from './kawaii-ornaments';
                       type="email"
                       formControlName="email"
                       placeholder="voce@gmail.com"
-                      class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-white border border-rose-200 text-sm text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                      class="w-full min-h-[44px] px-4 py-2 rounded-2xl bg-white border border-[#D8DCE3] text-sm text-[#0F1115] focus:outline-none focus:border-[#C2185B]"
                     />
                   </div>
                   @if (errorMsg()) {
-                    <p class="text-xs text-red-700 font-medium">{{ errorMsg() }}</p>
+                    <p class="text-xs text-[#9D174D] font-semibold">{{ errorMsg() }}</p>
                   }
                   <button
                     type="submit"
                     [disabled]="loading() || previewForm.invalid"
-                    class="w-full min-h-[48px] px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-sm font-semibold transition-all apple-press cursor-pointer"
+                    class="w-full min-h-[48px] px-5 py-3 rounded-full bg-[#FF80AB] hover:bg-[#F48FB1] disabled:opacity-45 text-[#111111] text-sm font-bold apple-press cursor-pointer"
                   >
                     {{ loading() ? 'Conectando...' : 'Confirmar Sessão Google' }}
                   </button>

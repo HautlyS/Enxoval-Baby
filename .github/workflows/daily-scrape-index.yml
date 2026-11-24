@@ -26,16 +26,10 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SSG_SYNC_SECRET: ${{ secrets.SSG_SYNC_SECRET }}
         run: node scripts/scrape-enxoval-index.mjs
 
-      - name: Install dependencies and build Angular SSG bundle with GitHub Secrets
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      - name: Install dependencies and build Angular SSG bundle
         run: |
           npm ci
           npm run build

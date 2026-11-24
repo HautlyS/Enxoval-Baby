@@ -200,18 +200,14 @@ async function run() {
   console.log(`Generated SSG store index: ${outPath} (${entries.length} items, ${output.meta.totalOffersIndexed} offers)`);
 
   const supabaseUrl = process.env.SUPABASE_URL?.trim();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   const anonKey = process.env.SUPABASE_ANON_KEY?.trim();
   const syncSecret = process.env.SSG_SYNC_SECRET?.trim();
-  const bearerToken = serviceRoleKey || anonKey;
-  if (supabaseUrl && (syncSecret || serviceRoleKey)) {
-    const headers = {'Content-Type': 'application/json'};
-    if (bearerToken) {
-      headers.Authorization = `Bearer ${bearerToken}`;
-    }
-    if (syncSecret) {
-      headers['x-sync-secret'] = syncSecret;
-    }
+  if (supabaseUrl && anonKey && syncSecret) {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${anonKey}`,
+      'x-sync-secret': syncSecret,
+    };
     const syncRes = await fetch(`${supabaseUrl}/functions/v1/sync-ssg-index`, {
       method: 'POST',
       headers,
