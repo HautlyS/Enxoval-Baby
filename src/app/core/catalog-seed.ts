@@ -1,17 +1,17 @@
 import {EnxovalItem, EnxovalListConfig, EnxovalStage, StoreOffer} from './models';
 
 export const STAGE_IMAGES = {
-  hero: '/src/assets/images/hero_enxoval_nursery_1795393198737.jpg',
-  gestante: '/src/assets/images/cat_gestante_maternidade_1795393197903.jpg',
-  bebe_rn: '/src/assets/images/cat_bebe_roupinhas_1795393197611.jpg',
-  quarto_passeio: '/src/assets/images/cat_passeio_banho_1795393198937.jpg',
-  familia: '/src/assets/images/cat_familia_casa_1795441107707.jpg',
+  hero: 'src/assets/images/hero_enxoval_nursery_1795393198737.jpg',
+  gestante: 'src/assets/images/cat_gestante_maternidade_1795393197903.jpg',
+  bebe_rn: 'src/assets/images/cat_bebe_roupinhas_1795393197611.jpg',
+  quarto_passeio: 'src/assets/images/cat_passeio_banho_1795393198937.jpg',
+  familia: 'src/assets/images/cat_familia_casa_1795441107707.jpg',
 } as const;
 
 export const DECORATION_IMAGES = {
-  blushSilkPattern: '/src/assets/images/bg_blush_silk_pattern_1795441106855.jpg',
-  peonyRibbon: '/src/assets/images/decor_peony_ribbon_1795441106714.jpg',
-  layetteGiftbox: '/src/assets/images/decor_layette_giftbox_1795441107136.jpg',
+  blushSilkPattern: 'src/assets/images/bg_blush_silk_pattern_1795441106855.jpg',
+  peonyRibbon: 'src/assets/images/decor_peony_ribbon_1795441106714.jpg',
+  layetteGiftbox: 'src/assets/images/decor_layette_giftbox_1795441107136.jpg',
 } as const;
 
 export function buildVerifiedStoreOffers(

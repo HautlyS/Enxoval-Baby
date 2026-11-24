@@ -1,24 +1,30 @@
 import {isPlatformBrowser} from '@angular/common';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {computed, inject, Injectable, OnDestroy, PLATFORM_ID, signal} from '@angular/core';
 import {createClient, RealtimeChannel, SupabaseClient} from '@supabase/supabase-js';
 import QRCode from 'qrcode';
 import {firstValueFrom} from 'rxjs';
-import {INITIAL_ENXOVAL_ITEMS, INITIAL_LIST_CONFIG} from './catalog-seed';
+import {
+  COMMUNITY_LIST_SEEDS,
+  FULL_ENXOVAL_CATALOG,
+  INITIAL_ENXOVAL_ITEMS,
+  INITIAL_LIST_CONFIG,
+} from './catalog-seed';
+import {environment} from '../../environments/environment';
+import {enxovalDB, type ListRow} from './enxoval-db';
 import {
   CreateListWizardInput,
   EnxovalItem,
   EnxovalListConfig,
   EnxovalStage,
-  EnxovalStateSnapshot,
   GoogleUserProfile,
   ItemPriority,
-  MaternityBagChecklistItem,
   PixKeyType,
   PublicEnxovalSummary,
   PurchaseRecord,
   SelectedCatalogItemInput,
   SsgIndexMetadata,
+  StoreOffer,
   StoreSlug,
 } from './models';
 import {generatePixBrCode} from './pix-brcode';
@@ -80,6 +86,133 @@ const INITIAL_MATERNITY_CHECKLIST: MaternityBagChecklistItem[] = [
   {id: 'bag-9', group: 'Documentos & Acompanhante', label: 'Troca de roupa do acompanhante e carregador longo', qtyLabel: '1 kit', packed: false},
 ];
 
+interface MaternityBagChecklistItem {
+  id: string;
+  group: 'Mamãe' | 'Bebê' | 'Documentos & Acompanhante';
+  label: string;
+  qtyLabel: string;
+  packed: boolean;
+}
+
+function sanitizeSlug(raw: string): string {
+  return raw
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48);
+}
+
+function buildPublicSummary(listConfig: EnxovalListConfig, items: EnxovalItem[]): PublicEnxovalSummary {
+  let totalRequired = 0;
+  let totalPurchased = 0;
+  let remainingValueBrl = 0;
+  for (const it of items) {
+    totalRequired += it.requiredQty;
+    const p = Math.min(it.purchasedQty, it.requiredQty);
+    totalPurchased += p;
+    remainingValueBrl += Math.max(0, it.requiredQty - p) * it.unitPriceBrl;
+  }
+  const completionPct = totalRequired > 0 ? Math.round((totalPurchased / totalRequired) * 100) : 0;
+  const previewImages = items
+    .map((it) => it.imageUrl)
+    .filter((u, idx, arr) => typeof u === 'string' && u.length > 0 && arr.indexOf(u) === idx)
+    .slice(0, 3);
+
+  return {
+    id: listConfig.id,
+    slug: listConfig.slug,
+    title: listConfig.title,
+    babyName: listConfig.babyName,
+    creatorName: listConfig.creatorName || 'Criador (Entre com Google)',
+    creatorCity: listConfig.creatorCity,
+    dueDate: listConfig.dueDate,
+    welcomeNote: listConfig.welcomeNote,
+    totalItems: items.length,
+    totalRequired,
+    totalPurchased,
+    remainingValueBrl: Number(remainingValueBrl.toFixed(2)),
+    completionPct,
+    hasPixKey: Boolean(listConfig.pixKey.trim()),
+    isCommunityTemplate: Boolean(listConfig.isCommunityTemplate),
+    updatedAt: listConfig.updatedAt,
+    previewImages,
+  };
+}
+
+function buildVerifiedStoreOffersClient(
+  searchQuery: string,
+  basePriceBrl: number,
+  scrapedAt: string,
+  includePharmacyHighlight = false,
+): {storeSlug: StoreSlug; storeName: string; pharmacyBrand?: string; offerTitle: string; priceBrl: number; url: string; inStock: boolean; deliveryEstimate: string; scrapedAt: string}[] {
+  const encoded = encodeURIComponent(searchQuery);
+  const mlSlug = searchQuery
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  const magaluPrice = Number((basePriceBrl * 0.99).toFixed(2));
+  const mlPrice = Number((basePriceBrl * 0.96).toFixed(2));
+  const amazonPrice = Number((basePriceBrl * 0.98).toFixed(2));
+  const pharmacyPrice = Number((basePriceBrl * (includePharmacyHighlight ? 0.94 : 1.03)).toFixed(2));
+
+  return [
+    {
+      storeSlug: 'mercadolivre' as StoreSlug,
+      storeName: 'Mercado Livre',
+      offerTitle: `${searchQuery} — Entrega Full`,
+      priceBrl: mlPrice,
+      url: `https://lista.mercadolivre.com.br/${mlSlug}`,
+      inStock: true,
+      deliveryEstimate: 'Chega amanhã',
+      scrapedAt,
+    },
+    {
+      storeSlug: 'amazon' as StoreSlug,
+      storeName: 'Amazon Brasil',
+      offerTitle: `${searchQuery} — Envio Prime`,
+      priceBrl: amazonPrice,
+      url: `https://www.amazon.com.br/s?k=${encoded}`,
+      inStock: true,
+      deliveryEstimate: '1 a 2 dias úteis',
+      scrapedAt,
+    },
+    {
+      storeSlug: 'magalu' as StoreSlug,
+      storeName: 'Magazine Luiza',
+      offerTitle: `${searchQuery} — Magalu Indica`,
+      priceBrl: magaluPrice,
+      url: `https://www.magazineluiza.com.br/busca/${encoded}/`,
+      inStock: true,
+      deliveryEstimate: 'Retira ou 2 dias',
+      scrapedAt,
+    },
+    {
+      storeSlug: 'farmacias' as StoreSlug,
+      storeName: 'Farmácias em Geral',
+      pharmacyBrand: includePharmacyHighlight ? 'Pague Menos / Drogasil' : 'Pague Menos / Drogaria SP',
+      offerTitle: `${searchQuery} — Rede Farmacêutica`,
+      priceBrl: pharmacyPrice,
+      url: `https://www.paguemenos.com.br/${mlSlug}`,
+      inStock: true,
+      deliveryEstimate: 'Entrega em até 2h',
+      scrapedAt,
+    },
+  ].sort((a, b) => a.priceBrl - b.priceBrl);
+}
+
+function cloneCatalogItems(items: EnxovalItem[]): EnxovalItem[] {
+  return items.map((it) => ({...it, purchasedQty: 0, offers: it.offers.map((o) => ({...o}))}));
+}
+
+function getCommunitySeedBySlug(slug: string): {config: EnxovalListConfig; stages: EnxovalStage[]; itemIds?: string[]} | undefined {
+  return COMMUNITY_LIST_SEEDS.find((s) => s.config.slug === slug);
+}
+
 @Injectable({providedIn: 'root'})
 export class EnxovalStore implements OnDestroy {
   private readonly http = inject(HttpClient);
@@ -89,7 +222,6 @@ export class EnxovalStore implements OnDestroy {
   private supabaseClient: SupabaseClient | null = null;
   private supabaseChannel: RealtimeChannel | null = null;
 
-  // In-memory Google auth session token (never stored in localStorage/sessionStorage)
   private accessToken = signal<string | null>(null);
   readonly currentUser = signal<GoogleUserProfile | null>(null);
   readonly googleOAuthConfigured = signal(false);
@@ -117,7 +249,6 @@ export class EnxovalStore implements OnDestroy {
   readonly error = signal<string | null>(null);
   readonly toastMessage = signal<string | null>(null);
 
-  // Navigation & Filters
   readonly activeView = signal<AppViewMode>('descobrir');
   readonly activeMobileTab = signal<MobileTab>('etapas');
   readonly selectedStage = signal<EnxovalStage | 'all'>('all');
@@ -127,7 +258,6 @@ export class EnxovalStore implements OnDestroy {
   readonly sortOrder = signal<CatalogSortOrder>('default');
   readonly selectedStoreFilter = signal<StoreSlug | 'all'>('all');
 
-  // Baby Tools State
   readonly maternityChecklist = signal<MaternityBagChecklistItem[]>(INITIAL_MATERNITY_CHECKLIST);
 
   readonly availableCategories = computed(() => {
@@ -201,8 +331,7 @@ export class EnxovalStore implements OnDestroy {
     }
 
     const totalRemaining = Math.max(0, totalRequired - totalPurchased);
-    const completionPct =
-      totalRequired > 0 ? Math.round((totalPurchased / totalRequired) * 100) : 0;
+    const completionPct = totalRequired > 0 ? Math.round((totalPurchased / totalRequired) * 100) : 0;
 
     return {
       totalCatalogItems: all.length,
@@ -253,9 +382,9 @@ export class EnxovalStore implements OnDestroy {
     this.teardownRealtime();
   }
 
-  private authHeaders(): HttpHeaders {
+  private authHeaders(): Record<string, string> {
     const token = this.accessToken();
-    return token ? new HttpHeaders({Authorization: `Bearer ${token}`}) : new HttpHeaders();
+    return token ? {Authorization: `Bearer ${token}`} : {};
   }
 
   openView(view: AppViewMode, scrollToTop = true): void {
@@ -354,6 +483,23 @@ export class EnxovalStore implements OnDestroy {
     return {slug: INITIAL_LIST_CONFIG.slug, isExplicitLink: false};
   }
 
+  private async loadIndexedStores(): Promise<SsgIndexMetadata> {
+    try {
+      const data = await firstValueFrom(
+        this.http.get<{meta?: SsgIndexMetadata; entries?: {itemId: string; searchQuery: string; imageUrl?: string | null; bestPriceBrl: number; offers: StoreOffer[]}[]}>('/data/indexed-stores.json'),
+      );
+      if (data.meta) {
+        return {
+          ...data.meta,
+          sourceMode: 'github-ssg-static',
+        };
+      }
+    } catch {
+      // ignore, fall back to seed meta
+    }
+    return this.ssgMeta();
+  }
+
   async initialize(): Promise<void> {
     this.loading.set(true);
     this.error.set(null);
@@ -367,24 +513,39 @@ export class EnxovalStore implements OnDestroy {
     }
     const minWait = new Promise((r) => setTimeout(r, 450));
     try {
-      const [snapshot, supaCfg] = await Promise.all([
-        firstValueFrom(
-          this.http.get<EnxovalStateSnapshot>(
-            `/api/enxoval/state?list=${encodeURIComponent(initialSlug)}`,
-          ),
-        ),
-        firstValueFrom(
-          this.http.get<{configured: boolean; url: string; anonKey: string}>('/api/config/supabase'),
-        ),
-        minWait,
+      await enxovalDB.open();
+
+      const [dbList, meta, supaOk] = await Promise.all([
+        enxovalDB.loadList(initialSlug),
+        enxovalDB.loadMeta(),
+        this.tryConnectSupabase(),
       ]);
 
-      this.applySnapshot(snapshot);
-      if (supaCfg.configured && supaCfg.url && supaCfg.anonKey) {
-        await this.connectSupabaseRuntime(supaCfg.url, supaCfg.anonKey);
+      if (dbList) {
+        this.listConfig.set(dbList.config);
+        this.activeListSlug.set(dbList.config.slug);
+        this.items.set(dbList.items);
+        this.purchases.set(dbList.purchases);
+        if (meta) this.ssgMeta.set(meta);
       } else {
-        this.connectSseRealtime();
+        const seed = getCommunitySeedBySlug(initialSlug);
+        if (seed) {
+          const items = cloneCatalogItems(
+            FULL_ENXOVAL_CATALOG.filter((it) => seed.stages.includes(it.stage)),
+          ).map((it) => ({...it, id: `${initialSlug.slice(0, 18)}-${it.id}`}));
+          this.listConfig.set({...seed.config, id: `lista-${seed.config.slug}`, slug: initialSlug});
+          this.activeListSlug.set(initialSlug);
+          this.items.set(items);
+          this.purchases.set([]);
+        } else {
+          this.items.set(cloneCatalogItems(INITIAL_ENXOVAL_ITEMS));
+          this.purchases.set([]);
+        }
+        await this.applyIndexedOffers();
       }
+
+      this.googleOAuthConfigured.set(supaOk);
+      await minWait;
     } catch {
       this.error.set('Não foi possível sincronizar com o servidor agora; exibindo lista local.');
     } finally {
@@ -392,244 +553,14 @@ export class EnxovalStore implements OnDestroy {
     }
   }
 
-  private applySnapshot(snapshot: EnxovalStateSnapshot): void {
-    this.listConfig.set(snapshot.listConfig);
-    this.activeListSlug.set(snapshot.listConfig.slug);
-    this.items.set(snapshot.items);
-    this.purchases.set(snapshot.purchases);
-    this.ssgMeta.set(snapshot.ssgMeta);
-    this.realtimeMode.set(snapshot.realtimeMode);
-    this.googleOAuthConfigured.set(snapshot.googleOAuthConfigured);
-    if (Array.isArray(snapshot.availableLists)) {
-      this.availableLists.set(snapshot.availableLists);
-    }
-  }
-
-  async loadListBySlug(
-    slug: string,
-    updateBrowserUrl = true,
-    switchToListView = true,
-  ): Promise<void> {
-    if (this.switchingList()) return;
-    this.switchingList.set(true);
-    this.selectedStage.set('all');
-    this.selectedCategory.set('all');
-    const minWait = new Promise((r) => setTimeout(r, 420));
-    try {
-      const [snapshot] = await Promise.all([
-        firstValueFrom(
-          this.http.get<EnxovalStateSnapshot>(`/api/enxoval/state?list=${encodeURIComponent(slug)}`),
-        ),
-        minWait,
-      ]);
-      this.applySnapshot(snapshot);
-      if (switchToListView) {
-        this.openView('lista', true);
-      }
-      if (updateBrowserUrl && isPlatformBrowser(this.platformId)) {
-        const nextUrl = `/?list=${encodeURIComponent(snapshot.listConfig.slug)}`;
-        window.history.replaceState({}, '', nextUrl);
-      }
-      this.showToast(`Lista aberta: ${snapshot.listConfig.title}`);
-    } catch {
-      this.showToast('Não foi possível carregar essa lista agora.');
-    } finally {
-      this.switchingList.set(false);
-    }
-  }
-
-  async createNewEnxovalList(input: CreateListWizardInput): Promise<{
-    listConfig: EnxovalListConfig;
-    shareUrl: string;
-    summary: PublicEnxovalSummary;
-  }> {
-    const res = await firstValueFrom(
-      this.http.post<{
-        listConfig: EnxovalListConfig;
-        items: EnxovalItem[];
-        summary: PublicEnxovalSummary;
-        availableLists: PublicEnxovalSummary[];
-        shareUrl: string;
-      }>('/api/enxoval/lists', input, {
-        headers: this.authHeaders(),
-      }),
-    );
-
-    this.listConfig.set(res.listConfig);
-    this.activeListSlug.set(res.listConfig.slug);
-    this.items.set(res.items);
-    this.purchases.set([]);
-    this.availableLists.set(res.availableLists);
-    this.selectedStage.set('all');
-    this.selectedCategory.set('all');
-    this.openView('lista', true);
-
-    if (isPlatformBrowser(this.platformId)) {
-      window.history.replaceState({}, '', `/?list=${encodeURIComponent(res.listConfig.slug)}`);
-    }
-    this.showToast(`Lista "${res.listConfig.title}" publicada com link pronto!`);
-    return {
-      listConfig: res.listConfig,
-      shareUrl: this.activeShareUrl(),
-      summary: res.summary,
-    };
-  }
-
-  private teardownRealtime(): void {
-    if (this.sseSource) {
-      this.sseSource.close();
-      this.sseSource = null;
-    }
-    if (this.supabaseClient && this.supabaseChannel) {
-      void this.supabaseClient.removeChannel(this.supabaseChannel);
-      this.supabaseChannel = null;
-    }
-  }
-
-  private connectSseRealtime(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    this.teardownRealtime();
-
-    const source = new EventSource('/api/realtime/stream');
-    this.sseSource = source;
-    this.realtimeMode.set('sse-local');
-
-    source.addEventListener('list_created', (evt) => {
-      try {
-        const data = JSON.parse((evt as MessageEvent).data) as {
-          availableLists?: PublicEnxovalSummary[];
-        };
-        if (Array.isArray(data.availableLists)) {
-          this.availableLists.set(data.availableLists);
-        }
-      } catch {
-        // ignore
-      }
-    });
-
-    source.addEventListener('item_added', (evt) => {
-      try {
-        const data = JSON.parse((evt as MessageEvent).data) as {
-          listSlug?: string;
-          item: EnxovalItem;
-          ssgMeta?: SsgIndexMetadata;
-          summary?: PublicEnxovalSummary;
-        };
-        if (data.summary) this.upsertListSummary(data.summary);
-        if (data.listSlug && data.listSlug !== this.activeListSlug()) return;
-        this.items.update((list) => {
-          if (list.some((i) => i.id === data.item.id)) return list;
-          return [data.item, ...list];
-        });
-        if (data.ssgMeta) this.ssgMeta.set(data.ssgMeta);
-      } catch {
-        // ignore
-      }
-    });
-
-    source.addEventListener('items_batch_added', (evt) => {
-      try {
-        const data = JSON.parse((evt as MessageEvent).data) as {
-          listSlug?: string;
-          items: EnxovalItem[];
-          ssgMeta?: SsgIndexMetadata;
-          summary?: PublicEnxovalSummary;
-        };
-        if (data.summary) this.upsertListSummary(data.summary);
-        if (data.listSlug && data.listSlug !== this.activeListSlug()) return;
-        this.items.update((list) => {
-          const existing = new Set(list.map((i) => i.id));
-          const incoming = (data.items ?? []).filter((it) => !existing.has(it.id));
-          return incoming.length > 0 ? [...incoming, ...list] : list;
-        });
-        if (data.ssgMeta) this.ssgMeta.set(data.ssgMeta);
-      } catch {
-        // ignore
-      }
-    });
-
-    source.addEventListener('item_deleted', (evt) => {
-      try {
-        const data = JSON.parse((evt as MessageEvent).data) as {
-          listSlug?: string;
-          itemId: string;
-          ssgMeta?: SsgIndexMetadata;
-          summary?: PublicEnxovalSummary;
-        };
-        if (data.summary) this.upsertListSummary(data.summary);
-        if (data.listSlug && data.listSlug !== this.activeListSlug()) return;
-        this.items.update((list) => list.filter((i) => i.id !== data.itemId));
-        if (data.ssgMeta) this.ssgMeta.set(data.ssgMeta);
-      } catch {
-        // ignore
-      }
-    });
-
-    source.addEventListener('list_config_updated', (evt) => {
-      try {
-        const data = JSON.parse((evt as MessageEvent).data) as {
-          listSlug?: string;
-          listConfig: EnxovalListConfig;
-          summary?: PublicEnxovalSummary;
-        };
-        if (data.summary) this.upsertListSummary(data.summary);
-        if (data.listSlug && data.listSlug !== this.activeListSlug()) return;
-        this.listConfig.set(data.listConfig);
-      } catch {
-        // ignore
-      }
-    });
-
-    source.addEventListener('purchase_completed', (evt) => {
-      try {
-        const data = JSON.parse((evt as MessageEvent).data) as {
-          listSlug?: string;
-          item: EnxovalItem;
-          purchase: PurchaseRecord;
-          summary?: PublicEnxovalSummary;
-        };
-        if (data.summary) {
-          this.availableLists.update((lists) =>
-            lists.map((l) => (l.slug === data.summary!.slug ? data.summary! : l)),
-          );
-        }
-        if (data.listSlug && data.listSlug !== this.activeListSlug()) return;
-        this.items.update((list) => list.map((i) => (i.id === data.item.id ? data.item : i)));
-        this.purchases.update((prev) => {
-          if (prev.some((p) => p.id === data.purchase.id)) return prev;
-          return [data.purchase, ...prev].slice(0, 30);
-        });
-      } catch {
-        // ignore
-      }
-    });
-
-    source.addEventListener('ssg_synced', (evt) => {
-      try {
-        const data = JSON.parse((evt as MessageEvent).data) as {
-          listSlug?: string;
-          ssgMeta: SsgIndexMetadata;
-          items: EnxovalItem[];
-        };
-        if (data.listSlug && data.listSlug !== this.activeListSlug()) return;
-        this.ssgMeta.set(data.ssgMeta);
-        this.items.set(data.items);
-      } catch {
-        // ignore
-      }
-    });
-  }
-
-  async connectSupabaseRuntime(url: string, anonKey: string): Promise<boolean> {
+  private async tryConnectSupabase(): Promise<boolean> {
+    const url = environment.supabaseUrl?.trim() || '';
+    const anonKey = environment.supabaseAnonKey?.trim() || '';
     if (!url.startsWith('https://') || !anonKey) return false;
     try {
       this.teardownRealtime();
       const client = createClient(url, anonKey, {
-        auth: {
-          flowType: 'pkce',
-          persistSession: false,
-          autoRefreshToken: true,
-        },
+        auth: {flowType: 'pkce', persistSession: false, autoRefreshToken: true},
       });
       this.supabaseClient = client;
 
@@ -710,17 +641,233 @@ export class EnxovalStore implements OnDestroy {
       this.showToast('Supabase Realtime & Google Auth conectados.');
       return true;
     } catch {
-      this.connectSseRealtime();
+      this.realtimeMode.set('sse-local');
       return false;
     }
   }
 
-  /**
-   * Google Sign-In Only flow:
-   * 1. Uses Supabase Auth Google OAuth PKCE popup if Supabase is connected
-   * 2. Uses direct Google OAuth 2.0 popup if GOOGLE_CLIENT_ID is configured
-   * 3. Otherwise opens the Google Sign-In modal for verified preview Google connection
-   */
+  private async applyIndexedOffers(): Promise<void> {
+    const meta = await this.loadIndexedStores();
+    this.ssgMeta.set(meta);
+
+    try {
+      const data = await firstValueFrom(
+        this.http.get<{entries?: {itemId: string; searchQuery: string; imageUrl?: string | null; bestPriceBrl: number; offers: StoreOffer[]}[]}>('/data/indexed-stores.json'),
+      );
+      const entries = Array.isArray(data?.entries) ? data.entries : [];
+      const entryMap = new Map(entries.map((e) => [e.itemId, e]));
+      this.items.update((list) =>
+        list.map((item) => {
+          const match = entryMap.get(item.id);
+          if (!match) return item;
+          const offersList = Array.isArray(match.offers) ? match.offers : [];
+          const scrapedImg =
+            typeof match.imageUrl === 'string' && match.imageUrl.startsWith('https://')
+              ? match.imageUrl
+              : item.imageUrl;
+          return {
+            ...item,
+            imageUrl: scrapedImg,
+            unitPriceBrl: match.bestPriceBrl > 0 ? match.bestPriceBrl : item.unitPriceBrl,
+            offers: offersList.length > 0 ? offersList : item.offers,
+            updatedAt: meta.generatedAt,
+          };
+        }),
+      );
+    } catch {
+      // keep seed offers
+    }
+  }
+
+  async loadListBySlug(
+    slug: string,
+    updateBrowserUrl = true,
+    switchToListView = true,
+  ): Promise<void> {
+    if (this.switchingList()) return;
+    this.switchingList.set(true);
+    this.selectedStage.set('all');
+    this.selectedCategory.set('all');
+    const minWait = new Promise((r) => setTimeout(r, 420));
+    try {
+      const dbList = await enxovalDB.loadList(slug);
+      if (dbList) {
+        this.listConfig.set(dbList.config);
+        this.activeListSlug.set(dbList.config.slug);
+        this.items.set(dbList.items);
+        this.purchases.set(dbList.purchases);
+      } else {
+        const seed = getCommunitySeedBySlug(slug);
+        if (seed) {
+          const items = cloneCatalogItems(
+            FULL_ENXOVAL_CATALOG.filter((it) => seed.stages.includes(it.stage)),
+          ).map((it) => ({...it, id: `${slug.slice(0, 18)}-${it.id}`}));
+          this.listConfig.set({...seed.config, id: `lista-${seed.config.slug}`, slug});
+          this.activeListSlug.set(slug);
+          this.items.set(items);
+          this.purchases.set([]);
+        } else {
+          this.items.set(cloneCatalogItems(INITIAL_ENXOVAL_ITEMS));
+          this.purchases.set([]);
+        }
+        await this.applyIndexedOffers();
+      }
+      await minWait;
+      if (switchToListView) {
+        this.openView('lista', true);
+      }
+      if (updateBrowserUrl && isPlatformBrowser(this.platformId)) {
+        const nextUrl = `/?list=${encodeURIComponent(this.listConfig().slug)}`;
+        window.history.replaceState({}, '', nextUrl);
+      }
+      this.showToast(`Lista aberta: ${this.listConfig().title}`);
+    } catch {
+      this.showToast('Não foi possível carregar essa lista agora.');
+    } finally {
+      this.switchingList.set(false);
+    }
+  }
+
+  async createNewEnxovalList(input: CreateListWizardInput): Promise<{
+    listConfig: EnxovalListConfig;
+    shareUrl: string;
+    summary: PublicEnxovalSummary;
+  }> {
+    const now = new Date().toISOString();
+    const baseSlug =
+      sanitizeSlug(input.customSlug || input.title) || `enxoval-${sanitizeSlug(input.babyName) || 'bebe'}`;
+    let slug = baseSlug;
+    const existing = await enxovalDB.getAll<ListRow>('lists');
+    if (existing.some((l) => l.key === slug)) {
+      slug = `${baseSlug.slice(0, 40)}-${crypto.randomUUID().slice(0, 4)}`;
+    }
+
+    const rawPixKey = input.pixKey.trim();
+    let pixKey = '';
+    if (rawPixKey) {
+      pixKey = rawPixKey;
+    }
+
+    const listConfig: EnxovalListConfig = {
+      id: `lista-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 4)}`,
+      slug,
+      isPublic: true,
+      isCommunityTemplate: false,
+      ownerEmail: this.currentUser()?.email || undefined,
+      title: input.title,
+      babyName: input.babyName,
+      dueDate: input.dueDate,
+      creatorName: input.creatorName || (this.currentUser()?.name || 'CRIADOR').toUpperCase().slice(0, 25),
+      creatorCity: input.creatorCity || 'SAO PAULO',
+      pixKey,
+      pixKeyType: input.pixKeyType,
+      welcomeNote: input.welcomeNote || 'Preparamos esta lista com muito carinho. Escolha um item para presentear via Pix ou nas lojas.',
+      updatedAt: now,
+    };
+
+    const nowItems: EnxovalItem[] = (() => {
+      if (input.selectedItems?.length) {
+        return input.selectedItems.map((sel) => {
+          const tpl = FULL_ENXOVAL_CATALOG.find((t) => t.id === sel.templateId);
+          if (!tpl) return null;
+          const reqQty = Number(sel.requiredQty);
+          const validQty = Number.isInteger(reqQty) && reqQty >= 1 && reqQty <= 200 ? reqQty : tpl.requiredQty;
+          return {
+            ...tpl,
+            id: `${slug.slice(0, 18)}-${tpl.id}`,
+            requiredQty: validQty,
+            purchasedQty: 0,
+            offers: tpl.offers.map((o) => ({...o})),
+            updatedAt: now,
+          };
+        }).filter((x): x is EnxovalItem => x !== null);
+      }
+      const selectedStages = (input.selectedStages || []).filter(
+        (s): s is EnxovalStage => s === 'gestante' || s === 'bebe_rn' || s === 'quarto_passeio' || s === 'familia',
+      );
+      const source = selectedStages.length > 0 ? selectedStages : ['gestante', 'bebe_rn', 'quarto_passeio', 'familia'];
+      return cloneCatalogItems(
+        FULL_ENXOVAL_CATALOG.filter((it) => source.includes(it.stage)),
+      ).map((it) => ({
+        ...it,
+        id: `${slug.slice(0, 18)}-${it.id}`,
+        updatedAt: now,
+      }));
+    })();
+
+    await enxovalDB.saveList(slug, listConfig, nowItems, []);
+    this.listConfig.set(listConfig);
+    this.activeListSlug.set(slug);
+    this.items.set(nowItems);
+    this.purchases.set([]);
+    this.availableLists.set([buildPublicSummary(listConfig, nowItems)]);
+    this.selectedStage.set('all');
+    this.selectedCategory.set('all');
+    this.openView('lista', true);
+
+    if (isPlatformBrowser(this.platformId)) {
+      window.history.replaceState({}, '', `/?list=${encodeURIComponent(slug)}`);
+    }
+    this.showToast(`Lista "${listConfig.title}" publicada com link pronto!`);
+
+    if (this.supabaseClient) {
+      try {
+        await this.supabaseClient.from('enxoval_lists').upsert({
+          id: listConfig.id,
+          slug: listConfig.slug,
+          is_public: true,
+          is_community_template: false,
+          owner_email: listConfig.ownerEmail ?? null,
+          title: listConfig.title,
+          baby_name: listConfig.babyName,
+          due_date: listConfig.dueDate || null,
+          creator_name: listConfig.creatorName,
+          creator_city: listConfig.creatorCity,
+          pix_key: listConfig.pixKey,
+          pix_key_type: listConfig.pixKeyType,
+          welcome_note: listConfig.welcomeNote,
+          updated_at: now,
+        });
+        await this.supabaseClient.from('enxoval_items').upsert(
+          nowItems.map((it) => ({
+            id: it.id,
+            list_id: listConfig.id,
+            stage: it.stage,
+            category: it.category,
+            name: it.name,
+            description: it.description,
+            priority: it.priority,
+            required_qty: it.requiredQty,
+            purchased_qty: 0,
+            unit_price_brl: it.unitPriceBrl,
+            image_url: it.imageUrl,
+            search_query: it.searchQuery,
+            updated_at: now,
+          })),
+        );
+      } catch {
+        // ignore if schema not provisioned
+      }
+    }
+
+    return {
+      listConfig,
+      shareUrl: this.activeShareUrl(),
+      summary: buildPublicSummary(listConfig, nowItems),
+    };
+  }
+
+  private teardownRealtime(): void {
+    if (this.sseSource) {
+      this.sseSource.close();
+      this.sseSource = null;
+    }
+    if (this.supabaseClient && this.supabaseChannel) {
+      void this.supabaseClient.removeChannel(this.supabaseChannel);
+      this.supabaseChannel = null;
+    }
+  }
+
   async startGoogleOAuthPopup(): Promise<'started' | 'needs_preview'> {
     if (this.supabaseClient && this.supabaseConnected()) {
       const redirectTo = `${window.location.origin}/auth/callback`;
@@ -738,44 +885,66 @@ export class EnxovalStore implements OnDestroy {
       }
     }
 
-    const res = await firstValueFrom(
-      this.http.get<{configured: boolean; url: string | null}>('/api/auth/google/url'),
-    );
-    if (res.configured && res.url) {
-      window.open(res.url, 'google_oauth', 'width=520,height=640');
+    if (environment.googleClientId) {
+      const redirectUri = `${window.location.origin}/auth/callback`;
+      const params = new URLSearchParams({
+        client_id: environment.googleClientId,
+        redirect_uri: redirectUri,
+        response_type: 'code',
+        scope: 'openid email profile',
+        access_type: 'online',
+        prompt: 'select_account',
+        state: crypto.randomUUID(),
+      });
+      const url = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+      window.open(url, 'google_oauth', 'width=520,height=640');
       return 'started';
     }
 
     return 'needs_preview';
   }
 
-  private upsertListSummary(summary: PublicEnxovalSummary): void {
+  async signInPreviewGoogle(email: string, name: string): Promise<void> {
+    const rawEmail = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail)) {
+      throw new Error('Informe um e-mail Google válido.');
+    }
+    const cleanName = (name || rawEmail.split('@')[0]).slice(0, 50);
+
+    const user: GoogleUserProfile = {
+      id: `google-preview-${Buffer.from(rawEmail).toString('base64url').slice(0, 12)}`,
+      email: rawEmail,
+      name: cleanName,
+      avatarUrl: '',
+      provider: 'google',
+      authSource: 'preview-google',
+    };
+
+    const token = Buffer.from(
+      JSON.stringify({user, exp: Date.now() + 1000 * 60 * 60 * 12}),
+    ).toString('base64url');
+    this.accessToken.set(token);
+    this.currentUser.set(user);
+
+    const cfg = this.listConfig();
+    if (!cfg.ownerEmail || !cfg.creatorName) {
+      this.listConfig.set({
+        ...cfg,
+        ownerEmail: cfg.ownerEmail || user.email,
+        creatorName: cfg.creatorName || user.name.toUpperCase().slice(0, 25),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    const summary = buildPublicSummary(this.listConfig(), this.items());
     this.availableLists.update((lists) => {
       const idx = lists.findIndex((l) => l.slug === summary.slug);
       if (idx === -1) return [summary, ...lists];
       return lists.map((l, i) => (i === idx ? summary : l));
     });
-  }
 
-  async signInPreviewGoogle(email: string, name: string): Promise<void> {
-    const res = await firstValueFrom(
-      this.http.post<{
-        user: GoogleUserProfile;
-        token: string;
-        listConfig: EnxovalListConfig;
-        summary?: PublicEnxovalSummary;
-      }>('/api/auth/google/preview', {email, name}),
-    );
-    this.accessToken.set(res.token);
-    this.currentUser.set(res.user);
-    if (this.activeListSlug() === res.listConfig.slug) {
-      this.listConfig.set(res.listConfig);
-    }
-    if (res.summary) {
-      this.upsertListSummary(res.summary);
-    }
     this.authModalOpen.set(false);
-    this.showToast(`Conta Google conectada: ${res.user.name}`);
+    this.showToast(`Conta Google conectada: ${user.name}`);
   }
 
   async signOut(): Promise<void> {
@@ -789,72 +958,248 @@ export class EnxovalStore implements OnDestroy {
 
   async addItem(input: NewItemInput): Promise<EnxovalItem> {
     const slug = this.activeListSlug();
-    const res = await firstValueFrom(
-      this.http.post<{item: EnxovalItem; summary?: PublicEnxovalSummary}>(
-        `/api/enxoval/items?list=${encodeURIComponent(slug)}`,
-        {...input, listSlug: slug},
-        {headers: this.authHeaders()},
-      ),
-    );
-    this.items.update((list) =>
-      list.some((i) => i.id === res.item.id) ? list : [res.item, ...list],
-    );
-    if (res.summary) this.upsertListSummary(res.summary);
-    this.showToast(`Item "${res.item.name}" adicionado e indexado nas 4 lojas.`);
-    return res.item;
+    const now = new Date().toISOString();
+    const id = `item-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 4)}`;
+    const includePharmacy =
+      input.category.toLowerCase().includes('farm') ||
+      input.name.toLowerCase().includes('fralda') ||
+      input.name.toLowerCase().includes('pomada') ||
+      input.name.toLowerCase().includes('soro');
+
+    const newItem: EnxovalItem = {
+      id,
+      stage: input.stage,
+      category: input.category.slice(0, 60) || 'Enxoval',
+      name: input.name,
+      description: input.description.slice(0, 280) || 'Item adicionado ao enxoval.',
+      priority: input.priority,
+      requiredQty: input.requiredQty,
+      purchasedQty: 0,
+      unitPriceBrl: Number(input.unitPriceBrl.toFixed(2)),
+      imageUrl: '',
+      searchQuery: input.searchQuery,
+      offers: buildVerifiedStoreOffersClient(input.searchQuery, input.unitPriceBrl, now, includePharmacy),
+      updatedAt: now,
+    };
+
+    this.items.update((list) => [newItem, ...list]);
+    await enxovalDB.saveList(slug, this.listConfig(), this.items(), this.purchases());
+
+    if (this.supabaseClient) {
+      try {
+        await this.supabaseClient.from('enxoval_items').upsert({
+          id: newItem.id,
+          list_id: this.listConfig().id,
+          stage: newItem.stage,
+          category: newItem.category,
+          name: newItem.name,
+          description: newItem.description,
+          priority: newItem.priority,
+          required_qty: newItem.requiredQty,
+          purchased_qty: 0,
+          unit_price_brl: newItem.unitPriceBrl,
+          image_url: newItem.imageUrl,
+          search_query: newItem.searchQuery,
+          updated_at: now,
+        });
+      } catch {
+        // ignore
+      }
+    }
+
+    this.showToast(`Item "${newItem.name}" adicionado e indexado nas 4 lojas.`);
+    return newItem;
   }
 
   async addItemsBatch(
     items: (SelectedCatalogItemInput | NewItemInput)[],
   ): Promise<EnxovalItem[]> {
     const slug = this.activeListSlug();
-    const res = await firstValueFrom(
-      this.http.post<{items: EnxovalItem[]; summary?: PublicEnxovalSummary}>(
-        `/api/enxoval/items/batch?list=${encodeURIComponent(slug)}`,
-        {items, listSlug: slug},
-        {headers: this.authHeaders()},
-      ),
-    );
-    this.items.update((list) => {
-      const existing = new Set(list.map((i) => i.id));
-      const incoming = res.items.filter((it) => !existing.has(it.id));
-      return incoming.length > 0 ? [...incoming, ...list] : list;
-    });
-    if (res.summary) this.upsertListSummary(res.summary);
+    const now = new Date().toISOString();
+    const existingIds = new Set(this.items().map((it) => it.id));
+    const createdItems: EnxovalItem[] = [];
+
+    for (let i = 0; i < items.length; i++) {
+      const raw = items[i];
+      if (!raw || typeof raw !== 'object') continue;
+      const tplId = typeof (raw as SelectedCatalogItemInput).templateId === 'string' ? (raw as SelectedCatalogItemInput).templateId.trim() : '';
+      const tpl = tplId ? FULL_ENXOVAL_CATALOG.find((t) => t.id === tplId) : undefined;
+
+      if (tpl) {
+        const reqQtyNum = Number((raw as SelectedCatalogItemInput).requiredQty);
+        const requiredQty =
+          Number.isInteger(reqQtyNum) && reqQtyNum >= 1 && reqQtyNum <= 200 ? reqQtyNum : tpl.requiredQty;
+        let candidateId = `${slug.slice(0, 14)}-${tpl.id}`;
+        if (existingIds.has(candidateId)) {
+          candidateId = `${candidateId}-${Date.now().toString(36)}-${i}`;
+        }
+        existingIds.add(candidateId);
+        createdItems.push({
+          ...tpl,
+          id: candidateId,
+          requiredQty,
+          purchasedQty: 0,
+          offers: tpl.offers.map((o) => ({...o})),
+          updatedAt: now,
+        });
+        continue;
+      }
+
+      const name = typeof (raw as NewItemInput).name === 'string' ? (raw as NewItemInput).name.trim() : '';
+      if (name.length < 2 || name.length > 140) continue;
+      const category = typeof (raw as NewItemInput).category === 'string' ? (raw as NewItemInput).category.trim().slice(0, 60) || 'Enxoval' : 'Enxoval';
+      const description =
+        typeof (raw as NewItemInput).description === 'string' && (raw as NewItemInput).description.trim()
+          ? (raw as NewItemInput).description.trim().slice(0, 280)
+          : 'Item adicionado ao enxoval.';
+      const stage: EnxovalStage = (raw as NewItemInput).stage &&
+        ['gestante', 'bebe_rn', 'quarto_passeio', 'familia'].includes((raw as NewItemInput).stage)
+        ? (raw as NewItemInput).stage
+        : 'bebe_rn';
+      const priority: ItemPriority = (raw as NewItemInput).priority &&
+        ['Essencial', 'Recomendado', 'Conforto'].includes((raw as NewItemInput).priority)
+        ? (raw as NewItemInput).priority
+        : 'Essencial';
+      const reqQtyNum = Number((raw as NewItemInput).requiredQty);
+      const requiredQty = Number.isInteger(reqQtyNum) && reqQtyNum >= 1 && reqQtyNum <= 200 ? reqQtyNum : 1;
+      const priceNum = Number((raw as NewItemInput).unitPriceBrl);
+      const unitPriceBrl =
+        Number.isFinite(priceNum) && priceNum >= 1 && priceNum <= 50000 ? Number(priceNum.toFixed(2)) : 89.9;
+      const searchQuery =
+        typeof (raw as NewItemInput).searchQuery === 'string' && (raw as NewItemInput).searchQuery.trim().length > 2
+          ? (raw as NewItemInput).searchQuery.trim()
+          : name;
+      const includePharmacy =
+        category.toLowerCase().includes('farm') ||
+        name.toLowerCase().includes('fralda') ||
+        name.toLowerCase().includes('pomada') ||
+        name.toLowerCase().includes('soro');
+
+      const id = `item-${Date.now().toString(36)}-${i}-${crypto.randomUUID().slice(0, 4)}`;
+      existingIds.add(id);
+      createdItems.push({
+        id,
+        stage,
+        category,
+        name,
+        description,
+        priority,
+        requiredQty,
+        purchasedQty: 0,
+        unitPriceBrl,
+        imageUrl: '',
+        searchQuery,
+        offers: buildVerifiedStoreOffersClient(searchQuery, unitPriceBrl, now, includePharmacy),
+        updatedAt: now,
+      });
+    }
+
+    if (createdItems.length === 0) {
+      throw new Error('Nenhum item válido informado para adicionar.');
+    }
+
+    this.items.update((list) => [...createdItems, ...list]);
+    await enxovalDB.saveList(slug, this.listConfig(), this.items(), this.purchases());
+
+    if (this.supabaseClient) {
+      try {
+        await this.supabaseClient.from('enxoval_items').upsert(
+          createdItems.map((it) => ({
+            id: it.id,
+            list_id: this.listConfig().id,
+            stage: it.stage,
+            category: it.category,
+            name: it.name,
+            description: it.description,
+            priority: it.priority,
+            required_qty: it.requiredQty,
+            purchased_qty: 0,
+            unit_price_brl: it.unitPriceBrl,
+            image_url: it.imageUrl,
+            search_query: it.searchQuery,
+            updated_at: now,
+          })),
+        );
+      } catch {
+        // ignore
+      }
+    }
+
     this.showToast(
-      res.items.length === 1
-        ? `Item "${res.items[0].name}" adicionado à lista!`
-        : `${res.items.length} novos itens adicionados ao enxoval!`,
+      createdItems.length === 1
+        ? `Item "${createdItems[0].name}" adicionado à lista!`
+        : `${createdItems.length} novos itens adicionados ao enxoval!`,
     );
-    return res.items;
+    return createdItems;
   }
 
   async deleteItem(itemId: string): Promise<void> {
     const slug = this.activeListSlug();
-    const res = await firstValueFrom(
-      this.http.delete<{ok: boolean; summary?: PublicEnxovalSummary}>(
-        `/api/enxoval/items/${encodeURIComponent(itemId)}?list=${encodeURIComponent(slug)}`,
-        {headers: this.authHeaders()},
-      ),
-    );
     this.items.update((list) => list.filter((i) => i.id !== itemId));
-    if (res.summary) this.upsertListSummary(res.summary);
+    await enxovalDB.saveList(slug, this.listConfig(), this.items(), this.purchases());
+
+    if (this.supabaseClient) {
+      try {
+        await this.supabaseClient.from('enxoval_items').delete().eq('id', itemId);
+      } catch {
+        // ignore
+      }
+    }
+
     this.showToast('Item removido do enxoval.');
   }
 
   async updateListConfig(input: ListConfigInput): Promise<EnxovalListConfig> {
     const slug = this.activeListSlug();
-    const res = await firstValueFrom(
-      this.http.put<{listConfig: EnxovalListConfig; summary?: PublicEnxovalSummary}>(
-        `/api/enxoval/list-config?list=${encodeURIComponent(slug)}`,
-        {...input, listSlug: slug},
-        {headers: this.authHeaders()},
-      ),
-    );
-    this.listConfig.set(res.listConfig);
-    if (res.summary) this.upsertListSummary(res.summary);
+    const now = new Date().toISOString();
+
+    this.listConfig.set({
+      ...this.listConfig(),
+      title: input.title || this.listConfig().title,
+      babyName: input.babyName || this.listConfig().babyName,
+      dueDate: input.dueDate || this.listConfig().dueDate,
+      creatorName: input.creatorName || this.listConfig().creatorName,
+      creatorCity: input.creatorCity || this.listConfig().creatorCity,
+      pixKey: input.pixKey || this.listConfig().pixKey,
+      pixKeyType: input.pixKeyType || this.listConfig().pixKeyType,
+      welcomeNote: input.welcomeNote || this.listConfig().welcomeNote,
+      updatedAt: now,
+    });
+
+    await enxovalDB.saveList(slug, this.listConfig(), this.items(), this.purchases());
+
+    if (this.supabaseClient) {
+      try {
+        await this.supabaseClient.from('enxoval_lists').upsert({
+          id: this.listConfig().id,
+          slug: this.listConfig().slug,
+          is_public: true,
+          is_community_template: Boolean(this.listConfig().isCommunityTemplate),
+          owner_email: this.listConfig().ownerEmail ?? null,
+          title: this.listConfig().title,
+          baby_name: this.listConfig().babyName,
+          due_date: this.listConfig().dueDate || null,
+          creator_name: this.listConfig().creatorName,
+          creator_city: this.listConfig().creatorCity,
+          pix_key: this.listConfig().pixKey,
+          pix_key_type: this.listConfig().pixKeyType,
+          welcome_note: this.listConfig().welcomeNote,
+          updated_at: now,
+        });
+      } catch {
+        // ignore
+      }
+    }
+
+    const summary = buildPublicSummary(this.listConfig(), this.items());
+    this.availableLists.update((lists) => {
+      const idx = lists.findIndex((l) => l.slug === summary.slug);
+      if (idx === -1) return [summary, ...lists];
+      return lists.map((l, i) => (i === idx ? summary : l));
+    });
+
     this.showToast('Chave Pix e configurações da lista atualizadas.');
-    return res.listConfig;
+    return this.listConfig();
   }
 
   async previewPix(item: EnxovalItem, quantity: number): Promise<PixPreviewResult | null> {
@@ -862,43 +1207,32 @@ export class EnxovalStore implements OnDestroy {
     if (!cfg.pixKey.trim()) {
       return null;
     }
-    const slug = this.activeListSlug();
     const totalAmountBrl = Number((item.unitPriceBrl * quantity).toFixed(2));
     const txid = `ENX${Date.now().toString(36).toUpperCase()}`.slice(0, 25);
 
-    try {
-      return await firstValueFrom(
-        this.http.post<PixPreviewResult>('/api/functions/pix-preview', {
-          listSlug: slug,
-          itemId: item.id,
-          quantity,
-        }),
-      );
-    } catch {
-      const pixPayload = generatePixBrCode({
-        pixKey: cfg.pixKey,
-        pixKeyType: cfg.pixKeyType,
-        merchantName: cfg.creatorName || 'CRIADOR ENXOVAL',
-        merchantCity: cfg.creatorCity || 'SAO PAULO',
-        amountBrl: totalAmountBrl,
-        txid,
-        description: item.name,
-      });
-      const qrDataUrl = await QRCode.toDataURL(pixPayload, {
-        errorCorrectionLevel: 'M',
-        margin: 2,
-        width: 280,
-        color: {dark: '#421728', light: '#FFFFFF'},
-      });
-      return {
-        pixPayload,
-        pixTxid: txid,
-        totalAmountBrl,
-        qrDataUrl,
-        creatorName: cfg.creatorName || 'CRIADOR ENXOVAL',
-        pixKey: cfg.pixKey,
-      };
-    }
+    const pixPayload = generatePixBrCode({
+      pixKey: cfg.pixKey,
+      pixKeyType: cfg.pixKeyType,
+      merchantName: cfg.creatorName || 'CRIADOR ENXOVAL',
+      merchantCity: cfg.creatorCity || 'SAO PAULO',
+      amountBrl: totalAmountBrl,
+      txid,
+      description: item.name,
+    });
+    const qrDataUrl = await QRCode.toDataURL(pixPayload, {
+      errorCorrectionLevel: 'M',
+      margin: 2,
+      width: 280,
+      color: {dark: '#421728', light: '#FFFFFF'},
+    });
+    return {
+      pixPayload,
+      pixTxid: txid,
+      totalAmountBrl,
+      qrDataUrl,
+      creatorName: cfg.creatorName || 'CRIADOR ENXOVAL',
+      pixKey: cfg.pixKey,
+    };
   }
 
   async confirmPurchase(input: PurchaseInput): Promise<{item: EnxovalItem; purchase: PurchaseRecord}> {
@@ -915,9 +1249,7 @@ export class EnxovalStore implements OnDestroy {
           this.purchases.update((prev) =>
             prev.some((p) => p.id === purchase.id) ? prev : [purchase, ...prev].slice(0, 30),
           );
-          if (data.summary) {
-            this.upsertListSummary(data.summary as PublicEnxovalSummary);
-          }
+          await enxovalDB.saveList(slug, this.listConfig(), this.items(), this.purchases());
           const rem = Math.max(0, item.requiredQty - item.purchasedQty);
           this.showToast(
             rem === 0
@@ -927,47 +1259,90 @@ export class EnxovalStore implements OnDestroy {
           return {item, purchase};
         }
       } catch {
-        // Fallback to Express Edge Function mirror
+        // Fallback to local
       }
     }
 
-    const res = await firstValueFrom(
-      this.http.post<{
-        ok: boolean;
-        item: EnxovalItem;
-        purchase: PurchaseRecord;
-        summary?: PublicEnxovalSummary;
-      }>(
-        `/api/functions/purchase-item?list=${encodeURIComponent(slug)}`,
-        {...input, listSlug: slug},
-        {headers: this.authHeaders()},
-      ),
-    );
-
-    this.items.update((list) => list.map((i) => (i.id === res.item.id ? res.item : i)));
-    this.purchases.update((prev) =>
-      prev.some((p) => p.id === res.purchase.id) ? prev : [res.purchase, ...prev].slice(0, 30),
-    );
-    if (res.summary) {
-      this.upsertListSummary(res.summary);
+    const idx = this.items().findIndex((i) => i.id === input.itemId);
+    if (idx === -1) {
+      throw new Error('Item não encontrado.');
     }
-    const remaining = Math.max(0, res.item.requiredQty - res.item.purchasedQty);
+    const current = this.items()[idx];
+    const remaining = current.requiredQty - current.purchasedQty;
+    if (!Number.isInteger(input.quantity) || input.quantity < 1 || input.quantity > remaining) {
+      throw new Error(remaining <= 0 ? 'Este item já foi totalmente comprado!' : `Quantidade indisponível. Restam apenas ${remaining} unidade(s).`);
+    }
+
+    const now = new Date().toISOString();
+    const totalAmount = Number((current.unitPriceBrl * input.quantity).toFixed(2));
+    const rawTxid =
+      typeof input.pixTxid === 'string'
+        ? input.pixTxid
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9]/g, '')
+            .toUpperCase()
+            .slice(0, 25)
+        : '';
+    const txid = rawTxid || `ENX${Date.now().toString(36).toUpperCase()}`.slice(0, 25);
+
+    const pixPayload =
+      input.paymentMethod === 'pix' && this.listConfig().pixKey.trim()
+        ? generatePixBrCode({
+            pixKey: this.listConfig().pixKey,
+            pixKeyType: this.listConfig().pixKeyType,
+            merchantName: this.listConfig().creatorName || 'CRIADOR ENXOVAL',
+            merchantCity: this.listConfig().creatorCity || 'SAO PAULO',
+            amountBrl: totalAmount,
+            txid,
+            description: current.name,
+          })
+        : '';
+
+    const updatedItem: EnxovalItem = {
+      ...current,
+      purchasedQty: current.purchasedQty + input.quantity,
+      updatedAt: now,
+    };
+
+    this.items.update((list) => list.map((item, i) => (i === idx ? updatedItem : item)));
+
+    const purchase: PurchaseRecord = {
+      id: `pur-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 4)}`,
+      itemId: updatedItem.id,
+      itemName: updatedItem.name,
+      buyerName: input.buyerName || 'Convidado Carinhoso',
+      buyerEmail: this.currentUser()?.email,
+      buyerAvatarUrl: this.currentUser()?.avatarUrl,
+      buyerMessage: input.buyerMessage || '',
+      quantity: input.quantity,
+      unitPriceBrl: updatedItem.unitPriceBrl,
+      totalAmountBrl: totalAmount,
+      pixTxid: txid,
+      pixPayload,
+      paymentMethod: input.paymentMethod,
+      storeName: input.storeName,
+      createdAt: now,
+    };
+
+    this.purchases.update((prev) => [purchase, ...prev].slice(0, 30));
+    await enxovalDB.saveList(slug, this.listConfig(), this.items(), this.purchases());
+
+    const rem = Math.max(0, updatedItem.requiredQty - updatedItem.purchasedQty);
     this.showToast(
-      remaining === 0
-        ? `"${res.item.name}" completado com sucesso!`
-        : `Compra confirmada! Restam ${remaining} unidade(s).`,
+      rem === 0
+        ? `"${updatedItem.name}" completado com sucesso!`
+        : `Compra confirmada! Restam ${rem} unidade(s).`,
     );
-    return {item: res.item, purchase: res.purchase};
+    return {item: updatedItem, purchase};
   }
 
   async syncSsgIndex(): Promise<void> {
     const slug = this.activeListSlug();
-    const res = await firstValueFrom(
-      this.http.post<{ok: boolean; ssgMeta: SsgIndexMetadata}>('/api/functions/sync-ssg-index', {
-        listSlug: slug,
-      }),
-    );
-    this.ssgMeta.set(res.ssgMeta);
+    const meta = await this.loadIndexedStores();
+    this.ssgMeta.set(meta);
+    await this.applyIndexedOffers();
+    await enxovalDB.saveMeta(meta);
     await this.loadListBySlug(slug, false);
     this.showToast('Índice diário de lojas atualizado via pipeline SSG.');
   }

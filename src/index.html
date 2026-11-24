@@ -18,5 +18,10 @@
   </head>
   <body class="antialiased bg-[#F6F7F9] text-[#0F1115] selection:bg-[#FF80AB] selection:text-[#111111]">
     <app-root></app-root>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch((err) => console.warn('SW register failed', err));
+      }
+    </script>
   </body>
 </html>

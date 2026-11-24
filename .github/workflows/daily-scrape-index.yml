@@ -54,6 +54,17 @@ jobs:
           SSG_SYNC_SECRET: ${{ secrets.SSG_SYNC_SECRET }}
         run: node scripts/scrape-enxoval-index.mjs
 
+      - name: Generate runtime environment config
+        run: |
+          cat > src/environments/environment.prod.ts <<EOF
+export const environment = {
+  production: true,
+  supabaseUrl: '${{ secrets.SUPABASE_URL }}',
+  supabaseAnonKey: '${{ secrets.SUPABASE_ANON_KEY }}',
+  googleClientId: '${{ secrets.GOOGLE_CLIENT_ID }}',
+};
+EOF
+
       - name: Build Angular SSG bundle
         run: bun run build
 

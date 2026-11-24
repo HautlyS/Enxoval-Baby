@@ -177,14 +177,14 @@ import {KawaiiProgressRing} from './kawaii-ornaments';
               <span>{{ store.checklistProgress().packed }} de {{ store.checklistProgress().total }} itens prontos</span>
             }
           </span>
-          <a
-            [href]="'/api/enxoval/export.csv?list=' + store.activeListSlug()"
-            [attr.download]="'enxoval-' + store.activeListSlug() + '.csv'"
+          <button
+            type="button"
+            (click)="exportCsv()"
             class="apple-press min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F6F7F9] hover:bg-[#E8EBF0] border border-[#D8DCE3] text-[#0F1115] text-xs font-bold transition-colors whitespace-nowrap"
           >
             <mat-icon class="text-base! text-[#C2185B]">download</mat-icon>
             <span>Baixar Lista Completa (CSV)</span>
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -277,5 +277,49 @@ export class BabyToolsPanel {
     } finally {
       this.addingDiapers.set(false);
     }
+  }
+
+  exportCsv(): void {
+    const slug = this.store.activeListSlug();
+    const items = this.store.items();
+    const escapeCsv = (val: string | number) => `"${String(val).replace(/"/g, '""')}"`;
+    const headers = [
+      'Etapa',
+      'Categoria',
+      'Item',
+      'Prioridade',
+      'Qtd Necessaria',
+      'Qtd Comprada',
+      'Qtd Restante',
+      'Preco Unitario BRL',
+      'Melhor Loja Indexada',
+      'Link Seguro',
+    ];
+    const rows = items.map((item) => {
+      const remaining = Math.max(0, item.requiredQty - item.purchasedQty);
+      const best = item.offers[0];
+      return [
+        escapeCsv(item.stage),
+        escapeCsv(item.category),
+        escapeCsv(item.name),
+        escapeCsv(item.priority),
+        item.requiredQty,
+        item.purchasedQty,
+        remaining,
+        item.unitPriceBrl.toFixed(2),
+        escapeCsv(best?.storeName ?? ''),
+        escapeCsv(best?.url ?? ''),
+      ].join(',');
+    });
+    const csv = `\uFEFF${headers.join(',')}\n${rows.join('\n')}`;
+    const blob = new Blob([csv], {type: 'text/csv; charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `enxoval-${slug}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 }
