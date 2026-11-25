@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-11-24T16:52:32.058Z",
+    "generatedAt": "2026-11-25T16:40:40.610Z",
     "workflowName": "daily-scrape-ssg-index",
     "scheduleCron": "0 6 * * *",
     "totalItemsIndexed": 25,
@@ -17,7 +17,7 @@
     {
       "itemId": "item-gestante-mala",
       "searchQuery": "mala maternidade",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27063441/Mala.jpg?v=639310136661470000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27092888/Mala.jpg?v=639311864526670000",
       "bestPriceBrl": 854.3,
       "offers": [
         {
@@ -28,7 +28,7 @@
           "url": "https://lista.mercadolivre.com.br/mala-maternidade",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -38,7 +38,7 @@
           "url": "https://www.amazon.com.br/s?k=mala%20maternidade",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -48,7 +48,7 @@
           "url": "https://www.magazineluiza.com.br/busca/mala%20maternidade/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -59,7 +59,7 @@
           "url": "https://www.paguemenos.com.br/mala-maternidade",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -77,7 +77,7 @@
           "url": "https://lista.mercadolivre.com.br/camisola-amamentacao",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -87,7 +87,7 @@
           "url": "https://www.amazon.com.br/s?k=camisola%20amamentacao",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -97,7 +97,7 @@
           "url": "https://www.magazineluiza.com.br/busca/camisola%20amamentacao/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -108,7 +108,7 @@
           "url": "https://www.paguemenos.com.br/camisola-amamentacao",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -126,7 +126,7 @@
           "url": "https://lista.mercadolivre.com.br/sutia-amamentacao",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -136,7 +136,7 @@
           "url": "https://www.amazon.com.br/s?k=sutia%20amamentacao",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -146,7 +146,7 @@
           "url": "https://www.magazineluiza.com.br/busca/sutia%20amamentacao/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -157,14 +157,14 @@
           "url": "https://www.paguemenos.com.br/sutia-amamentacao",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-gestante-almofada",
       "searchQuery": "almofada amamentacao",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27085394/Almofada.jpg?v=639310347077330000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27114169/Almofada.jpg?v=639312046560470000",
       "bestPriceBrl": 119.9,
       "offers": [
         {
@@ -175,7 +175,7 @@
           "url": "https://lista.mercadolivre.com.br/almofada-amamentacao",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -185,7 +185,7 @@
           "url": "https://www.amazon.com.br/s?k=almofada%20amamentacao",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -195,7 +195,7 @@
           "url": "https://www.magazineluiza.com.br/busca/almofada%20amamentacao/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -206,7 +206,7 @@
           "url": "https://www.paguemenos.com.br/almofada-amamentacao",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -224,7 +224,7 @@
           "url": "https://lista.mercadolivre.com.br/pomada-lanolina",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -234,7 +234,7 @@
           "url": "https://www.amazon.com.br/s?k=pomada%20lanolina",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -244,7 +244,7 @@
           "url": "https://www.magazineluiza.com.br/busca/pomada%20lanolina/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -255,7 +255,7 @@
           "url": "https://www.paguemenos.com.br/pomada-para-os-seios-lanolina-anidra-amamente-30g/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -273,7 +273,7 @@
           "url": "https://lista.mercadolivre.com.br/bomba-tira-leite",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -283,7 +283,7 @@
           "url": "https://www.amazon.com.br/s?k=bomba%20tira%20leite",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -293,7 +293,7 @@
           "url": "https://www.magazineluiza.com.br/busca/bomba%20tira%20leite/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -304,56 +304,56 @@
           "url": "https://www.paguemenos.com.br/bomba-tira-leite-dellamed-169846892rm59y87/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-gestante-absorvente",
       "searchQuery": "absorvente seios",
-      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/1129792/7612367040396_1.png?v=639059129252000000",
-      "bestPriceBrl": 37.91,
+      "imageUrl": "https://paguemenos.vteximg.com.br/arquivos/ids/850983/absorvente-para-seios-dauf-com-12-unidades-principal.jpg?v=638512169364930000",
+      "bestPriceBrl": 12.47,
       "offers": [
         {
           "storeSlug": "mercadolivre",
           "storeName": "Mercado Livre",
-          "offerTitle": "Absorvente para Seios Medela Descartável 30 Unidades — Mercado Livre",
-          "priceBrl": 37.91,
+          "offerTitle": "Absorvente para Seios Amorável Anatômico 12 Unidades — Mercado Livre",
+          "priceBrl": 12.47,
           "url": "https://lista.mercadolivre.com.br/absorvente-seios",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
           "storeName": "Amazon Brasil",
           "offerTitle": "absorvente seios — Envio Prime",
-          "priceBrl": 38.7,
+          "priceBrl": 12.73,
           "url": "https://www.amazon.com.br/s?k=absorvente%20seios",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
           "storeName": "Magazine Luiza",
           "offerTitle": "absorvente seios — Magalu Indica",
-          "priceBrl": 39.1,
+          "priceBrl": 12.86,
           "url": "https://www.magazineluiza.com.br/busca/absorvente%20seios/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
           "storeName": "Farmácias em Geral",
           "pharmacyBrand": "Pague Menos / Drogasil",
-          "offerTitle": "Absorvente para Seios Medela Descartável 30 Unidades",
-          "priceBrl": 39.49,
-          "url": "https://www.paguemenos.com.br/absorvente-para-seio-medela-descartavel-com-30-unidades/p",
+          "offerTitle": "Absorvente para Seios Amorável Anatômico 12 Unidades",
+          "priceBrl": 12.99,
+          "url": "https://www.paguemenos.com.br/absorvente-para-seios-dauf-com-12-unidades/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -371,7 +371,7 @@
           "url": "https://lista.mercadolivre.com.br/body-bebe-manga-longa",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -381,7 +381,7 @@
           "url": "https://www.amazon.com.br/s?k=body%20bebe%20manga%20longa",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -391,7 +391,7 @@
           "url": "https://www.magazineluiza.com.br/busca/body%20bebe%20manga%20longa/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -402,7 +402,7 @@
           "url": "https://www.paguemenos.com.br/body-bebe-manga-longa",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -420,7 +420,7 @@
           "url": "https://lista.mercadolivre.com.br/mijao-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -430,7 +430,7 @@
           "url": "https://www.amazon.com.br/s?k=mijao%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -440,7 +440,7 @@
           "url": "https://www.magazineluiza.com.br/busca/mijao%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -451,7 +451,7 @@
           "url": "https://www.paguemenos.com.br/mijao-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -469,7 +469,7 @@
           "url": "https://lista.mercadolivre.com.br/macacao-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -479,7 +479,7 @@
           "url": "https://www.amazon.com.br/s?k=macacao%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -489,7 +489,7 @@
           "url": "https://www.magazineluiza.com.br/busca/macacao%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -500,7 +500,7 @@
           "url": "https://www.paguemenos.com.br/macacao-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -518,7 +518,7 @@
           "url": "https://lista.mercadolivre.com.br/fralda-pampers-recem-nascido",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -528,7 +528,7 @@
           "url": "https://www.amazon.com.br/s?k=fralda%20pampers%20recem%20nascido",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -538,7 +538,7 @@
           "url": "https://www.magazineluiza.com.br/busca/fralda%20pampers%20recem%20nascido/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -549,7 +549,7 @@
           "url": "https://www.paguemenos.com.br/fraldas-pampers-recem-nascido-premium-care-rn-36-unidades/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -567,7 +567,7 @@
           "url": "https://lista.mercadolivre.com.br/lenco-umedecido-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -577,7 +577,7 @@
           "url": "https://www.amazon.com.br/s?k=lenco%20umedecido%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -587,7 +587,7 @@
           "url": "https://www.magazineluiza.com.br/busca/lenco%20umedecido%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -598,7 +598,7 @@
           "url": "https://www.paguemenos.com.br/lenco-umedecido-infantil-amoravel-99porcento-agua-com-50-unidades/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -616,7 +616,7 @@
           "url": "https://lista.mercadolivre.com.br/bepantol-baby",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -626,7 +626,7 @@
           "url": "https://www.amazon.com.br/s?k=bepantol%20baby",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -636,7 +636,7 @@
           "url": "https://www.magazineluiza.com.br/busca/bepantol%20baby/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -647,14 +647,14 @@
           "url": "https://www.paguemenos.com.br/creme-para-assaduras-bepantol-baby-disney-toy-story-120g/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-rn-cueiro",
       "searchQuery": "cueiro manta bebe",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27074339/Cueiro.jpg?v=639310221152500000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27103784/Cueiro.jpg?v=639311945637630000",
       "bestPriceBrl": 153.5,
       "offers": [
         {
@@ -665,7 +665,7 @@
           "url": "https://lista.mercadolivre.com.br/cueiro-manta-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -675,7 +675,7 @@
           "url": "https://www.amazon.com.br/s?k=cueiro%20manta%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -685,7 +685,7 @@
           "url": "https://www.magazineluiza.com.br/busca/cueiro%20manta%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -696,7 +696,7 @@
           "url": "https://www.paguemenos.com.br/cueiro-manta-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -714,7 +714,7 @@
           "url": "https://lista.mercadolivre.com.br/aspirador-nasal-termometro-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -724,7 +724,7 @@
           "url": "https://www.amazon.com.br/s?k=aspirador%20nasal%20termometro%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -734,7 +734,7 @@
           "url": "https://www.magazineluiza.com.br/busca/aspirador%20nasal%20termometro%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -745,14 +745,14 @@
           "url": "https://www.paguemenos.com.br/aspirador-nasal-pediatrico-com-estojo-buba-1744394jo53724k7/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-qp-berco",
       "searchQuery": "berco americano",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27080652/BerA§o.jpg?v=639310274865000000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27110098/BerA§o.jpg?v=639311999057970000",
       "bestPriceBrl": 2839.68,
       "offers": [
         {
@@ -763,7 +763,7 @@
           "url": "https://lista.mercadolivre.com.br/berco-americano",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -773,7 +773,7 @@
           "url": "https://www.amazon.com.br/s?k=berco%20americano",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -783,7 +783,7 @@
           "url": "https://www.magazineluiza.com.br/busca/berco%20americano/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -794,63 +794,63 @@
           "url": "https://www.paguemenos.com.br/berco-americano",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-qp-carrinho",
       "searchQuery": "carrinho bebe travel system",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27061859/Carrinho.jpg?v=639310124570600000",
-      "bestPriceBrl": 6719.04,
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27093301/Carrinho.jpg?v=639311867333530000",
+      "bestPriceBrl": 4031.04,
       "offers": [
         {
           "storeSlug": "mercadolivre",
           "storeName": "Mercado Livre",
-          "offerTitle": "Carrinho Travel System Bellagio Chicco — Mercado Livre",
-          "priceBrl": 6719.04,
+          "offerTitle": "Carrinho Travel System Leona 2 TS TRIO Exclusivo Site — Mercado Livre",
+          "priceBrl": 4031.04,
           "url": "https://lista.mercadolivre.com.br/carrinho-bebe-travel-system",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
           "storeName": "Amazon Brasil",
           "offerTitle": "carrinho bebe travel system — Envio Prime",
-          "priceBrl": 6859.02,
+          "priceBrl": 4115.02,
           "url": "https://www.amazon.com.br/s?k=carrinho%20bebe%20travel%20system",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
           "storeName": "Magazine Luiza",
           "offerTitle": "carrinho bebe travel system — Magalu Indica",
-          "priceBrl": 6929.01,
+          "priceBrl": 4157.01,
           "url": "https://www.magazineluiza.com.br/busca/carrinho%20bebe%20travel%20system/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
           "storeName": "Farmácias em Geral",
           "pharmacyBrand": "Pague Menos / Drogasil",
           "offerTitle": "carrinho bebe travel system — Rede Farmacêutica",
-          "priceBrl": 7208.97,
+          "priceBrl": 4324.97,
           "url": "https://www.paguemenos.com.br/carrinho-bebe-travel-system",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-qp-banheira",
       "searchQuery": "banheira bebe",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27086836/Banheira.jpg?v=639310370006770000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27116282/Banheira.jpg?v=639312079097900000",
       "bestPriceBrl": 383.04,
       "offers": [
         {
@@ -861,7 +861,7 @@
           "url": "https://lista.mercadolivre.com.br/banheira-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -871,7 +871,7 @@
           "url": "https://www.amazon.com.br/s?k=banheira%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -881,7 +881,7 @@
           "url": "https://www.magazineluiza.com.br/busca/banheira%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -892,14 +892,14 @@
           "url": "https://www.paguemenos.com.br/banheira-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-qp-toalha",
       "searchQuery": "toalha capuz bebe",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27076472/Toalha.jpg?v=639310238150270000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27105917/Toalha.jpg?v=639311961921630000",
       "bestPriceBrl": 108,
       "offers": [
         {
@@ -910,7 +910,7 @@
           "url": "https://lista.mercadolivre.com.br/toalha-capuz-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -920,7 +920,7 @@
           "url": "https://www.amazon.com.br/s?k=toalha%20capuz%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -930,7 +930,7 @@
           "url": "https://www.magazineluiza.com.br/busca/toalha%20capuz%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -941,14 +941,14 @@
           "url": "https://www.paguemenos.com.br/toalha-capuz-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-qp-baba",
       "searchQuery": "baba eletronica",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27080321/BabA¡.jpg?v=639310272214130000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27109767/BabA¡.jpg?v=639311996281130000",
       "bestPriceBrl": 767.04,
       "offers": [
         {
@@ -959,7 +959,7 @@
           "url": "https://lista.mercadolivre.com.br/baba-eletronica",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -969,7 +969,7 @@
           "url": "https://www.amazon.com.br/s?k=baba%20eletronica",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -979,7 +979,7 @@
           "url": "https://www.magazineluiza.com.br/busca/baba%20eletronica/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -990,14 +990,14 @@
           "url": "https://www.paguemenos.com.br/baba-eletronica",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-qp-trocador",
       "searchQuery": "trocador bebe",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27071555/Trocador.jpg?v=639310199398870000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27101000/Trocador.jpg?v=639311924806500000",
       "bestPriceBrl": 671.04,
       "offers": [
         {
@@ -1008,7 +1008,7 @@
           "url": "https://lista.mercadolivre.com.br/trocador-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -1018,7 +1018,7 @@
           "url": "https://www.amazon.com.br/s?k=trocador%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -1028,7 +1028,7 @@
           "url": "https://www.magazineluiza.com.br/busca/trocador%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -1039,14 +1039,14 @@
           "url": "https://www.paguemenos.com.br/trocador-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-fam-canguru",
       "searchQuery": "canguru bebe",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27080289/Canguru.jpg?v=639310271984670000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27109735/Canguru.jpg?v=639311996002100000",
       "bestPriceBrl": 287.04,
       "offers": [
         {
@@ -1057,7 +1057,7 @@
           "url": "https://lista.mercadolivre.com.br/canguru-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -1067,7 +1067,7 @@
           "url": "https://www.amazon.com.br/s?k=canguru%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -1077,7 +1077,7 @@
           "url": "https://www.magazineluiza.com.br/busca/canguru%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -1088,14 +1088,14 @@
           "url": "https://www.paguemenos.com.br/canguru-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-fam-esterilizador",
       "searchQuery": "esterilizador mamadeira",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27088150/Esterilizador.jpg?v=639310398100570000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27117596/Esterilizador.jpg?v=639312109933870000",
       "bestPriceBrl": 57.5,
       "offers": [
         {
@@ -1106,7 +1106,7 @@
           "url": "https://lista.mercadolivre.com.br/esterilizador-mamadeira",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -1116,7 +1116,7 @@
           "url": "https://www.amazon.com.br/s?k=esterilizador%20mamadeira",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -1126,7 +1126,7 @@
           "url": "https://www.magazineluiza.com.br/busca/esterilizador%20mamadeira/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -1137,7 +1137,7 @@
           "url": "https://www.paguemenos.com.br/esterilizador-mamadeira",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
@@ -1155,7 +1155,7 @@
           "url": "https://lista.mercadolivre.com.br/soro-fisiologico",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -1165,7 +1165,7 @@
           "url": "https://www.amazon.com.br/s?k=soro%20fisiologico",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -1175,7 +1175,7 @@
           "url": "https://www.magazineluiza.com.br/busca/soro%20fisiologico/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -1186,14 +1186,14 @@
           "url": "https://www.paguemenos.com.br/solucao-fisiologica-pro-soro-dauf-0-9porcento-com-100ml/p",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     },
     {
       "itemId": "item-fam-organizador",
       "searchQuery": "kit higiene bebe",
-      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27082707/Kit.jpg?v=639310298861470000",
+      "imageUrl": "https://alobebe.vteximg.com.br/arquivos/ids/27112153/Kit.jpg?v=639312018707730000",
       "bestPriceBrl": 41.18,
       "offers": [
         {
@@ -1204,7 +1204,7 @@
           "url": "https://lista.mercadolivre.com.br/kit-higiene-bebe",
           "inStock": true,
           "deliveryEstimate": "Chega amanhã",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "amazon",
@@ -1214,7 +1214,7 @@
           "url": "https://www.amazon.com.br/s?k=kit%20higiene%20bebe",
           "inStock": true,
           "deliveryEstimate": "1 a 2 dias úteis",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "magalu",
@@ -1224,7 +1224,7 @@
           "url": "https://www.magazineluiza.com.br/busca/kit%20higiene%20bebe/",
           "inStock": true,
           "deliveryEstimate": "Retira ou 2 dias",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         },
         {
           "storeSlug": "farmacias",
@@ -1235,7 +1235,7 @@
           "url": "https://www.paguemenos.com.br/kit-higiene-bebe",
           "inStock": true,
           "deliveryEstimate": "Entrega em até 2h",
-          "scrapedAt": "2026-11-24T16:52:32.058Z"
+          "scrapedAt": "2026-11-25T16:40:40.610Z"
         }
       ]
     }
